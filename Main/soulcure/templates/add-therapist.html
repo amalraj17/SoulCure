@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Physical Theraphy &mdash; Website Template by Colorlib</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+  <link href="https://fonts.googleapis.com/css?family=Rubik:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+  <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+  <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+
+  <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'css/rangeslider.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+  
+  </style>
+</head>
+
+<body class="">
+    
+
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu ">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <header class="site-navbar" role="banner">
+
+      <div class="d-flex justify-content-between justify-content-lg-center w-100">
+        <div class="row align-items-center">
+          <div class="">
+            <h1 class="mb-0 site-logo"><img src="{% static 'img/logo1.png' %}"></h1>
+          </div>
+          
+          <div class="d-none d-xl-block">
+            <nav class="site-navigation position-relative text-right" role="navigation">
+
+              <ul class="site-menu d-flex justify-content-end js-clone-nav mr-auto d-none d-lg-block">
+                <li class="active"><a href="index.html"><span>Home</span></a></li>
+                <li><a href="{% url 'login' %}"><span>About</span></a></li>
+                <li><a href="contact.html"><span>Contact</span></a></li>
+                {% if user.is_staff %}
+                <li><a href="contact.html"><span>Dashboard</span></a></li>
+                <li><a href="{% url 'addTherapist' %}"><span>Add Therapist</span></a></li>
+                <li><a href=""><span>{{user.name}}</span></a></li>
+                <li><a href="{% url 'logout' %}"><span>Logout</span></a></li>
+                {% elif user.CLIENT %}
+                <li class="has-children">
+                  <a href="{% url 'register' %}"><span>Services</span></a>
+                  <ul class="dropdown arrow-top">
+                    <li><a href="#">Physical Therapy</a></li>
+                    <li><a href="#">Massage Therapy</a></li>
+                    <li><a href="#">Chiropractic Therapy</a></li>
+                    <li class="has-children">
+                      <a href="#">Dropdown</a>
+                      <ul class="dropdown">
+                        <li><a href="#">Physical Therapy</a></li>
+                        <li><a href="#">Massage Therapy</a></li>
+                        <li><a href="#">Chiropractic Therapy</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li><a href="blog.html"><span>Blog</span></a></li>
+                <li><a href=""><span>{{user.name}}</span></a></li>
+                <li><a href="{% url 'logout' %}"><span>Logout</span></a></li>
+                {% else %}
+                <a href="{% url 'login' %}"> <button class="btn btn-primary btn-rounded-pill"
+                    type="sumbit">Login</button></a>
+                {% endif %}
+              </ul>
+
+
+            </nav>
+          </div>
+
+
+          <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a href="#"
+              class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a></div>
+
+        </div>
+
+      </div>
+  </div>
+
+  </header>
+        <div class="d-flex justify-content-center align-items-center  min-vh-100">
+            <div class="m-5 p-5 w-50">
+                <form method="post" class="w-100" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ user_form.as_p }}
+                    {{ profile_form.as_p }}
+                    {{ therapist_form.as_p }}
+                    <button class="m-5 w-50 btn btn-dark" type="submit" value="submit">ADD</button>
+                </form>
+            </div>
+        </div>
+        <script src="" async defer></script>
+        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'js/jquery-ui.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+
+  <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+  <script src="{% static 'js/aos.js' %}"></script>
+  <script src="{% static 'js/rangeslider.min.js' %}"></script>
+
+
+  <script src="{% static 'js/typed.js' %}"></script>
+  <script>
+    var typed = new Typed('.typed-words', {
+      strings: ["pain", " stress", " fatigue"],
+      typeSpeed: 80,
+      backSpeed: 80,
+      backDelay: 4000,
+      startDelay: 1000,
+      loop: true,
+      showCursor: true
+    });
+  </script>
+
+  <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>
+    </body>
+</html>

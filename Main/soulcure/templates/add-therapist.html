@@ -27,7 +27,19 @@
 
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <style>
-  
+    body{
+      background: #586358;
+    }
+    .forms-expanded {
+      margin-top: 100px;
+    }
+    h2{
+      color: aliceblue;
+      text-align: center;
+    }
+    button{
+      justify-content: center;
+    }
   </style>
 </head>
 
@@ -105,8 +117,9 @@
   </div>
 
   </header>
-        <div class="d-flex justify-content-center align-items-center  min-vh-100">
-            <div class="m-5 p-5 w-50">
+        <div class="d-flex justify-content-center align-items-center forms-expanded  min-vh-100">
+            <div class="m-5 mt-5 p-5 w-50 ">
+              <h2 class="align-center">Register New Therapist</h2>
                 <form method="post" class="w-100" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ user_form.as_p }}

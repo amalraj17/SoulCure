@@ -43,6 +43,8 @@ class CustomUser(AbstractUser):
     )
 
     username=None
+    first_name = None
+    last_name = None
     USERNAME_FIELD = 'email'
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
@@ -50,10 +52,7 @@ class CustomUser(AbstractUser):
     password = models.CharField(max_length=128)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICE, blank=True, null=True,default='1')
 
-    # date_joined = models.DateTimeField(auto_now_add=True)
-    # last_login = models.DateTimeField(auto_now_add=True)
-    # created_date = models.DateTimeField(auto_now_add=True)
-    # modified_date = models.DateTimeField(auto_now=True)
+
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -119,7 +118,8 @@ class UserProfile(models.Model):
 
 
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    # user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='media/profile_picture', blank=True, null=True)
     address = models.CharField(max_length=250, blank=True, null=True)
     country = models.CharField(max_length=15, default="India", blank=True, null=True)

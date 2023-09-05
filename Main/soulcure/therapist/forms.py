@@ -48,3 +48,23 @@ class TherapyForm(forms.ModelForm):
         fields = ['therapy_name','description', 'duration','benefits']
 
 
+
+# forms.py
+
+from django import forms
+from .models import CustomUser, Therapist, UserProfile
+
+class CustomUserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['name', 'email', 'phone']
+
+class TherapistForm(forms.ModelForm):
+    class Meta:
+        model = Therapist
+        fields = ['certification_name', 'certificate_id', 'experience', 'therapy']
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture','address', 'country', 'state', 'city', 'pin_code', 'gender', 'dob']

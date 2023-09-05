@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from .jazz import JAZZMIN_SETTINGS
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -137,6 +138,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
+JAZZMIN_UI_TWEAKS = {
+
+    "theme": "sandstone",
+}
+
 # AUTHENTICATION_BACKENDS = [
 #     'accounts.backends.EmailBackend',
 #     'django.contrib.auth.backends.ModelBackend',  # Keep the default ModelBackend
@@ -168,11 +175,25 @@ MEDIA_URL = ''
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Emailing settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'mailtoshowvalidationok@gmail.com'
-EMAIL_HOST_PASSWORD = 'qtwpnirvgsxzhtdo' 
-DEFAULT_FROM_EMAIL = 'mailtoshowvalidationok@gmail.com'
+EMAIL_HOST_USER = 'amalraj686513@gmail.com'
+EMAIL_HOST_PASSWORD = 'kuolsyqgaawnvlfl' 
+DEFAULT_FROM_EMAIL = 'amalraj686513@gmail.com'
+PASSWORD_RESET_TIMEOUT = 14400
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_FROM = 'pythonlessons0@gmail.com'
+# EMAIL_HOST_USER = 'pythonlessons0@gmail.com'
+# EMAIL_HOST_PASSWORD = 'bsvdctbnvaqlszhd'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+
+
 

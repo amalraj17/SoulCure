@@ -76,7 +76,7 @@ class CustomUserForm(forms.ModelForm):
     
     class Meta:
         model = CustomUser
-        fields = ['name', 'email', 'phone', 'role']
+        fields = ['name', 'email', 'phone']
         widgets = {
             'name': forms.TextInput(attrs={
                 "class": "form-control form-control-lg ",
@@ -90,9 +90,9 @@ class CustomUserForm(forms.ModelForm):
                 "class": "form-control form-control-lg",
                 'placeholder': 'Enter Phone Number'
             }),
-            'role': forms.Select(attrs={
-                "class": "form-control form-control-lg"
-            }),
+            # 'role': forms.Select(attrs={
+            #     "class": "form-control form-control-lg"
+            # }),
 
         }
 

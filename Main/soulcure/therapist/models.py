@@ -12,7 +12,7 @@ class Therapy(models.Model):
     status = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.therapy_name
+        return self.therapy_name 
     
 
 

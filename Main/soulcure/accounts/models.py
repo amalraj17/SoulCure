@@ -18,6 +18,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, name,phone, email, password=None):
+        
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
@@ -28,6 +29,7 @@ class UserManager(BaseUserManager):
         user.is_active = True
         user.is_staff = True
         user.is_superadmin = True
+        user.role=4
         user.save(using=self._db)
         return user
 
@@ -35,11 +37,13 @@ class CustomUser(AbstractUser):
     CLIENT = 1
     THERAPIST = 2
     EDITOR = 3
+    ADMIN = 4
 
     ROLE_CHOICE = (
         (CLIENT, 'Client'),
         (THERAPIST, 'Therapist'),
         (EDITOR, 'Editor'),
+        (ADMIN,'Admin'),
     )
 
     username=None

@@ -62,7 +62,7 @@ class CustomUserForm(forms.ModelForm):
 class TherapistForm(forms.ModelForm):
     class Meta:
         model = Therapist
-        fields = ['certification_name', 'certificate_id', 'experience', 'therapy']
+        fields = ['certification_name', 'certificate_id', 'experience', 'therapy','bio']
 
 class UserProfileForm(forms.ModelForm):
     class Meta:

@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.urls import reverse
 from django.contrib.auth import login as auth_login ,authenticate, logout
 from django.shortcuts import render, redirect
 from django.contrib  import messages,auth
@@ -77,7 +78,19 @@ def userlogin(request):
             if user is not None:
                 auth_login(request, user)
                 print("User authenticated:", user.email, user.role)
-                return redirect('http://127.0.0.1:8000/')
+                if request.user.role == CustomUser.CLIENT:
+                    print("user is client")
+                    return redirect('http://127.0.0.1:8000/')
+                elif request.user.role == CustomUser.THERAPIST:
+                    print("user is therapist")
+                    return redirect(reverse('therapist'))
+                elif request.user.role == CustomUser.ADMIN:
+                    print("user is admin")                   
+                    return redirect(reverse('adminindex'))
+                else:
+                    print("user is normal")
+                    return redirect('http://127.0.0.1:8000/')
+
             else:
                 error_message = "Invalid login credentials."
                 return render(request, 'login.html', {'error_message': error_message})
@@ -157,7 +170,7 @@ def addTherapist(request):
             user_profile = UserProfile(user=user)
             user_profile.save()
 
-            return redirect('index')
+            return redirect('adminindex')
 
     else:
         user_form = CustomUserForm()

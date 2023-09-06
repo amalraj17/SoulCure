@@ -108,6 +108,10 @@
         margin-left: 25%;
       }
 
+      .square {
+        height: 250px;
+        width: 250px;
+      }
       select,
       input {
         display: block;
@@ -134,10 +138,10 @@
   <body class="p-2 p-lg-0">
     <h1 class="text-center">Edit Profile</h1>
     <div class="dcontainer align-items-center p-5 card shadow">
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %} {% if user_profile.profile_picture %}
         <img
-          class="m-3 rounded-circle"
+          class="m-3 rounded-circle square"
           src="{{ user_profile.profile_picture.url }}"
           alt="Profile Picture"
         />
@@ -154,7 +158,9 @@
         {{therapist_form.as_p }}
         <br />
         <br />
+
         <div class="d-flex justify-content-center w-100 align-items-center">
+          <a href=""><button class="btn btn-success sub-btn" type="submit">Discard Changes</button></a>
           <button class="btn btn-success sub-btn" type="submit">Save</button>
         </div>
       </form>

@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from .forms import TherapyForm
 from .models import Therapy
 from accounts.models import CustomUser,UserProfile
@@ -7,6 +7,12 @@ from itertools import zip_longest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+from .forms import CustomUserForm, TherapistForm, UserProfileForm
+
+
+
+
+
 
 
 # Create your views here.
@@ -58,15 +64,17 @@ def therapist_profile(request, therapist_id):
 
 @login_required
 def therapistprofile(request):
+    
     # Retrieve the logged-in user's information
     user = request.user
 
     # Initialize variables for user profile and therapist info
     user_profile = None
     therapist_info = None
-
+    if user.userprofile.user.role == 1:
+        return redirect("profile")
     # Check if the user has a therapist role (role == 2)
-    if user.userprofile.user.role == 2:
+    elif user.userprofile.user.role == 2:
         try:
             # Get the user profile information
             user_profile = UserProfile.objects.get(user=user.userprofile.user)
@@ -95,36 +103,6 @@ def therapistprofile(request):
 
 
 
-# @login_required
-# def therapistprofile(request):
-#     # Retrieve the logged-in user's information
-#     user = request.user
-
-#     # Check if the user has a therapist role (role == 2)
-#     if user.userprofile.user.role == 2:
-#         # Get the therapist's specific information
-#         therapist = Therapist.objects.get(user=user.userprofile.user)
-#         therapist_info = {
-#             'bio': therapist.bio,
-#             'certification_name': therapist.certification_name,
-#             'experience': therapist.experience,
-#         }
-#     else:
-#         therapist_info = None  # User is not a therapist
-
-
-
-#     context = {
-#         'user': user,
-#         'userprofile': user.userprofile,  # User profile information
-#         'therapist_info': therapist_info,  # Therapist-specific information
-#     }
-
-#     return render(request, 'therapist-profile.html', context)
-# views.py
-
-from .forms import CustomUserForm, TherapistForm, UserProfileForm
-
 @login_required
 def edit_therapist_profile(request):
     user_id = request.user.id
@@ -135,7 +113,7 @@ def edit_therapist_profile(request):
     if request.method == 'POST':
         user_form = CustomUserForm(request.POST, instance=user)
         therapist_form = TherapistForm(request.POST, instance=therapist)
-        user_profile_form = UserProfileForm(request.POST, instance=user_profile)
+        user_profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
 
         if user_form.is_valid() and therapist_form.is_valid() and user_profile_form.is_valid():
             user_form.save()
@@ -191,4 +169,30 @@ def change_password(request):
             messages.error(request, 'Passwords do not match.')
 
     return render(request, 'therapist-profile.html',{'msg':val})  
+
+########################################################################################################################
+
+#View therapist
+
+########################################################################################################################
+
+@login_required
+def viewtherapist(request, user_id):
+    users = get_object_or_404(CustomUser, id=user_id)
+    therapist = Therapist.objects.get(user=users)
+    profile = UserProfile.objects.get(user=users)
+
+    context={
+        'users' : users,
+        'userprofile' : profile,
+        'therapist' : therapist
+        }
+    return render(request, 'therapist/view-therapist.html', context)
+
+def therapists(request):
+    therapists = Therapist.objects.all()
+    cuser = CustomUser.objects.filter(role=CustomUser.THERAPIST, id__in=therapists.values_list('user_id', flat=True))
+    uprofile = UserProfile.objects.filter(user_id__in=cuser.values_list('id', flat=True))
+    combined_data = list(zip_longest(cuser, uprofile, therapists))
+    return render(request, 'therapist/therapists.html', {'combined_data': combined_data})
 

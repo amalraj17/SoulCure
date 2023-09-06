@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main','accounts','therapist',
+    'main','accounts','therapist','client',
     'django.contrib.sites',
     'allauth',
     'allauth.account',

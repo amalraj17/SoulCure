@@ -1,11 +1,25 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import get_user_model
 from accounts.models import CustomUser
-
+from django.urls import reverse
+from django.contrib.auth import get_user_model
 User = get_user_model
 # Create your views here.
+
+
+
+
 def index(request):
-    return render(request,'index.html')
+    if request.user.is_authenticated and request.user.role== 4:
+        return redirect(reverse('adminindex'))
+    elif request.user.is_authenticated and request.user.role== 2:
+        return redirect(reverse('therapist'))
+    elif request.user.is_authenticated and request.user.role== 1:
+        return redirect(reverse('index'))
+    else:
+        return render(request, 'index.html', {'user': request.user})
+# def index(request):
+#     return render(request,'index.html')
 def adminindex(request):
     clients = CustomUser.objects.filter(role=CustomUser.CLIENT)
     client = clients.count()

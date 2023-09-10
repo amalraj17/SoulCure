@@ -31,8 +31,7 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
     <style>
         body {
-           
-            padding: 30px;
+
             color: #9b9ca1;
           }
     
@@ -267,9 +266,6 @@
                       <p class="txtsize mx-3 mt-3">
                         {{ user.userprofile.user.name }}
                       </p>
-                      <p class="txtsize2 mx-3 mt-2">
-                        {{ therapist_info.certification_name }}
-                      </p>
                     </div>
                     <form method="post" action="{% url 'change_password' %}">
                       {% csrf_token %}
@@ -345,7 +341,7 @@
                     </div>
                     <div class="col-md-12 d-flex">
                       <label class="txtsize"><strong> Address :</strong></label>
-                      <p class="txtsize mx-3">{{ user.userprofile.address }}</p>
+                      <p class="txtsize mx-3">{{ user.userprofile.address }},{{ user.userprofile.addressline1 }},{{ user.userprofile.addressline2 }}</p>
                     </div>
                     <div class="col-md-12 d-flex">
                       <label class="txtsize"><strong> Country :</strong></label>

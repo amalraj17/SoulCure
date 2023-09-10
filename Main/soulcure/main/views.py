@@ -8,16 +8,27 @@ User = get_user_model
 
 
 
-
 def index(request):
-    if request.user.is_authenticated and request.user.role== 4:
-        return redirect(reverse('adminindex'))
-    elif request.user.is_authenticated and request.user.role== 2:
-        return redirect(reverse('therapist'))
-    elif request.user.is_authenticated and request.user.role== 1:
-        return redirect(reverse('index'))
-    else:
-        return render(request, 'index.html', {'user': request.user})
+    if request.user.is_authenticated:
+        if request.user.role == 4 and not request.path == reverse('adminindex'):
+            return redirect(reverse('adminindex'))
+        elif request.user.role == 2 and not request.path == reverse('therapist'):
+            return redirect(reverse('therapist'))
+        elif request.user.role == 1 and not request.path == reverse('index'):
+            return redirect(reverse('index'))
+    
+    return render(request, 'index.html', {'user': request.user})
+
+
+# def index(request):
+#     if request.user.is_authenticated and request.user.role== 4:
+#         return redirect(reverse('adminindex'))
+#     elif request.user.is_authenticated and request.user.role== 2:
+#         return redirect(reverse('therapist'))
+#     elif request.user.is_authenticated and request.user.role== 1:
+#         return redirect(reverse('index'))
+#     else:
+#         return render(request, 'index.html', {'user': request.user})
 # def index(request):
 #     return render(request,'index.html')
 def adminindex(request):

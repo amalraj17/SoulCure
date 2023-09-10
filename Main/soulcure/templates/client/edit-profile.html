@@ -144,15 +144,14 @@
       border: 0;
     }
   </style>
-  </style>
 </head>
 
 <body class="p-5 p-lg-5">
-  <h1 class="text-center">Edit Profile</h1>
+  <!-- <div class="dcontainer align-items-center p-5 card shadow"> -->
+  <h1 class="text-center fw-bold text-dark">Edit Profile</h1>
   <hr class="mx-5">
-  <form class="w-100" method="post" id="pictureForm" enctype="multipart/form-data">
+  <form class="w-100" method="post" enctype="multipart/form-data" id="pictureForm">
     <div class="container">
-
       <div class="d flex ">
         <div>
           <div class="d-flex justify-content-center">
@@ -169,7 +168,6 @@
             {% endif %}
           </div>
         </div>
-
         <div class="row m-0 p-5">
           <div class="col-md-6 p-5">
             <div class="form-group">
@@ -206,11 +204,25 @@
               <p id="name" class="text-danger"></p>
             </div>
             <div class="form-group">
+              <label for="{{ user_profile_form.gender.id_for_label }}">Gender</label>
+              {{ user_profile_form.gender }}
+            </div>
+            <div class="form-group">
+              <label for="{{ user_profile_form.dob.id_for_label }}">Date of Birth</label>
+              {{ user_profile_form.dob }}
+              <div id="dobValidation" class="invalid-feedback">
+                You must be at least 23 years old.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 p-5">
+            <div class="form-group">
               <label for="{{ user_profile_form.address.id_for_label }}">Address Line 1</label>
               {{ user_profile_form.address }}
               <div id="addressValidation" class="invalid-feedback">
                 Please enter a valid address containing characters and allowing numbers, parentheses, commas, hyphens,
-                and spaces.
+                and
+                spaces.
               </div>
               <p id="name" class="text-danger"></p>
             </div>
@@ -219,7 +231,8 @@
               {{ user_profile_form.addressline1 }}
               <div id="addressValidation1" class="invalid-feedback">
                 Please enter a valid address containing characters and allowing numbers, parentheses, commas, hyphens,
-                and spaces.
+                and
+                spaces.
               </div>
               <p id="name" class="text-danger"></p>
             </div>
@@ -228,7 +241,8 @@
               {{ user_profile_form.addressline2 }}
               <div id="addressValidation2" class="invalid-feedback">
                 Please enter a valid address containing characters and allowing numbers, parentheses, commas, hyphens,
-                and spaces.
+                and
+                spaces.
               </div>
               <p id="name" class="text-danger"></p>
             </div>
@@ -254,7 +268,6 @@
               <div id="cityValidation" class="invalid-feedback">
                 Please enter a valid city containing only letters.
               </div>
-              <p id="name" class="text-danger"></p>
             </div>
             <div class="form-group">
               <label for="{{ user_profile_form.pin_code.id_for_label }}">Pin Code</label>
@@ -262,77 +275,24 @@
               <div id="zipcodeValidation" class="invalid-feedback">
                 Please enter a valid 6-digit ZIP code.
               </div>
-              <p id="name" class="text-danger"></p>
-            </div>
-          </div>
-          <div class="col-md-6 p-5 ">
-            <div class="form-group">
-              <label for="{{ user_profile_form.gender.id_for_label }}">Gender</label>
-              {{ user_profile_form.gender }}
-            </div>
-            <div class="form-group">
-              <label for="{{ user_profile_form.dob.id_for_label }}">Date of Birth</label>
-              {{ user_profile_form.dob }}
-              <div id="dobValidation" class="invalid-feedback">
-                You must be at least 23 years old.
-              </div>
-              <p id="name" class="text-danger"></p>
             </div>
 
-
-
-            <div class="form-group">
-              <label for="{{ therapist_form.bio.id_for_label }}">Bio</label>
-              {{ therapist_form.bio }}
-              <div id="bioValidation" class="invalid-feedback">
-                Bio must contain at least 100 words and only allow symbols '()', '-', "'", '"', and '.'.
-              </div>
-              <p id="name" class="text-danger"></p>
-            </div>
-            <div class="form-group">
-              <label for="{{ therapist_form.certification_name.id_for_label }}">Certification Name</label>
-              {{ therapist_form.certification_name }}
-              <div id="certificationNameValidation" class="invalid-feedback">
-                Please enter a valid Certiftication name.
-              </div>
-              <p id="name" class="text-danger"></p>
-            </div>
-            <div class="form-group">
-              <label for="{{ therapist_form.certificate_id.id_for_label }}">Certificate Id</label>
-              {{ therapist_form.certificate_id }}
-              <div id="certificationIdValidation" class="invalid-feedback">
-                Please enter a valid Certifticate - Id
-              </div>
-              <p id="name" class="text-danger"></p>
-            </div>
-            <div class="form-group">
-              <label for="{{ therapist_form.experience.id_for_label }}">Experience</label>
-              {{ therapist_form.experience }}
-              <div id="experienceValidation" class="invalid-feedback">
-                Experience must be a valid number and should be at least 2 years.
-                <p id="name" class="text-danger"></p>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="{{ therapist_form.therapy.id_for_label }}">Specialization</label>
-              {{ therapist_form.therapy}}
-              <div id="nameValidation" class="invalid-feedback">
-                Please Choose your Specialization
-              </div>
-              <p id="name" class="text-danger"></p>
-            </div>
-          </div>
-          <br />
-          <br />
-
-          <div class="d-flex justify-content-center w-100 align-items-center gap-3 mt-5">
-            <a href=""><button class="btn btn-success sub-btn" type="submit">Discard Changes</button></a>
-            <button class="btn btn-success sub-btn" type="submit">Save</button>
           </div>
         </div>
       </div>
-  </form>
 
+      <div>
+        <div class="d-flex justify-content-center w-100 align-items-center gap-3">
+          <a href=""><button class="btn btn-success sub-btn" type="submit">Discard Changes</button></a>
+          <button class="btn btn-success sub-btn" type="submit">Save</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  </div>
+
+
+  </div>
   <script>
     $(document).ready(function () {
       $('#{{ user_profile_form.dob.id_for_label }}').datepicker();

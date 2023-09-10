@@ -1,62 +1,3 @@
-# from django import forms
-# from .models import CustomUser
-# # from .validators import allow_only_images_validator
-
-# class UserForm(forms.ModelForm):
-
-#     password = forms.CharField(widget=forms.PasswordInput(
-#         attrs={
-#             "class": "form-control form-control-lg",
-#             "id":"pass",
-#             'placeholder': 'Enter Password'}
-#         ))
-    
-#     confirm_password = forms.CharField(widget=forms.PasswordInput(
-#         attrs={
-#             "class": "form-control form-control-lg",
-#             "id":"cpass",
-#             'placeholder': 'Confirm Password'}
-#         ))
-    
-#     name = forms.CharField(
-#         widget=forms.TextInput(
-#             attrs={
-#                 "class": "form-control form-control-lg",
-#                 "id":"name",
-#                 'placeholder': 'Enter Name'
-#             }
-#         )
-#     )
-#     phone = forms.CharField(
-#         widget=forms.NumberInput(
-#             attrs={
-#                 "class": "form-control form-control-lg",
-#                 "id":"phone",
-#                 'placeholder': 'Enter Phone'
-#             }
-#         )
-#     )
-#     email=forms.EmailField(
-#         widget=forms.EmailInput(
-#             attrs={
-#                 "class": "form-control form-control-lg",
-#                 "id":"mail",
-#                 'placeholder': 'Enter Email',
-#                 }
-#         )
-#     )
-
-
-
-
-#     class Meta:
-#         model = CustomUser
-#         fields = ['name','email', 'phone','password']
-        
-            
-        
-
-    
 from django import forms
 from django.contrib.auth import get_user_model
 from .models import UserProfile
@@ -66,10 +7,12 @@ CustomUser = get_user_model()
 
 class CustomUserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'id':'pass',
         "class": "form-control form-control-lg",
         'placeholder': 'Enter Password'
     }))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'id':'cpass',
         "class": "form-control form-control-lg",
         'placeholder': 'Confirm Password'
     }))
@@ -80,13 +23,16 @@ class CustomUserForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={
                 "class": "form-control form-control-lg ",
-                'placeholder': 'Enter Name'
+                'placeholder': 'Enter Name',
+                'id':'name'
             }),
             'email': forms.EmailInput(attrs={
+                'id':'email',
                 "class": "form-control form-control-lg",
                 'placeholder': 'Enter Email'
             }),
             'phone': forms.TextInput(attrs={
+                'id':'phone',
                 "class": "form-control form-control-lg",
                 'placeholder': 'Enter Phone Number'
             }),
@@ -123,14 +69,22 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['profile_picture', 'address', 'country', 'state', 'city', 'pin_code', 'gender', 'dob']
+        fields = ['profile_picture', 'address','addressline1','addressline2', 'country', 'state', 'city', 'pin_code', 'gender', 'dob']
         widgets = {
             'profile_picture': forms.ClearableFileInput(attrs={
                 "class": "form-control form-control-lg"
             }),
             'address': forms.TextInput(attrs={
                 "class": "form-control form-control-lg",
-                'placeholder': 'Enter Address'
+                'placeholder': 'Address Line 1'
+            }),
+            'addresslline1': forms.TextInput(attrs={
+                "class": "form-control form-control-lg",
+                'placeholder': 'Address Line 2'
+            }),
+            'addressline2': forms.TextInput(attrs={
+                "class": "form-control form-control-lg",
+                'placeholder': 'Address Line 3'
             }),
             'country': forms.TextInput(attrs={
                 "class": "form-control form-control-lg",

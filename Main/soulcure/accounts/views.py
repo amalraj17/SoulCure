@@ -133,7 +133,7 @@ def register(request):
 
 def userLogout(request):
     logout(request)
-    return redirect('/')
+    return redirect('http://127.0.0.1:8000/')
 
 
 
@@ -150,33 +150,37 @@ def addTherapist(request):
         user_form = CustomUserForm(request.POST)
 
         if user_form.is_valid():
-            user = user_form.save(commit=False)
-            password = user_form.cleaned_data['password']
+            email = user_form.cleaned_data.get('email')
+            if User.objects.filter(email=email).exists():
+                msg = 'Email already exists. Please use a different email address.'
+            else:
+                user = user_form.save(commit=False)
+                password = user_form.cleaned_data['password']
 
             # Send welcome email
-            send_welcome_email(user.email, password, user.name)
+                send_welcome_email(user.email, password, user.name)
 
-            user.set_password(password)
-            user.is_active = True
+                user.set_password(password)
+                user.is_active = True
 
-            user.role = CustomUser.THERAPIST  # Set the role to "Therapist"
-            user.save()
+                user.role = CustomUser.THERAPIST  # Set the role to "Therapist"
+                user.save()
 
             # Check if the user has the role=2 (Therapist)
-            if user.role == CustomUser.THERAPIST:
-                therapist = Therapist(user=user)  # Create a Therapist instance
-                therapist.save()
+                if user.role == CustomUser.THERAPIST:
+                    therapist = Therapist(user=user)  # Create a Therapist instance
+                    therapist.save()
 
-            user_profile = UserProfile(user=user)
-            user_profile.save()
+                user_profile = UserProfile(user=user)
+                user_profile.save()
 
-            return redirect('adminindex')
+                return redirect('adminindex')
 
     else:
         user_form = CustomUserForm()
 
     context = {
-        'user_form': user_form,
+        'user_form': user_form
     }
 
     return render(request, 'add-therapist.html', context)

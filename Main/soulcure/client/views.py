@@ -20,7 +20,6 @@ from therapist.forms import CustomUserForm, UserProfileForm
 @login_required
 def profile(request):
     
-    # Retrieve the logged-in user's information
     user = request.user
 
     # Initialize variables for user profile and therapist info
@@ -41,6 +40,8 @@ def profile(request):
     }
 
     return render(request, 'client/profile.html', context)
+
+
 
 
 
@@ -69,7 +70,7 @@ def editprofile(request):
         'user_profile':user_profile
     }
 
-    return render(request, 'edit-therapist-profile.html', context)
+    return render(request, 'client/edit-profile.html', context)
 
 ########################################################################################################################
 

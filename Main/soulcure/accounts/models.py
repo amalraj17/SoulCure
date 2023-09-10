@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 # Create your models here.
@@ -120,13 +121,18 @@ class UserProfile(models.Model):
         ('West Bengal', 'West Bengal'),
     ]
 
+    ASIAN_COUNTRY_CHOICES = [
+    ('India', 'India'),
+    ]
 
 
-    # user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='media/profile_picture', blank=True, null=True)
-    address = models.CharField(max_length=250, blank=True, null=True)
-    country = models.CharField(max_length=15, default="India", blank=True, null=True)
+    address = models.CharField(max_length=50, blank=True, null=True)
+    addressline1 = models.CharField(max_length=50, blank=True, null=True)
+    addressline2 = models.CharField(max_length=50, blank=True, null=True)
+    # country = models.CharField(max_length=15, default="India", blank=True, null=True)
+    country = models.CharField(max_length=50, choices=ASIAN_COUNTRY_CHOICES, default='India', blank=True, null=True)
     state = models.CharField(("Select State"),max_length=40, choices=STATE_CHOICES, blank=True, null=True)
     city = models.CharField(max_length=15, blank=True, null=True)
     pin_code = models.CharField(max_length=8, blank=True, null=True)
@@ -135,18 +141,21 @@ class UserProfile(models.Model):
     profile_created_at = models.DateTimeField(auto_now_add=True)
     profile_modified_at = models.DateTimeField(auto_now=True)
 
-    # Rest of the methods and __str__ definition
+
+    def calculate_age(self):
+        today = date.today()
+        age = today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
+        return age
+    age = property(calculate_age)
+
 
     def get_gender_display(self):
         return dict(self.GENDER_CHOICES).get(self.gender)
 
-    # Rest of the methods and __str__ definition
-
-
     def __str__(self):
         return self.user.email
     
-    def get_role(self):
+    def get_role(self): 
         if self.role == 1:
             user_role = 'Client'
         elif self.role == 2:

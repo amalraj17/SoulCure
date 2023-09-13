@@ -156,7 +156,7 @@
         </div>
     </div>
     <!-- Navbar End -->
-    <!-- Search Result Start -->
+    {% comment %} <!-- Search Result Start -->
     <div class="container-fluid py-5">
         <div class="container">
             <div class="text-center mx-auto mb-5" style="max-width: 600px;">
@@ -182,14 +182,63 @@
                         </div>
                     </div></a>
                 </div>
-{% endfor %}
-                {% comment %} <div class="col-12 text-center">
-                    <button class="btn btn-primary py-3 px-5">Load More</button>
-                </div> {% endcomment %}
+                {% endfor %}
+               
             </div>
         </div>
     </div>
-    <!-- Search Result End -->
+    <!-- Search Result End --> {% endcomment %}
+
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="text-center mx-auto mb-5" style="max-width: 600px;">
+                <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">Our Team Of Experts</h5>
+                <h1 class="display-5">Qualified Therapeutic Professionals</h1>
+            </div>
+            <div class="row g-5">
+                {% for user, profile, therapist in therapists_page %}
+                <div class="col-lg-6 team-item">
+                    <a href="{% url 'view-therapist' user_id=therapist.user.id %}">
+                        <div class="row g-0 bg-light rounded overflow-hidden">
+                            <div class="col-12 col-sm-5 h-100">
+                                <img class="img-fluid h-100" src="{{ profile.profile_picture.url }}" style="object-fit: cover;">
+                            </div>
+                            <div class="col-12 col-sm-6 h-100 d-flex flex-column">
+                                <div class="mt-3 p-5">
+                                    <h3 class="mb-5">{{ user.name }}</h3>
+                                    <h5 class="fw-normal fst-italic text-primary mb-2">{{ therapist.therapy.name }}</h5>
+                                    <h5 class="fw-normal text-dark mb-4">Experience: {{ therapist.experience }} Years</h5>
+                                    <p class="m-0">{{ therapist.certification_name }}</p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-1 h-100">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+    
+            <!-- Pagination controls -->
+            <div class="pagination mt-5 justify-content-center">
+                <span class="step-links">
+                    {% if therapists_page.has_previous %}
+                        <a href="?page=1" class="pagination-link ">&laquo; first</a>
+                        <a href="?page={{ therapists_page.previous_page_number }}" class="pagination-link ">previous</a>
+                    {% endif %}
+            
+                    <span class="current-page">{{ therapists_page.number }}</span>
+            
+                    {% if therapists_page.has_next %}
+                        <a href="?page={{ therapists_page.next_page_number }}" class="pagination-link">next</a>
+                        <a href="?page={{ therapists_page.paginator.num_pages }}" class="pagination-link">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            
+        </div>
+    </div>
+    
 
 
     <!-- Footer Start -->

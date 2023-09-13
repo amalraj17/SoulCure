@@ -188,10 +188,28 @@ def viewtherapist(request, user_id):
         }
     return render(request, 'therapist/view-therapist.html', context)
 
+# def therapists(request):
+#     therapists = Therapist.objects.all()
+#     cuser = CustomUser.objects.filter(role=CustomUser.THERAPIST, id__in=therapists.values_list('user_id', flat=True))
+#     uprofile = UserProfile.objects.filter(user_id__in=cuser.values_list('id', flat=True))
+#     combined_data = list(zip_longest(cuser, uprofile, therapists))
+#     return render(request, 'therapist/therapists.html', {'combined_data': combined_data})
+
+from django.core.paginator import Paginator
+
 def therapists(request):
     therapists = Therapist.objects.all()
     cuser = CustomUser.objects.filter(role=CustomUser.THERAPIST, id__in=therapists.values_list('user_id', flat=True))
     uprofile = UserProfile.objects.filter(user_id__in=cuser.values_list('id', flat=True))
     combined_data = list(zip_longest(cuser, uprofile, therapists))
-    return render(request, 'therapist/therapists.html', {'combined_data': combined_data})
 
+    # Create a Paginator object with a specified number of therapists per page
+    paginator = Paginator(combined_data, per_page=4)  # Change '10' to the number of therapists per page you prefer
+
+    # Get the current page number from the request's GET parameters
+    page_number = request.GET.get('page')
+
+    # Retrieve the therapists for the current page
+    therapists_page = paginator.get_page(page_number)
+
+    return render(request, 'therapist/therapists.html', {'therapists_page': therapists_page})

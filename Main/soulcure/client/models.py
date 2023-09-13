@@ -35,6 +35,6 @@ class Appointment(models.Model):
     created_date = models.DateTimeField(auto_now_add=True,null=True)
     cancelled_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
-
+ 
     def __str__(self):
         return f"Appointment with {self.client.name} and {self.therapist.name} on {self.date} at {self.get_time_slot_display()}"

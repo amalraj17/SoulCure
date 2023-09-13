@@ -117,7 +117,6 @@ def change_password_client(request):
 
 ########################################################################################################################
 
-# views.py
 
 from django.shortcuts import render, redirect
 from .models import Appointment
@@ -192,3 +191,46 @@ def appointment(request,t_id):
 
 
 
+########################################################################################################################
+
+#Search
+
+########################################################################################################################
+
+def search(request):
+    return render(request,'search.html')
+
+
+from django.shortcuts import render
+from django.http import JsonResponse
+from therapist.models import Therapist
+
+
+@login_required
+def search_therapists(request):
+        # Get search criteria from AJAX reques
+    return render(request, 'demosearch.html')  # Replace 'search.html' with your template
+
+from django.db.models import Q
+@login_required
+def search_therapists2(request):
+    query = request.GET.get('query')
+
+    # Use Q objects to filter therapists based on therapy name or therapist name
+    therapists = Therapist.objects.filter(
+        Q(user__name__icontains=query) | Q(therapy__therapy_name__icontains=query)
+    )
+
+    therapists_data = [
+        {
+            'id': therapist.user.id,
+            'name': therapist.user.name,
+            'therapy': therapist.therapy.therapy_name,
+            'profile_picture': therapist.user.userprofile.profile_picture.url,
+            'experience': therapist.experience,
+            'certification_name': therapist.certification_name,
+        }
+        for therapist in therapists
+    ]
+
+    return JsonResponse({'therapists': therapists_data})

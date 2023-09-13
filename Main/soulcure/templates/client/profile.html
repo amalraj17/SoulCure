@@ -125,9 +125,6 @@
   </head>
 
   <body>
-    <!-- Navbar Start -->
-    <body>
-      <!-- Topbar Start -->
   
       <!-- Navbar Start -->
       <div class="container-fluid sticky-top bg-white shadow-sm">
@@ -267,7 +264,7 @@
                         {{ user.userprofile.user.name }}
                       </p>
                     </div>
-                    <form method="post" action="{% url 'change_password' %}">
+                    <form method="post" action="{% url 'change_password_client' %}">
                       {% csrf_token %}
                       <div class="mt-5">
                         <h3 class="my-4 mt-5">Change Password</h3>
@@ -312,6 +309,8 @@
                 </div>
                 {% if msg == 1 %}
                 <span>Your password was successfully updated.</span>
+                {% elif msg == 2 %}
+                <span>Please fill in both password fields.</span>
                 {% endif %}
               </div>
 

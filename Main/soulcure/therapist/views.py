@@ -125,7 +125,6 @@ def edit_therapist_profile(request):
         user_form = CustomUserForm(instance=user)
         therapist_form = TherapistForm(instance=therapist)
         user_profile_form = UserProfileForm(instance=user_profile)
-    print(user_profile.profile_picture)
     context = {
         'user_form': user_form,
         'therapist_form': therapist_form,

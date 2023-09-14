@@ -32,7 +32,7 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
- 
+
 
     <style>
         body {
@@ -60,7 +60,7 @@
         .dcontainer {
             margin-left: 1%;
             margin-right: 1%;
-            
+
         }
 
         .txtlarge {
@@ -155,39 +155,7 @@
             </nav>
         </div>
     </div>
-    <!-- Navbar End -->
-    {% comment %} <!-- Search Result Start -->
-    <div class="container-fluid py-5">
-        <div class="container">
-            <div class="text-center mx-auto mb-5" style="max-width: 600px;">
-                <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">Our Team Of Experts</h5>
-                <h1 class="display-5">Qualified Therapeutic Professionals</h1>
-            </div>
-            <div class="row g-5">
-                {% for user, profile, therapist in combined_data %}
-                <div class="col-lg-6 team-item">
-                    <a href="{% url 'view-therapist' user_id=therapist.user.id %}"><div class="row g-0 bg-light rounded overflow-hidden">
-                        <div class="col-12 col-sm-5 h-100">
-                            <img class="img-fluid h-100" src="{{profile.profile_picture.url}}" style="object-fit: cover;">
-                        </div>
-                        <div class="col-12 col-sm-6 h-100 d-flex flex-column">
-                            <div class="mt-3 p-5">
-                                <h3 class="mb-5">{{user.name}}</h3>
-                                <h5 class="fw-normal fst-italic text-primary mb-2">{{therapist.therapy}}</h5>
-                                <h5 class="fw-normal  text-dark mb-4">Experience: {{therapist.experience}} Years</h5>
-                                <p class="m-0">{{therapist.certification_name}}</p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-1 h-100">
-                        </div>
-                    </div></a>
-                </div>
-                {% endfor %}
-               
-            </div>
-        </div>
-    </div>
-    <!-- Search Result End --> {% endcomment %}
+
 
     <div class="container-fluid py-5">
         <div class="container">
@@ -195,50 +163,145 @@
                 <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">Our Team Of Experts</h5>
                 <h1 class="display-5">Qualified Therapeutic Professionals</h1>
             </div>
-            <div class="row g-5">
-                {% for user, profile, therapist in therapists_page %}
-                <div class="col-lg-6 team-item">
-                    <a href="{% url 'view-therapist' user_id=therapist.user.id %}">
-                        <div class="row g-0 bg-light rounded overflow-hidden">
-                            <div class="col-12 col-sm-5 h-100">
-                                <img class="img-fluid h-100" src="{{ profile.profile_picture.url }}" style="object-fit: cover;">
+            <!-- Search Start -->
+            <div class="container-fluid pt-5">
+                <div class="container">
+
+                    <div class="mx-auto" style="width: 100%; max-width: 600px; height:50px">
+                        <form id="search-form">
+                            <div class="input-group" style="height:50px">
+                                <input class="form-control border-primary w-50" type="text" id="query" name="query"
+                                    placeholder="Search by Therapist Name or Therapy">
+                                <button type="submit" class="btn btn-dark border-0 w-25">Search</button>
                             </div>
-                            <div class="col-12 col-sm-6 h-100 d-flex flex-column">
-                                <div class="mt-3 p-5">
-                                    <h3 class="mb-5">{{ user.name }}</h3>
-                                    <h5 class="fw-normal fst-italic text-primary mb-2">{{ therapist.therapy.name }}</h5>
-                                    <h5 class="fw-normal text-dark mb-4">Experience: {{ therapist.experience }} Years</h5>
-                                    <p class="m-0">{{ therapist.certification_name }}</p>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-1 h-100">
-                            </div>
-                        </div>
-                    </a>
+                        </form>
+
+
+                    </div>
                 </div>
-                {% endfor %}
             </div>
-    
+            <!-- Search End -->
+
+
+
+
+            <div class="container m-5" id="results">
+                <!-- Results will be displayed here using JavaScript -->
+            </div>
+
+
+            <div class="container" id="therapists-list">
+                <div class="row g-5">
+                    {% for user, profile, therapist in therapists_page %}
+                    <div class="col-lg-6 team-item">
+                        <a href="{% url 'view-therapist' user_id=therapist.user.id %}">
+                            <div class="row g-0 bg-light rounded overflow-hidden">
+                                <div class="col-12 col-sm-5 h-100">
+                                    <img class="img-fluid h-100" src="{{ profile.profile_picture.url }}"
+                                        style="object-fit: cover;">
+                                </div>
+                                <div class="col-12 col-sm-6 h-100 d-flex flex-column">
+                                    <div class="mt-3 p-5">
+                                        <h3 class="mb-5">{{ user.name }}</h3>
+                                        <h5 class="fw-normal fst-italic text-primary mb-2">
+                                            {{therapist.therapy.therapy_name}}</h5>
+                                        <h5 class="fw-normal text-dark mb-4">Experience: {{ therapist.experience }} Years
+                                        </h5>
+                                        <p class="m-0">{{ therapist.certification_name }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-1 h-100">
+                                </div><!-- ... (rest of the code) ... -->
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+
+
             <!-- Pagination controls -->
             <div class="pagination mt-5 justify-content-center">
                 <span class="step-links">
                     {% if therapists_page.has_previous %}
-                        <a href="?page=1" class="pagination-link ">&laquo; first</a>
-                        <a href="?page={{ therapists_page.previous_page_number }}" class="pagination-link ">previous</a>
+                    <a href="?page=1" class="pagination-link ">&laquo; first</a>
+                    <a href="?page={{ therapists_page.previous_page_number }}" class="pagination-link ">previous</a>
                     {% endif %}
-            
+
                     <span class="current-page">{{ therapists_page.number }}</span>
-            
+
                     {% if therapists_page.has_next %}
-                        <a href="?page={{ therapists_page.next_page_number }}" class="pagination-link">next</a>
-                        <a href="?page={{ therapists_page.paginator.num_pages }}" class="pagination-link">last &raquo;</a>
+                    <a href="?page={{ therapists_page.next_page_number }}" class="pagination-link">next</a>
+                    <a href="?page={{ therapists_page.paginator.num_pages }}" class="pagination-link">last &raquo;</a>
                     {% endif %}
                 </span>
             </div>
-            
+
         </div>
     </div>
-    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#search-form").submit(function (e) {
+            e.preventDefault();
+
+            // Get search query from form
+            var query = $("#query").val();
+
+            // Send AJAX request
+            $.ajax({
+                type: "GET",
+                url: "{% url 'search_therapists2' %}",  // Replace with the actual URL
+                data: { query: query },
+                dataType: "json",
+                success: function (data) {
+                    // Update results on the page
+                    var resultsHtml = "<div class='row mb-3'>";
+                    data.therapists.forEach(function (therapist, index) {
+
+                        if (index % 2 === 0 && index > 0) {
+                            resultsHtml += "</div>"; // Close the previous row
+                            resultsHtml += "<div class='row mb-3'>"; // Open a new row with margin
+                        }
+                        // Create the therapist URL using JavaScript
+                        var therapistUrl = '/therapist/view-therapist/' + therapist.id + '/';
+                        
+                        resultsHtml += '<div class="col-lg-6 team-item">';
+                        resultsHtml += '<a href="' + therapistUrl + '">';
+                        resultsHtml += '<div class="row g-0 bg-light rounded overflow-hidden">';
+                        resultsHtml += '<div class="col-12 col-sm-5 h-100">';
+                        resultsHtml += '<img class="img-fluid h-100" src="' + therapist.profile_picture + '" style="object-fit: cover;">';
+                        resultsHtml += '</div>';
+                        resultsHtml += '<div class="col-12 col-sm-6 h-100 d-flex flex-column">';
+                        resultsHtml += '<div class="mt-3 p-5">';
+                        resultsHtml += '<h3 class="mb-5">' + therapist.name + '</h3>';
+                        resultsHtml += '<h5 class="fw-normal fst-italic text-primary mb-2">' + therapist.therapy + '</h5>';
+                        resultsHtml += '<h5 class="fw-normal text-dark mb-4">Experience: ' + therapist.experience + ' Years</h5>';
+                        resultsHtml += '<p class="m-0">' + therapist.certification_name + '</p>';
+                        resultsHtml += '</div>';
+                        resultsHtml += '</div>';
+                        resultsHtml += '<div class="col-12 col-sm-1 h-100">';
+                        resultsHtml += '</div>';
+                        resultsHtml += '</div>';
+                        resultsHtml += '</a>';
+                        resultsHtml += '</div>';
+                    });
+                    
+                    // Replace the content of the therapists list container
+                    $("#therapists-list").html(resultsHtml);
+                },
+                
+
+                error: function (xhr, status, error) {
+                    // Log any errors to the console
+                    console.error(xhr.responseText);
+                },
+            });
+        });
+    });
+</script>
 
 
     <!-- Footer Start -->
@@ -246,14 +309,17 @@
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">Get In Touch</h4>
-                    <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor</p>
+                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
+                        Get In Touch</h4>
+                    <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed
+                        dolor</p>
                     <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>123 Street, New York, USA</p>
                     <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>info@example.com</p>
                     <p class="mb-0"><i class="fa fa-phone-alt text-primary me-3"></i>+012 345 67890</p>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">Quick Links</h4>
+                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
+                        Quick Links</h4>
                     <div class="d-flex flex-column justify-content-start">
                         <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Home</a>
                         <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About Us</a>
@@ -264,7 +330,8 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">Popular Links</h4>
+                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
+                        Popular Links</h4>
                     <div class="d-flex flex-column justify-content-start">
                         <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Home</a>
                         <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About Us</a>
@@ -275,7 +342,8 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">Newsletter</h4>
+                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
+                        Newsletter</h4>
                     <form action="">
                         <div class="input-group">
                             <input type="text" class="form-control p-3 border-0" placeholder="Your Email Address">
@@ -284,10 +352,14 @@
                     </form>
                     <h6 class="text-primary text-uppercase mt-4 mb-3">Follow Us</h6>
                     <div class="d-flex">
-                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i
+                                class="fab fa-twitter"></i></a>
+                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i
+                                class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle" href="#"><i
+                                class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
@@ -297,7 +369,8 @@
         <div class="container">
             <div class="row g-5">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <a class="text-primary" href="#">Your Site Name</a>. All Rights Reserved.</p>
+                    <p class="mb-md-0">&copy; <a class="text-primary" href="#">Your Site Name</a>. All Rights Reserved.
+                    </p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <p class="mb-0">Designed by <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a></p>

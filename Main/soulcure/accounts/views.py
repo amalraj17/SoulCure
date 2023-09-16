@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from django.urls import reverse
 from django.contrib.auth import login as auth_login ,authenticate, logout
 from django.shortcuts import render, redirect
@@ -212,3 +212,40 @@ def send_welcome_email(email, password, therapist_name):
     
     send_mail(subject, message, from_email, recipient_list)
 
+
+########################################################################################################################
+
+#List Users
+
+########################################################################################################################
+
+def users_list(request):
+    users = User.objects.all()
+    return render(request, 'admin/view-users.html', {'users': users})
+
+
+
+def edit_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if request.method == 'POST':
+        # Handle form submission and update user details
+        user.username = request.POST['username']
+        user.email = request.POST['email']
+
+        # Update user role based on the selected role option
+        role = request.POST.get('role')
+        if role == 'customer':
+            user.is_staff = False
+            user.is_superuser = False
+        elif role == 'staff':
+            user.is_staff = True
+            user.is_superuser = False
+        elif role == 'superuser':
+            user.is_staff = True
+            user.is_superuser = True
+
+        user.save()
+        return redirect('user_list')  # Redirect back to the user list page
+
+    return render(request, 'admin/edituser.html', {'user': user})

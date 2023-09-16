@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from .forms import CustomUserForm, TherapistForm, UserProfileForm
+from client.models import Appointment
 
 
 
@@ -188,12 +189,6 @@ def viewtherapist(request, user_id):
         }
     return render(request, 'therapist/view-therapist.html', context)
 
-# def therapists(request):
-#     therapists = Therapist.objects.all()
-#     cuser = CustomUser.objects.filter(role=CustomUser.THERAPIST, id__in=therapists.values_list('user_id', flat=True))
-#     uprofile = UserProfile.objects.filter(user_id__in=cuser.values_list('id', flat=True))
-#     combined_data = list(zip_longest(cuser, uprofile, therapists))
-#     return render(request, 'therapist/therapists.html', {'combined_data': combined_data})
 
 from django.core.paginator import Paginator
 
@@ -213,3 +208,18 @@ def therapists(request):
     therapists_page = paginator.get_page(page_number)
 
     return render(request, 'therapist/therapists.html', {'therapists_page': therapists_page})
+
+
+
+
+########################################################################################################################
+
+#View Appointments
+
+########################################################################################################################
+
+def view_appointment_therapist(request):
+    therapist = request.user
+
+    appointments = Appointment.objects.filter(therapist=therapist)
+    return render(request,'therapist/view-appointments.html',{'appointments':appointments})

@@ -6,6 +6,7 @@ from django.contrib import messages
 from therapist.forms import CustomUserForm, UserProfileForm
 from therapist.models import Therapist
 from datetime import time
+from .models import Appointment
 
 
 
@@ -124,72 +125,144 @@ from .forms import AppointmentForm,CurrentUserForm
 
 
 @login_required
-def appointment(request,t_id):
+def appointment(request, t_id):
     therapist = get_object_or_404(CustomUser, id=t_id)
-    context=None
-    print(t_id)
-    print(therapist.name)
+    context = None
+
     if request.method == 'POST':
         date = request.POST.get('date')
         time_slot = request.POST.get('time_slot')
-        
-        # Check if an appointment already exists for the selected date and time slot
-        app = Appointment.objects.filter(therapist=therapist, date=date, time_slot=time_slot)
-        
-        if app.count() == 0:  # Use app.count() to check the count
+
+        # Check if the current user (client) has already booked an appointment for the same date and time slot
+        existing_appointment = Appointment.objects.filter(client=request.user, date=date, time_slot=time_slot).first()
+
+        # Check if the current user (client) has already booked an appointment for the same date
+        existing_appointment_same_date = Appointment.objects.filter(client=request.user, date=date).first()
+
+        if existing_appointment:
+            apps = Appointment.objects.filter(date=date, time_slot=time_slot)
+            time_slots = {time(9, 0): 1, time(11, 0): 1, time(13, 0): 1, time(15, 0): 1, time(17, 0): 1}
+            for app in apps:
+                time_slots[app.time_slot] = 0
+
+            available_slots = [time_slot.strftime('%I:%M %p') for time_slot, available in time_slots.items() if available]
+            available_slots = ", ".join(available_slots)
+            print(available_slots)
+
+            user = request.user
+            initial_data = {
+                'client': user,
+                'client_name': user.name,
+                'client_phone': user.phone,
+                'therapist': therapist.id,
+                'therapist_name': therapist.name,
+            }
+            appointment_form = AppointmentForm(initial=initial_data)
+            user_form = CurrentUserForm(instance=user)
+            context = {
+                'error': 'You have already scheduled an appointment for the selected Date and Time Slot',
+                'therapist': therapist,
+                'appointment_form': appointment_form,
+                'user_form': user_form,
+                'available_slots': available_slots
+            }
+        elif existing_appointment_same_date:
+            user = request.user
+            initial_data = {
+                'client': user,
+                'client_name': user.name,
+                'client_phone': user.phone,
+                'therapist': therapist.id,
+                'therapist_name': therapist.name,
+            }
+            appointment_form = AppointmentForm(initial=initial_data)
+            user_form = CurrentUserForm(instance=user)
+            context = {
+                'error': 'You have already scheduled an appointment for the selected Date',
+                'therapist': therapist,
+                'appointment_form': appointment_form,
+                'user_form': user_form,
+            }
+        else:
             form = AppointmentForm(request.POST)
             form.instance.client = request.user
             form.instance.therapist = therapist
-            
+
             if form.is_valid():
                 form.save()
                 return redirect('index')
-        else:
-            apps=Appointment.objects.filter(therapist=therapist,date=request.POST.get('date'))
-            time_slots={time(9,0):1,time(11, 0):1,time(13,0):1,time(15, 0):1,time(17,0):1}
-            for time_slot in time_slots:
-                for app in apps:
-                    if app.time_slot== time_slot:
-                        time_slots[time_slot]=0
-            available_slots=""
-            for time_slot in time_slots:
-                if time_slots[time_slot]==1:
-                    available_slots+="\n"+time_slot.strftime('%I:%M %p')
-            available_slots=available_slots.strip()
-            user = request.user
-            initial_data = {
-            'client': user,
-            'client_name': user.name,
-            'client_phone': user.phone,
-            'therapist':therapist.id,
-            'therapist_name':therapist.name,
-        }
-            appointment_form = AppointmentForm(initial=initial_data)
-            user_form = CurrentUserForm(instance=user)
-            context={
-                'error':'Therapist already shceduled on the selected Date and Time Slot',
-                'therapist':therapist,
-                'appointment_form': appointment_form,
-                'user_form': user_form,
-                'available_slots':available_slots
-            }
-            return render(request, 'appointment.html', context) 
+
     else:
         user = request.user
         initial_data = {
             'client': user,
             'client_name': user.name,
             'client_phone': user.phone,
-            'therapist':therapist.id,
-            'therapist_name':therapist.name,
+            'therapist': therapist.id,
+            'therapist_name': therapist.name,
         }
         appointment_form = AppointmentForm(initial=initial_data)
         user_form = CurrentUserForm(instance=user)
-        context = {'appointment_form': appointment_form, 'user_form': user_form ,'therapist':therapist}
-    
+        context = {'appointment_form': appointment_form, 'user_form': user_form, 'therapist': therapist}
+
     return render(request, 'appointment.html', context)
 
 
+
+
+
+def cancel_appointment(request):
+    if request.method == 'POST':
+        appointment_id = request.POST.get('appointment_id')
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+            
+            # Check if the appointment is not already canceled
+            if appointment.status != 'Canceled':
+                appointment.status = 'Canceled'
+                appointment.delete()
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'message': 'Appointment is already canceled.'})
+        except Appointment.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Appointment not found.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+def get_available_time_slots(request):
+    therapist_id = request.GET.get('therapist_id')
+    therapist = get_object_or_404(CustomUser, id=therapist_id)
+    date = request.GET.get('date')
+
+    # Fetch existing appointments for the selected date and therapist
+    existing_appointments = Appointment.objects.filter(therapist=therapist, date=date)
+
+    # Create a list of all available time slots
+    all_time_slots = [time(9, 0), time(11, 0), time(13, 0), time(15, 0), time(17, 0)]
+
+    # Initialize a dictionary to store the availability of time slots
+    time_slot_availability = {time_slot: True for time_slot in all_time_slots}
+
+    # Mark time slots as unavailable if they are already booked
+    for appointment in existing_appointments:
+        if appointment.time_slot in time_slot_availability:
+            time_slot_availability[appointment.time_slot] = False
+
+    # Filter the available time slots
+    available_time_slots = [time_slot.strftime('%I:%M %p') for time_slot, is_available in time_slot_availability.items() if is_available]
+
+    return JsonResponse({'available_time_slots': available_time_slots})
+
+
+
+
+
+
+def view_appointment_client(request):
+    client = request.user
+
+    active_appointments = Appointment.objects.filter(client=client)
+    return render(request,'client/view-appointments.html',{'appointments':active_appointments})
+    
 
 ########################################################################################################################
 
@@ -208,8 +281,7 @@ from therapist.models import Therapist
 
 @login_required
 def search_therapists(request):
-        # Get search criteria from AJAX reques
-    return render(request, 'demosearch.html')  # Replace 'search.html' with your template
+    return render(request, 'demosearch.html')  
 
 from django.db.models import Q
 @login_required

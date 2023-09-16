@@ -7,7 +7,7 @@ from accounts.models import CustomUser
 class BootstrapTextInput(forms.TextInput):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("attrs", {})
-        kwargs["attrs"]["class"] = "form-control form-control-lg"
+        kwargs["attrs"]["class"] = "form-control form-control-lg bg-white"
         super().__init__(*args, **kwargs)
 
 # Define a custom widget class with Bootstrap styling for select fields
@@ -28,7 +28,7 @@ class BootstrapDateInput(forms.DateInput):
 
 class AppointmentForm(forms.ModelForm):
     date = forms.DateField(
-        widget=forms.DateInput(attrs={'placeholder': 'YYYY-MM-DD', 'id': 'date', 'class': 'form-control form-control-lg', 'type': 'date'})
+        widget=forms.DateInput(attrs={'placeholder': 'YYYY-MM-DD', 'id': 'date','name':'date' ,'class': 'form-control form-control-lg', 'type': 'date'})
     )
     therapist_name = forms.CharField(
         max_length=100,  # Adjust the max length as needed
@@ -44,30 +44,17 @@ class AppointmentForm(forms.ModelForm):
 
     class Meta:
         model = Appointment
-        fields = ['date', 'therapist_name', 'time_slot']
+        fields = [ 'therapist_name','date','time_slot']
         widgets = {
             'time_slot': BootstrapSelect(attrs={'placeholder': 'Select State', 'id': 'time_slot'}),
         }
 
-
-# class AppointmentForm(forms.ModelForm):
-
-#     date = forms.DateField(
-#         widget=forms.DateInput(attrs={'placeholder': 'YYYY-MM-DD', 'id': 'date' , 'class':'form-control form-control-lg ' ,'type': 'date'})
-#     )
-#     class Meta:
-#         model = Appointment
-#         fields = ['date', 'therapist', 'time_slot']
-#         widgets = {
-#             'time_slot': BootstrapSelect(attrs={'placeholder': 'Select State', 'id': 'time_slot'}),
-#             'therapist': BootstrapSelect(attrs={'placeholder': 'Select Gender', 'id': 'therapist'}),
-#         }
 class CurrentUserForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['name','email','phone']
         widgets = {
-            'name': BootstrapTextInput(attrs={'placeholder': 'Enter Your Name', 'id': 'name'}),
-            'email': BootstrapTextInput(attrs={'placeholder': 'Enter Your Email', 'id': 'email'}),
+            'name': BootstrapTextInput(attrs={'placeholder': 'Enter Your Name', 'id': 'name','disabled':'disabled'}),
+            'email': BootstrapTextInput(attrs={'placeholder': 'Enter Your Email', 'id': 'email','disabled':'disabled'}),
             'phone': BootstrapTextInput(attrs={'placeholder': 'Enter Your Phone', 'id': 'phone'}),
         }

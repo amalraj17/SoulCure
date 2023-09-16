@@ -19,18 +19,6 @@ def index(request):
     
     return render(request, 'index.html', {'user': request.user})
 
-
-# def index(request):
-#     if request.user.is_authenticated and request.user.role== 4:
-#         return redirect(reverse('adminindex'))
-#     elif request.user.is_authenticated and request.user.role== 2:
-#         return redirect(reverse('therapist'))
-#     elif request.user.is_authenticated and request.user.role== 1:
-#         return redirect(reverse('index'))
-#     else:
-#         return render(request, 'index.html', {'user': request.user})
-# def index(request):
-#     return render(request,'index.html')
 def adminindex(request):
     clients = CustomUser.objects.filter(role=CustomUser.CLIENT)
     client = clients.count()
@@ -53,3 +41,5 @@ def updateStatus(request,update_id):
         updateUser.is_active=True
     updateUser.save()
     return redirect('adminindex')
+
+

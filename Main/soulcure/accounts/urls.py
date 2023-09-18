@@ -11,7 +11,15 @@ urlpatterns = [
         path('logout/',views.userLogout,name='logout'),
         path('',include('allauth.urls')), 
         path('add-therapist/',views.addTherapist,name='addTherapist'),
+        path('view-therapies/', views.view_therapies, name='view-therapies'),
         path('users-lists/',views.users_list,name='users-lists'),
+        path('change-therapy-status/<int:therapy_id>/', views.change_therapy_status, name='change-therapy-status'),
+        path('update-therapy/<int:therapy_id>/', views.update_therapy, name='update-therapy'),
+        path('susers/', views.susers, name='susers'),
+        path('user-data/',views.user_data,name='user-data'),
+
+
+
 
         path('activate/<uidb64>/<token>', views.activate, name='activate'),
         path('reset_password/',auth_views.PasswordResetView.as_view(),name="reset_password"),

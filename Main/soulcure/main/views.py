@@ -41,5 +41,6 @@ def updateStatus(request,update_id):
         updateUser.is_active=True
     updateUser.save()
     return redirect('adminindex')
-
+def about(request):
+    return render(request,'about.html')
 

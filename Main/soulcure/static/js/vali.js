@@ -266,7 +266,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const dobInput = document.getElementById("dob");
 
-    dobInput.addEventListener("blur", validateDOB);
+    if (dobInput) {
+      // Check if the addressInput element exists
+   
+      dobInput.addEventListener("blur", validateDOB);
+    }
+    // dobInput.addEventListener("blur", validateDOB);
 
     function validateDOB() {
       console.log("validateDOB function called");
@@ -292,6 +297,36 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
+    const dobclientInput = document.getElementById("dobclient");
+    console.log(dobclientInput)
+
+    dobclientInput.addEventListener("blur", validateDOBclient);
+    
+    function validateDOBclient() {
+      console.log("validateDOB function called");
+      const dobclientValidation = document.getElementById("dobclientValidation");
+      const dobValid = document.getElementById("dobValid");
+      const inputValue = dobclientInput.value;
+    
+      // Calculate the age based on the entered date of birth
+      const currentDate = new Date();
+      const selectedDate = new Date(inputValue);
+      const ageInYears = currentDate.getFullYear() - selectedDate.getFullYear();
+    
+      // Check if the age is at least 5 years
+      if (ageInYears < 8) {
+        dobclientInput.classList.add("is-invalid");
+        dobclientInput.classList.remove("is-valid");
+        dobclientValidation.style.display = "block";
+        dobValid.style.display = "none";
+      } else {
+        dobclientInput.classList.remove("is-invalid");
+        dobclientInput.classList.add("is-valid");
+        dobclientValidation.style.display = "none";
+        dobValid.style.display = "block";
+      }
+    }
+    
 
 
     const bioInput = document.getElementById("bio");

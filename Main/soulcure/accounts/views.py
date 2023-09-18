@@ -249,3 +249,55 @@ def edit_user(request, user_id):
         return redirect('user_list')  # Redirect back to the user list page
 
     return render(request, 'admin/edituser.html', {'user': user})
+
+
+########################################################################################################################
+
+#View-therapies// admin main
+
+########################################################################################################################
+from therapist.models import Therapy
+from therapist.forms import TherapyForm
+
+from django.http import JsonResponse
+from django.core import serializers
+from .models import CustomUser
+
+def view_therapies(request):
+    therapies = Therapy.objects.all()
+    context = {'therapies': therapies}
+    return render(request, 'admin/view-therapies.html', context)
+
+
+def susers(request):
+    return render(request, 'admin/users.html')
+
+def user_data(request):
+    users = CustomUser.objects.all().exclude(role='Admin')
+    data = serializers.serialize('json', users)
+    return JsonResponse({'data': data}, safe=False)
+
+
+
+def change_therapy_status(request, therapy_id):
+    try:
+        therapy = Therapy.objects.get(id=therapy_id)
+        therapy.status = not therapy.status 
+        therapy.save()
+    except Therapy.DoesNotExist:
+        pass
+
+    return redirect('view-therapies') 
+
+def update_therapy(request, therapy_id):
+    therapy = get_object_or_404(Therapy, id=therapy_id) 
+
+    if request.method == 'POST':
+        form = TherapyForm(request.POST, instance=therapy)
+        if form.is_valid():
+            form.save()
+            return redirect('view-therapies') 
+    else:
+        form = TherapyForm(instance=therapy)
+
+    return render(request, 'admin/update_therapy.html', {'form': form, 'therapy': therapy})

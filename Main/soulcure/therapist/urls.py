@@ -16,6 +16,8 @@ urlpatterns = [
 
     path('view-therapist/<int:user_id>/',views.viewtherapist,name='view-therapist'),
     path('view-appointment-therapist/',views.view_appointment_therapist,name='view-appointment-therapist'),
+    path('update-appointment-status/', views.update_appointment_status, name='update-appointment-status'),
+
 
  
 

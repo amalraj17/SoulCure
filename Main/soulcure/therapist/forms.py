@@ -144,3 +144,22 @@ class TherapistForm(forms.ModelForm):
             'experience': BootstrapTextInput(attrs={'placeholder': 'Enter Experience', 'id': 'experience'}),
             'therapy': BootstrapSelect(attrs={'placeholder': 'Select Therapy', 'id': 'therapy'}),
         }
+
+
+
+
+
+###########################################################################################################################################
+
+# Meeting Form
+
+###########################################################################################################################################
+
+from django import forms
+
+class MeetingScheduleForm(forms.Form):
+    appointment_id = forms.IntegerField(widget=forms.HiddenInput())
+    date = forms.DateField(label='Meeting Date', widget=forms.DateInput(attrs={'type': 'date'}))
+    time = forms.TimeField(label='Meeting Time', widget=forms.TimeInput(attrs={'type': 'time'}))
+    meeting_platform = forms.CharField(label='Meeting Platform', max_length=100)
+    meeting_url = forms.URLField(label='Meeting URL', max_length=200, required=False)

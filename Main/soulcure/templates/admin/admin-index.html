@@ -31,6 +31,12 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <style>
+        .admin-class
+        {
+            max-width: 100%;
+        }
+    </style>
 </head>
 
 <body>
@@ -95,24 +101,34 @@
 
     <div class="d-flex justify-content-center admin-class">
         <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-8">
-            <p class="m-4 text-secondary fs-4 fw-bold">Manage Users</p>
-           <a href="{% url 'users-lists' %}"> <p class="m-4 text-secondary fs-4 fw-bold">Users</p></a>
+            <div class="row p-3 mt-4">
+            <div class="col-lg-2 border mx-2">
+                <a href="{% url 'susers' %}"><p class="m-4 text-secondary text-center text-dark  fs-5 fw-bold">Users</p></a>
+            </div>
+            <div class="col-lg-2 border mx-2">
+                <a href="{% url 'view-therapies' %}"><p class="m-4 text-secondary text-center fs-5 fw-bold">View Therapy</p></a>
+            </div>
+            <div class="col-lg-2 border mx-2">
+                <a href="{% url 'addTherapy' %}"><p class="m-4 text-secondary text-center fs-5 fw-bold">Add Therapy</p></a>
+            </div>
+            <div class="col-lg-2 border mx-2">
+                <a href="{% url 'addTherapist' %}" ><p class="m-4 text-secondary text-center fs-5 fw-bold">Add Therapist</p></a>
+               
+            </div>
 
+        </div>
+
+        <hr>
 
             <div class="d-flex justify-content-center flex-lg-row align-items-center text-center flex-column">
-                <div class="d-flex col-3 justify-content-center flex-column align-items-center m-0">
+                <div class="d-flex col-3 justify-content-center flex-column align-items-center m-0 text-dark">
                     <p class="fs-5 text-secondary">Number of Users</p>
                     <p class="fs-4">{{client}}</p>
                 </div>
-                <div class="d-flex col-3 justify-content-center flex-column align-items-center">
+                <div class="d-flex col-3 justify-content-center flex-column align-items-center text-dark">
                     <p class="fs-5 text-secondary">Number of Therapists</p>
                     <p class="fs-4">{{therapist}}</p>
                 </div>
-                {% comment %} <div class="d-flex col-3 justify-content-center flex-column align-items-center">
-                    <p class="fs-5 text-secondary">Number of Clubs</p>
-                    <p class="fs-4">{{club}}</p>
-                    <div id="piechart_club_3d" style="width: 240px; height: 240px;"></div>
-                </div> {% endcomment %}
             </div>
             <div class="table-responsive m-4">
                 <table class="table rounded text-center table-hover table-bordered">

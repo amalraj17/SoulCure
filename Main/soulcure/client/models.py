@@ -14,7 +14,6 @@ class Appointment(models.Model):
     STATUS_CHOICES = [
         ('scheduled', 'Scheduled'),
         ('confirmed', 'Confirmed'),
-        ('cancelled', 'Cancelled'),
         ('completed', 'Completed'),
     ]
 
@@ -26,13 +25,14 @@ class Appointment(models.Model):
         limit_choices_to={'role': CustomUser.CLIENT}
     )
     therapist = models.ForeignKey(
-        CustomUser, 
+        CustomUser,
         on_delete=models.CASCADE, 
         related_name='therapist_appointments',
         limit_choices_to={'role': CustomUser.THERAPIST}
     )
     time_slot = models.TimeField(choices=TIME_CHOICES)
     created_date = models.DateTimeField(auto_now_add=True,null=True)
+    modified_date = models.DateTimeField(auto_now=True, null=True)
     cancelled_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
  

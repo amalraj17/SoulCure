@@ -3,7 +3,7 @@ from accounts.models import CustomUser,UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-from therapist.forms import CustomUserForm, UserProfileForm
+from .forms import CustomUserForm, UserProfileForm
 from therapist.models import Therapist
 from datetime import time
 from .models import Appointment
@@ -208,9 +208,6 @@ def appointment(request, t_id):
     return render(request, 'appointment.html', context)
 
 
-
-
-
 def cancel_appointment(request):
     if request.method == 'POST':
         appointment_id = request.POST.get('appointment_id')
@@ -220,7 +217,7 @@ def cancel_appointment(request):
             # Check if the appointment is not already canceled
             if appointment.status != 'Canceled':
                 appointment.status = 'Canceled'
-                appointment.delete()
+                appointment.delete() 
                 return JsonResponse({'success': True})
             else:
                 return JsonResponse({'success': False, 'message': 'Appointment is already canceled.'})

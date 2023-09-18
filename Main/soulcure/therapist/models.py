@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import CustomUser,UserProfile
 from accounts.models import CustomUser, UserProfile
+from client.models import Appointment
 
 
 # Create your models here.
@@ -31,4 +32,20 @@ class Therapist(models.Model):
 
 
 
-    # user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, blank=True, null=True)
+
+class Meeting(models.Model):
+    STATUS_CHOICES = [
+        ('scheduled', 'Scheduled'),
+        ('completed', 'Completed'),
+    ]
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    platform = models.CharField(max_length=100)
+    meeting_url = models.URLField()
+    scheduled_time = models.DateTimeField()
+    duration_minutes = models.PositiveIntegerField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Meeting for Appointment with {self.appointment.client.name} and {self.appointment.therapist.name} on {self.scheduled_time}"

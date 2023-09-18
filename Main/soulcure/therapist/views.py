@@ -1,14 +1,15 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from .forms import TherapyForm
-from .models import Therapy
+from .models import Therapy,Meeting
 from accounts.models import CustomUser,UserProfile
 from .models import Therapist
 from itertools import zip_longest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-from .forms import CustomUserForm, TherapistForm, UserProfileForm
+from .forms import CustomUserForm, TherapistForm, UserProfileForm,MeetingScheduleForm
 from client.models import Appointment
+
 
 
 
@@ -214,10 +215,68 @@ def therapists(request):
 
 ########################################################################################################################
 
-#View Appointments
+#Appointments
 
 ########################################################################################################################
 
+@login_required
+def update_appointment_status(request):
+    if request.method == 'POST':
+        appointment_id = request.POST.get('appointment_id')
+        new_status = request.POST.get('status')
+        print(appointment_id)
+        print(new_status)
+
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+
+            if request.user == appointment.therapist:
+                appointment.status = new_status
+                appointment.save()
+                return redirect('view-appointment-therapist')
+            else:
+                pass
+        except Appointment.DoesNotExist:
+            # Handle appointment not found
+            pass 
+
+    return redirect('view-appointment-therapist')
+
+
+# from django.shortcuts import render, redirect
+# from .forms import MeetingScheduleForm  # Import your MeetingScheduleForm or create one
+# from .models import Appointment  # Import your Appointment model or adjust the import
+
+# def schedule_meeting(request, appointment_id):
+#     try:
+#         appointment = Appointment.objects.get(id=appointment_id)
+#     except Appointment.DoesNotExist:
+#         # Handle appointment not found
+#         messages.error(request, 'Appointment not found.')
+#         return redirect('view-appointment-therapist')
+
+#     if request.method == 'POST':
+#         form = MeetingScheduleForm(request.POST)
+#         if form.is_valid():
+#             meeting = form.save(commit=False)
+#             meeting.appointment = appointment
+#             meeting.save()
+#             messages.success(request, 'Meeting scheduled successfully.')
+#             return redirect('view-appointment-therapist')
+
+#     else:
+#         form = MeetingScheduleForm()
+
+#     context = {
+#         'form': form,
+#         'appointment': appointment,
+#     }
+
+#     return render(request, 'therapist/schedule_meeting_modal.html', context)
+
+
+
+@login_required
 def view_appointment_therapist(request):
     therapist = request.user
 

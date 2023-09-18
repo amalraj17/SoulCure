@@ -32,8 +32,7 @@
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
     <style>
-        .admin-class
-        {
+        .admin-class {
             max-width: 100%;
         }
     </style>
@@ -99,38 +98,60 @@
     <!-- Navbar End -->
 
 
-    <div class="d-flex justify-content-center admin-class">
+    <div class=" d-flex justify-content-center admin-class">
         <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-8">
-            <div class="row p-3 mt-4">
-            <div class="col-lg-2 border mx-2">
-                <a href="{% url 'susers' %}"><p class="m-4 text-secondary text-center text-dark  fs-5 fw-bold">Users</p></a>
+            <div class="d-flex mt-4 justify-content-center flex-lg-row align-items-center text-center flex-column">
+                <div class="d-flex col-2 justify-content-center flex-column align-items-center mx-2 text-dark"
+                    style="border: 3px solid #181515; border-radius: 10px; background-color: #ffffff;">
+                    <p class="fs-4 text-dark" style="font-weight: bold;">Total Clients</p>
+                    <p class="fs-4" style="font-weight: bold;">{{client}}</p>
+                </div>
+                <div class="d-flex col-2 justify-content-center flex-column align-items-center mx-2 text-dark"
+                    style="border: 3px solid #181515; border-radius: 10px; background-color: #ffffff;">
+                    <p class="fs-4 text-success" style="font-weight: bold;">Active Users</p>
+                    <p class="fs-4 text-success" style="font-weight: bold;">{{activeusers}}</p>
+                </div>
+                <div class="d-flex col-2 justify-content-center flex-column align-items-center mx-2 text-dark"
+                    style="border: 3px solid #181515; border-radius: 10px; background-color: #ffffff;">
+                    <p class="fs-4 text-danger" style="font-weight: bold;">InActive Users</p>
+                    <p class="fs-4 text-danger" style="font-weight: bold;">{{inactiveusers}}</p>
+                </div>
+
+                <div class="d-flex col-2 justify-content-center flex-column align-items-center mx-2 text-dark"
+                    style="border: 3px solid #181515; border-radius: 10px; background-color: #ffffff;">
+                    <p class="fs-4 text-dark" style="font-weight: bold;">Total Therapists</p>
+                    <p class="fs-4" style="font-weight: bold;">{{therapist}}</p>
+                </div>
             </div>
-            <div class="col-lg-2 border mx-2">
-                <a href="{% url 'view-therapies' %}"><p class="m-4 text-secondary text-center fs-5 fw-bold">View Therapy</p></a>
+            <div class="row p-3">
+                <div class="col-lg-12">
+                    <a href="{% url 'susers' %}">
+                        <p class="m-4 text-secondary text-center text-dark btn-lg btn-primary  fs-5 fw-bold">Users</p>
+                    </a>
+                    <a href="{% url 'view-therapies' %}">
+                        <p class="m-4 text-secondary text-center btn-lg btn-primary fs-5 fw-bold">View Therapy</p>
+                    </a>
+                    <a href="{% url 'view-appointments' %}">
+                        <p class="m-4 text-secondary text-center btn-lg btn-primary fs-5 fw-bold">View Appointments</p>
+                    </a>
+                    <a href="{% url 'addTherapy' %}">
+                        <p class="m-4 text-secondary text-center btn-lg btn-primary fs-5 fw-bold">Add Therapy</p>
+                    </a>
+                    <a href="{% url 'addTherapist' %}">
+                        <p class="m-4 text-secondary text-center btn-lg btn-primary fs-5 fw-bold">Add Therapist</p>
+                    </a>
+                </div>
+
             </div>
-            <div class="col-lg-2 border mx-2">
-                <a href="{% url 'addTherapy' %}"><p class="m-4 text-secondary text-center fs-5 fw-bold">Add Therapy</p></a>
-            </div>
-            <div class="col-lg-2 border mx-2">
-                <a href="{% url 'addTherapist' %}" ><p class="m-4 text-secondary text-center fs-5 fw-bold">Add Therapist</p></a>
-               
-            </div>
+
+            
 
         </div>
 
         <hr>
 
-            <div class="d-flex justify-content-center flex-lg-row align-items-center text-center flex-column">
-                <div class="d-flex col-3 justify-content-center flex-column align-items-center m-0 text-dark">
-                    <p class="fs-5 text-secondary">Number of Users</p>
-                    <p class="fs-4">{{client}}</p>
-                </div>
-                <div class="d-flex col-3 justify-content-center flex-column align-items-center text-dark">
-                    <p class="fs-5 text-secondary">Number of Therapists</p>
-                    <p class="fs-4">{{therapist}}</p>
-                </div>
-            </div>
-            <div class="table-responsive m-4">
+
+        <!-- <div class="table-responsive m-4">
                 <table class="table rounded text-center table-hover table-bordered">
                     <tr class="thead fw-bold">
 
@@ -163,11 +184,11 @@
                     {% endif %}
                     {% endfor %}
                 </table>
-            </div>
+            </div> -->
 
-        </div>
     </div>
-    
+    </div>
+
 
 
     <!-- Back to Top -->

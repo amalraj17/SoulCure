@@ -114,6 +114,18 @@
         <div class="container p-5 card ">
   
           <form method="post" class=" mx-auto w-75" enctype="multipart/form-data">
+            <div id="therapyNameValidation" class="invalid-feedback text-center">
+                Please enter a valid therapy name containing only letters
+              </div>
+              <div id="therapyDescriptionValidation" class="invalid-feedback text-center">
+                Therapy description must contain at least 25 words.
+              </div>
+              <div id="durationValidation" class="invalid-feedback text-center">
+                Duration upto 20 weeks
+              </div>
+              <div id="benefitsValidation" class="invalid-feedback">
+                Benefits must contain at least 25 words.
+              </div>
           {% csrf_token %}
           {{ form.as_p}}
 
@@ -126,5 +138,121 @@
 
 
     <a  href="{% url 'view-therapies' %}"><h6 class="align-center text-center m-5">Back to Therapy List</h6></a>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const therapyNameInput = document.getElementById("tname");
+          therapyNameInput.addEventListener("keyup", validateTherapyName);
+  
+          function validateTherapyName() {
+            console.log("validateTherapyName function called");
+            const therapyNameValidation = document.getElementById("therapyNameValidation");
+            const therapyNameValid = document.getElementById("therapyNameValid");
+            const inputValue = therapyNameInput.value.trim(); // Remove leading/trailing whitespace
+  
+            const therapyNamePattern = /^[A-Za-z]+( [A-Za-z]+)*$/;
+  
+            if (!therapyNamePattern.test(inputValue)) {
+              therapyNameInput.classList.add("is-invalid");
+              therapyNameInput.classList.remove("is-valid");
+              therapyNameValidation.style.display = "block";
+              therapyNameValid.style.display = "none";
+            } else {
+              therapyNameInput.classList.remove("is-invalid");
+              therapyNameInput.classList.add("is-valid");
+              therapyNameValidation.style.display = "none";
+              therapyNameValid.style.display = "block";
+            }
+          }
+  
+  
+  
+          const therapyDescriptionInput = document.getElementById("therapyDescription");
+  
+          therapyDescriptionInput.addEventListener("keyup", validateTherapyDescription);
+  
+          function validateTherapyDescription() {
+            console.log("validateTherapyDescription function called");
+            const therapyDescriptionValidation = document.getElementById("therapyDescriptionValidation");
+            const therapyDescriptionValid = document.getElementById("therapyDescriptionValid");
+            const inputValue = therapyDescriptionInput.value;
+  
+            // Remove all non-alphanumeric characters except '()', '-', "'", '"', and '.'
+            const cleanedInput = inputValue.replace(/[^A-Za-z0-9()\-'"\.]/g, ' ');
+  
+            // Split the cleaned input into words
+            const words = cleanedInput.split(/\s+/);
+  
+            if (words.length < 25) {
+              therapyDescriptionInput.classList.add("is-invalid");
+              therapyDescriptionInput.classList.remove("is-valid");
+              therapyDescriptionValidation.style.display = "block";
+              therapyDescriptionValid.style.display = "none";
+            } else {
+              therapyDescriptionInput.classList.remove("is-invalid");
+              therapyDescriptionInput.classList.add("is-valid");
+              therapyDescriptionValidation.style.display = "none";
+              therapyDescriptionValid.style.display = "block";
+            }
+          }
+  
+  
+          const durationInput = document.getElementById("duration");
+  
+          durationInput.addEventListener("keyup", validateDuration);
+  
+          function validateDuration() {
+            console.log("validateDuration function called");
+            const durationValidation = document.getElementById("durationValidation");
+            const durationValid = document.getElementById("durationValid");
+            const inputValue = durationInput.value.trim();
+  
+            const isValid = /^([1-9]|1[0-9]|20)$/.test(inputValue);
+  
+            if (!isValid) {
+              durationInput.classList.add("is-invalid");
+              durationInput.classList.remove("is-valid");
+              durationValidation.style.display = "block";
+              durationValid.style.display = "none";
+            } else {
+              durationInput.classList.remove("is-invalid");
+              durationInput.classList.add("is-valid");
+              durationValidation.style.display = "none";
+              durationValid.style.display = "block";
+            }
+          }
+  
+  
+          const benefitsInput = document.getElementById("benefits");
+          benefitsInput.addEventListener("keyup", validateBenefits);
+  
+          function validateBenefits() {
+            console.log("validateBenefits function called");
+            const benefitsValidation = document.getElementById("benefitsValidation");
+            const benefitsValid = document.getElementById("benefitsValid");
+            const inputValue = benefitsInput.value;
+  
+            const cleanedInput = inputValue.replace(/[^A-Za-z0-9()\-'"\.]/g, ' ');
+  
+            // Split the cleaned input into words
+            const words = cleanedInput.split(/\s+/);
+  
+            if (words.length < 25) {
+              benefitsInput.classList.add("is-invalid");
+              benefitsInput.classList.remove("is-valid");
+              benefitsValidation.style.display = "block";
+              benefitsValid.style.display = "none";
+            } else {
+              benefitsInput.classList.remove("is-invalid");
+              benefitsInput.classList.add("is-valid");
+              benefitsValidation.style.display = "none";
+              benefitsValid.style.display = "block";
+            }
+          }
+  
+  
+        });
+      </script>
 </body>
 </html>

@@ -54,17 +54,15 @@
                     <div class="navbar-nav ms-5 mr-5 py-0 justify-content-end">
                         <a href="{% url 'index' %}" class="nav-item nav-link active">Home</a>
                         <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
-                        <a href="service.html" class="nav-item nav-link">Therapies</a>
                         <a href="{% url 'listtherapist' %}" class="nav-item nav-link">Find a Therapist</a>
-{% comment %} 
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
                             <div class="dropdown-menu m-0">
-                                <a href="{% url 'listtherapist' %}" class="dropdown-item">The Team</a>
-                                <a href="{% url 'search' %}" class="dropdown-item">Search</a>
-                                <a href="appointment.html" class="dropdown-item">Appointment</a>
+                                <a href="{% url 'familytherapy' %}" class="dropdown-item">Family Therapy</a>
+                                {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
+                                <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
-                        </div> {% endcomment %}
+                        </div> 
                         <a href="contact.html" class="nav-item nav-link">Contact</a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle"

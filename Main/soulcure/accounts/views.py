@@ -262,6 +262,7 @@ from therapist.forms import TherapyForm
 from django.http import JsonResponse
 from django.core import serializers
 from .models import CustomUser
+from client.models import Appointment
 
 def view_therapies(request):
     therapies = Therapy.objects.all()
@@ -270,7 +271,23 @@ def view_therapies(request):
 
 
 def susers(request):
-    return render(request, 'admin/users.html')
+    users = CustomUser.objects.all().exclude(role=4)
+    return render(request, 'admin/users.html', {'users': users})
+
+
+def view_appointments(request):
+    appointments = Appointment.objects.all
+    return render(request,'admin/view-appointments.html',{'appointments':appointments})
+
+
+def updateuserStatus(request,update_id):
+    updateUser=CustomUser.objects.get(id=update_id)
+    if updateUser.is_active==True:
+        updateUser.is_active=False
+    else:
+        updateUser.is_active=True
+    updateUser.save()
+    return redirect('susers')
 
 def user_data(request):
     users = CustomUser.objects.all().exclude(role='Admin')

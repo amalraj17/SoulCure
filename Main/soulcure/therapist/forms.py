@@ -8,7 +8,8 @@ class TherapyForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={
                 "class": "form-control form-control-lg",
-                'placeholder': 'Enter Therapy Name'
+                'placeholder': 'Enter Therapy Name',
+                'id':'tname',
             }
         )
     )
@@ -16,7 +17,7 @@ class TherapyForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control form-control-lg",
-                "id":"phone",
+                "id":"duration",
                 'placeholder': 'Enter Duration in weeks'
             }
         )
@@ -27,7 +28,8 @@ class TherapyForm(forms.ModelForm):
             attrs={
                 'rows':'4',
                 'class': 'form-control form-control-lg',
-                'placeholder': 'Enter Breif Description'
+                'placeholder': 'Enter Breif Description',
+                'id':'therapyDescription'
                 }
             )
         )
@@ -37,7 +39,7 @@ class TherapyForm(forms.ModelForm):
             attrs={
                 'rows':'3',
                 'class': 'form-control form-control-lg',
-                'placeholder': 'Enter the benefits'
+                'placeholder': 'Enter the benefits','id':'benefits',
                 }
             )
         )

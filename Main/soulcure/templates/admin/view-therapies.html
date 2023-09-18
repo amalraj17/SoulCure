@@ -81,6 +81,63 @@
 
 </head>
     <body>
+
+        
+    <!-- Navbar Start -->
+    <div class="container-fluid sticky-top bg-white shadow-sm">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 ">
+                <a href="index.html" class="navbar-brand">
+                    <h1 class="m-0  text-success">
+                        <i class="fa-solid fa-hand-holding-hand fa-flip-horizontal"></i>SoulCure
+                    </h1>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                {% if user.is_staff %}
+                <div class="collapse navbar-collapse ms-5 mr-5 justify-content-end" id="navbarCollapse">
+                    <div class="navbar-nav ms-5 mr-5 py-0 justify-content-end">
+
+                        <a href="{% url 'adminindex' %}" class="nav-item nav-link active">Home</a>
+                        <a href="{% url 'admin:index' %}" class="nav-item nav-link ">DashBoard</a>
+                        <a href="{% url 'addTherapist' %}" class="nav-item nav-link ">Add Therapist</a>
+                        <a href="" class="nav-item nav-link "><span>Welcome,{{user.name}}</span></a>
+                        <a href="{% url 'logout' %}" class="nav-item nav-link ">Logout</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="collapse navbar-collapse ms-5 mr-5 justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav ms-5 mr-5 py-0 justify-content-end">
+
+
+                        <a href="index.html" class="nav-item nav-link active">Home</a>
+                        <a href="about.html" class="nav-item nav-link">About</a>
+                        <a href="service.html" class="nav-item nav-link">Therapies</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu m-0">
+                                <a href="team.html" class="dropdown-item">The Team</a>
+                                <a href="{% url 'logout' %}" class="dropdown-item">Our Team</a>
+                                <a href="appointment.html" class="dropdown-item">Appointment</a>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="nav-item nav-link">Contact</a>
+
+                    </div>
+
+                    <div class="d-flex">
+                        <a href="{% url 'login' %}" class="nav-item nav-link btn btn-success mx-2 text-dark">Login</a>
+
+                        <!-- Register button -->
+                        <a href="{% url 'register' %}" class="nav-item nav-link btn btn-success text-dark">Register</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
         <div class="container cheight">
             <div class="container-fluid mt-5">
                 <h1 class="text-center">Available Therapies</h1>

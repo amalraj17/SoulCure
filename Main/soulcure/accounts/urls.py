@@ -17,7 +17,9 @@ urlpatterns = [
         path('update-therapy/<int:therapy_id>/', views.update_therapy, name='update-therapy'),
         path('susers/', views.susers, name='susers'),
         path('user-data/',views.user_data,name='user-data'),
-
+        path('updateuserStauts/<int:update_id>',views.updateuserStatus,name="updateuserStatus"),
+        path('view-appointments/',views.view_appointments,name='view-appointments'),
+       
 
 
 

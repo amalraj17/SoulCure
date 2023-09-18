@@ -31,13 +31,55 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-  
+
     <!-- Add DataTables JavaScript -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
     <style>
-        .admin-class
-        {
+        .admin-class {
             max-width: 100%;
+        }
+
+        .table-responsive {
+            margin: 20px;
+        }
+
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .table tr.thead th {
+            background-color: #343a40;
+            color: #ffffff;
+            font-weight: bold;
+            padding: 10px;
+        }
+
+        .table tr td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+        }
+
+        .table thead:hover {
+            background-color: #16862e;
+        }
+
+        .table tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        .table {
+            border-radius: 8px;
+        }
+
+        .table tr td,
+        .table tr th {
+            text-align: center;
         }
     </style>
 </head>
@@ -102,45 +144,51 @@
     <!-- Navbar End -->
 
     <div class="container mt-5">
-        <h1 class="text-center">User List</h1>
-        <table id="userTable" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- User data will be loaded here dynamically -->
-            </tbody>
-        </table>
+        <div class="table-responsive m-4">
+
+            <h1 class="text-center">User List</h1>
+            <table id="example" class="table rounded table-striped table-hover table-bordered" style="width:100%">
+                <thead class="thead fw-bold bg-success text-dark ">
+                    <tr>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Role</th>
+                        <th class="text-center">Status</th>
+                        <td class="text-center">Edit Status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td class="text-dark">{{ user.id }}</td>
+                        <td class="text-dark">{{ user.name }}</td>
+                        <td class="text-dark">{{ user.email }}</td>
+                        <td class="text-dark">{{ user.role }}</td>
+                        {% if user.is_active == 1 %} 
+                        <td class="text-success"><i class="fas fa-circle fa-xs"></i>&nbsp;&nbsp; Active</td>
+                        {% else %}
+                        <td class="text-danger"><i class="fas fa-circle fa-xs"></i>&nbsp;&nbsp; InActive</td>
+                        {% endif %}
+                        <td class="text-center text-white">
+                            <a href="{% url 'updateuserStatus' user.id %}">
+                                <button class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
+                            </a>
+                        </td>
+                        
+
+
+
+                    </tr>
+                    {% endfor %}
+                    <!-- User data will be loaded here dynamically -->
+                </tbody>
+            </table>
+        </div>
+        <script>
+            new DataTable('#example');
+        </script>
     </div>
-
-    <!-- Include necessary JavaScript libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            // Initialize DataTable
-            $('#userTable').DataTable({
-                "ajax": "/user-data/", // URL to fetch data in JSON format
-                "columns": [
-                    {"data": "fields.id"},
-                    {"data": "fields.name"},
-                    {"data": "fields.email"},
-                    {"data": "fields.role"},
-                ],
-                "pageLength": 10, // Number of rows per page
-                "lengthMenu": [10, 25, 50, 100], // Dropdown for selecting rows per page
-                "searching": true, // Enable search functionality
-                "ordering": true, // Enable sorting
-            });
-        });
-    </script>
-
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-success btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>

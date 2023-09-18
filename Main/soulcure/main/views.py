@@ -24,9 +24,13 @@ def adminindex(request):
     client = clients.count()
     therapists = CustomUser.objects.filter(role=CustomUser.THERAPIST)
     therapist = therapists.count()
+    activeuser = CustomUser.objects.filter(is_active=True)
+    activeusers = activeuser.count()
+    inactiveuser = CustomUser.objects.filter(is_active=False)
+    inactiveusers = inactiveuser.count()
     users=CustomUser.objects.all()
 
-    return render(request,'admin/admin-index.html',{'user':request.user,'client': client,'therapist': therapist,'users':users})
+    return render(request,'admin/admin-index.html',{'user':request.user,'client': client,'therapist': therapist,'users':users,'inactiveusers':inactiveusers,'activeusers':activeusers})
 def therapistindex(request):
     return render(request,'therapist/therapist-index.html')
 def deleteUser(request,delete_id):
@@ -43,4 +47,6 @@ def updateStatus(request,update_id):
     return redirect('adminindex')
 def about(request):
     return render(request,'about.html')
+def familytherapy(request):
+    return render(request,'family-therapy.html')
 

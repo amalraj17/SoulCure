@@ -273,6 +273,7 @@ def search(request):
 
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.db.models import Q
 from therapist.models import Therapist
 
 
@@ -280,7 +281,7 @@ from therapist.models import Therapist
 def search_therapists(request):
     return render(request, 'demosearch.html')  
 
-from django.db.models import Q
+
 @login_required
 def search_therapists2(request):
     query = request.GET.get('query')

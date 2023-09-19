@@ -299,8 +299,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const dobclientInput = document.getElementById("dobclient");
     console.log(dobclientInput)
-
-    dobclientInput.addEventListener("blur", validateDOBclient);
+    if (dobclientInput) {
+      // Check if the addressInput element exists
+      dobclientInput.addEventListener("blur", validateDOBclient);
+    }
+    // dobclientInput.addEventListener("blur", validateDOBclient);
     
     function validateDOBclient() {
       console.log("validateDOB function called");

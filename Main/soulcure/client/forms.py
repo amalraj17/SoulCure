@@ -23,13 +23,24 @@ class BootstrapDateInput(forms.DateInput):
         kwargs.setdefault("attrs", {})
         kwargs["attrs"]["class"] = "form-control form-control-lg datepicker"
         super().__init__(*args, **kwargs)
-
-
+from django import forms
+from datetime import date  # Import the date module from datetime
 
 class AppointmentForm(forms.ModelForm):
     date = forms.DateField(
-        widget=forms.DateInput(attrs={'placeholder': 'YYYY-MM-DD', 'id': 'date','name':'date' ,'class': 'form-control form-control-lg', 'type': 'date'})
+        widget=forms.DateInput(
+            attrs={
+                'placeholder': 'YYYY-MM-DD',
+                'id': 'date',
+                'name': 'date',
+                'class': 'form-control form-control-lg',
+                'type': 'date',
+                'min': date.today().strftime('%Y-%m-%d')  # Set the minimum date to today
+            }
+        )
     )
+
+
     therapist_name = forms.CharField(
         max_length=100,  # Adjust the max length as needed
         required=False,  # Set to False to allow an empty field

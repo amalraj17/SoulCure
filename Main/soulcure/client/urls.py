@@ -13,6 +13,8 @@ urlpatterns = [
     path('search/',views.search,name='search'),
     path('view-appointment-client/',views.view_appointment_client,name='view-appointment-client'),
     path('cancel-appointment/', views.cancel_appointment, name='cancel-appointment'),
+    path('confirm-appointment/', views.confirmappointment, name='confirm-appointment'),
+
 
 
 

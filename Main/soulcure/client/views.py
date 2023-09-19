@@ -190,7 +190,8 @@ def appointment(request, t_id):
 
             if form.is_valid():
                 form.save()
-                return redirect('index')
+                return redirect('confirm-appointment')
+                
 
     else:
         user = request.user
@@ -207,6 +208,9 @@ def appointment(request, t_id):
 
     return render(request, 'appointment.html', context)
 
+
+def confirmappointment(request):
+    return render(request,'client/confirm-appointments.html')
 
 def cancel_appointment(request):
     if request.method == 'POST':

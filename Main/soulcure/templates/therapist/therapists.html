@@ -251,10 +251,10 @@
     $(document).ready(function () {
         $("#search-form").submit(function (e) {
             e.preventDefault();
-
+    
             // Get search query from form
             var query = $("#query").val();
-
+    
             // Send AJAX request
             $.ajax({
                 type: "GET",
@@ -262,10 +262,17 @@
                 data: { query: query },
                 dataType: "json",
                 success: function (data) {
-                    // Update results on the page
+                    // Check if there are therapists in the results
+                    if (data.therapists.length === 0) {
+                        // Display a "No results found" message
+                        $("#therapists-list").html("<p>No results found</p>");
+                        return; // Exit the function early
+                    }
+    
+                    // Initialize the results HTML
                     var resultsHtml = "<div class='row mb-3'>";
-                     data.therapists.forEach(function (therapist, index) {
-
+                    
+                    data.therapists.forEach(function (therapist, index) {
                         if (index % 2 === 0 && index > 0) {
                             resultsHtml += "</div>"; // Close the previous row
                             resultsHtml += "<div class='row mb-3'>"; // Open a new row with margin
@@ -297,8 +304,6 @@
                     // Replace the content of the therapists list container
                     $("#therapists-list").html(resultsHtml);
                 },
-                
-
                 error: function (xhr, status, error) {
                     // Log any errors to the console
                     console.error(xhr.responseText);
@@ -306,6 +311,7 @@
             });
         });
     });
+    
 </script>
 
 

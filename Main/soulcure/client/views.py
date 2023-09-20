@@ -190,8 +190,7 @@ def appointment(request, t_id):
 
             if form.is_valid():
                 form.save()
-                return redirect('confirm-appointment')
-                
+                return redirect('confirm-appointment')              
 
     else:
         user = request.user

@@ -10,6 +10,8 @@ urlpatterns = [
     path('about/',views.about,name='about'),
     path('familytherapy/',views.familytherapy,name='familytherapy'),
 
+    path('admindash/',views.admindash,name='admindash'),
+
     path('deleteUser/<int:delete_id>',views.deleteUser,name="deleteUser"),
     path('updateStauts/<int:update_id>',views.updateStatus,name="updateStatus"),
 ]

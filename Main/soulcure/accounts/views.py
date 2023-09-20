@@ -172,6 +172,7 @@ def addTherapist(request):
                     therapist.save()
 
                 user_profile = UserProfile(user=user)
+            
                 user_profile.save()
 
                 return redirect('adminindex')

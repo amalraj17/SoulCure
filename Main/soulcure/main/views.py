@@ -57,4 +57,7 @@ def about(request):
 def familytherapy(request):
     return render(request,'family-therapy.html')
 
+@login_required
+def choosetherapy(request):
+    return render(request,'select-therapy.html')
 

@@ -46,23 +46,6 @@ def listTherapist(request):
 #User-profile
 
 ########################################################################################################################
-def therapist_profile(request, therapist_id):
-    try:
-        therapist = Therapist.objects.get(id=therapist_id)
-    except Therapist.DoesNotExist:
-        # Handle the case where the therapist with the specified ID does not exist
-        # You can redirect or show an error message
-        therapist = None
-
-    if therapist:
-        user_profile = therapist.user.userprofile
-
-        context = {
-            'therapist': therapist,
-            'user_profile': user_profile,
-        }
-
-        return render(request, 'therapist-profile2.html', context)
 
 @login_required
 def therapistprofile(request):
@@ -209,6 +192,23 @@ def therapists(request):
     therapists_page = paginator.get_page(page_number)
 
     return render(request, 'therapist/therapists.html', {'therapists_page': therapists_page})
+
+def family_therapists(request):
+    # if Therapy.status == True:
+        therapists = Therapist.objects.filter(therapy__id= 3)
+        cuser = CustomUser.objects.filter(role=CustomUser.THERAPIST, id__in=therapists.values_list('user_id', flat=True))
+        uprofile = UserProfile.objects.filter(user_id__in=cuser.values_list('id', flat=True))
+        combined_data = list(zip_longest(cuser, uprofile, therapists))
+
+        paginator = Paginator(combined_data, per_page=4)  
+        page_number = request.GET.get('page')
+        therapists_page = paginator.get_page(page_number)
+
+        return render(request, 'therapist/family-therapist.html', {'therapists_page': therapists_page})
+    # else:
+        
+    #     return render(request, 'index.html')
+
 
 
 

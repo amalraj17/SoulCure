@@ -35,30 +35,15 @@
         /* Add custom styles for a creative design */
         body {
             background-color: #f5f5f5;
-            font-family: Arial, sans-serif;
         }
 
-        /* .hero {
-            background-image: url('hero.jpg');
-            background-size: cover;
-            background-position: center;
-            color: #000;
-            padding: 200px 0;
-            text-align: center;
-} */
         .hero {
-            background-image: url('/static/img/heroo.jpg');
-            /* Replace with your image URL */
+            background-image: linear-gradient(rgba(21, 22, 21, 0.342), rgba(1, 31, 1, 0.767)), url('/static/img/ft-hero.jpg');
+
             background-size: cover;
             background-position: center;
-            height: 100vh;
-            /* Set the hero image height to the viewport height */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: -1;
-            /* Place it behind other content */
+            height: 50vh;
+
         }
 
 
@@ -75,32 +60,34 @@
 
         /* Style the rest of the content */
         .content {
-            margin-top: 250px;
-            background-color: #ffffffd2;
+            margin-top: 2%;
             padding: 20px;
         }
 
-        .headingCont {
-            height: 500px;
+
+        .b-color {
+            background: #20c71a !important;
+            width: 25%;
+            height: 60px;
+            font-weight: bold;
         }
 
-        .headingTxt {
-            font-size: 100px;
+        .content p,
+        li {
+            font-size: 18px;
         }
-
-
 
         /* Extra small devices (phones, 600px and down) */
         @media only screen and (max-width: 600px) {
             .headingCont {
-            height: 300px;
-            padding: 5%;
-        }
+                height: 300px;
+                padding: 5%;
+            }
 
-        .headingTxt {
-            font-size: 60px;
-            margin-top: 50%;
-        }
+            .headingTxt {
+                font-size: 60px;
+                margin-top: 50%;
+            }
         }
 
         /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -145,9 +132,9 @@
                                 {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
                                 <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
-                        </div> 
+                        </div>
                         <a href="{% url 'about' %}" class="nav-item nav-link">About Us</a>
- 
+
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle"
@@ -178,7 +165,7 @@
                                 {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
                                 <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
-                        </div> 
+                        </div>
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
 
@@ -199,206 +186,304 @@
 
     <!-- Hero Section -->
     <div class="hero">
-
-    </div>
-    <div class="d-flex  align-items-center justify-content-center headingCont">
-        <div class="">
-            <h1 class="text-uppercase text-white headingTxt"
-                style="-webkit-text-stroke: 1px #dee2e6; ">Discover Healing, Harmony,and <br>
+        <div class=" text-center pt-5">
+            <h1 class="text-uppercase text-white  headingTxt" style="-webkit-text-stroke: 1px #dee2e6; ">Discover
+                Healing, Harmony,and <br>
                 Connection</h1>
+            <p class=" mt-5 text-white display-5">FAMILY THERAPY</p>
 
         </div>
     </div>
-
-
-
-
-
+    <div class=" content">
+        <div class="container-fluid " id="about">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-12">
+                        <h2 class="mb-4 fs-1">A comprehensive guide to family therapy: Different approaches, how it can
+                            help, and when to schedule a session</h2>
+                        <p>
+                            Family bonds are rich, complex, profound – and sometimes painful. Family can both build us
+                            up and break us down. But in its ideal state, a family is the crucible in which we can
+                            become our best and truest selves.
+                        </p>
+                        <p>
+                            That’s where family therapy can help. Licensed family therapists at Thriveworks are trained
+                            to guide loved ones who are having issues connecting with each other. Our specialized
+                            therapists have a pretty good idea of what makes a happy, healthy family, and they can share
+                            their knowledge through safe, nonjudgmental counseling sessions.
+                        </p>
+                        <p>
+                            If you need expert help reinforcing your family bonds, the licensed marriage and family
+                            therapists (LMFTs) at Thriveworks are here for you – for all of you. You can read more about
+                            how the process works in the sections below.
+                        </p>
+                        <div class="row">
+                            <a href="{% url 'familytherapist' %}"><button class="btn b-color text-dark  rounded-pill mt-2 mb-5">Find a Family
+                                    Therapist</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Page Content -->
-    <div class="container content">
-        <div class="container-fluid py-5" id="about">
+    <div class=" content">
+        <div class="container-fluid " id="about">
             <div class="container">
-                <div class="position-relative d-flex align-items-center justify-content-center">
-                    <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Family
-                        Therapy</h1>
-                    <h1 class="position-absolute text-uppercase text-primary">Family Therapy</h1>
-                </div>
+                <h2 class=" text-uppercase text-success">What Does Family Therapy Do?</h2>
                 <div class="row align-items-center">
-                    <div class="col-lg-5 pb-4 pb-lg-0">
-                        <img class="img-fluid rounded w-100" src="{% static 'img/phy.jpg' %}" alt="image">
+                    <div class="col-lg-5 pb-4 pb-lg-0 m-0 p-0">
+                        <img class="img-fluid rounded" style="width:600px; height:400px;"
+                            src="{% static 'img/ft-2.jpg' %}" alt="image">
                     </div>
-                    <div class="col-lg-7">
-                        <h3 class="mb-4 fs-2">What is Family Therapy?</h3>
-                        <p class="fs-4">Family therapy, also known as family counseling or systemic therapy, is a type of
-                            psychotherapy that focuses on improving communication and resolving conflicts within a
-                            family unit. It is based on the idea that family relationships are interconnected, and
-                            issues within one family member can impact the entire family.</p>
-                        <p class="fs-4">Family therapists work with families to address a wide range of concerns, including
-                            relationship difficulties, behavioral problems in children or adolescents, substance abuse,
-                            mental health issues, and major life transitions.</p>
+                    <div class="p-5 col-lg-7">
+                        <p>Family therapy provides enormous value to families, as they work through
+                            their issues alongside a qualified mental health professional. </p>
+                        <p>Why? An objective third party can often point out blind spots and help loved
+                            ones identify the ultimate source of their challenges. But family therapists don’t just
+                            observe problems; they also assist in finding solutions. </p>
+                        <p>Some of the rewards of family therapy are unique to specific situations, and
+                            others are more general. For example, some common benefits of family therapy at
+                            Thriveworks include the following:</p>
+                        <ul>
+                            <li>Improved communication skills</li>
+                            <li>Reduced conflict</li>
+                            <li>Less stress and dysfunction</li>
+                            <li>Improved behaviors</li>
+                            <li>Healthier boundaries</li>
+                            <li>Improved coping skills and resilience</li>
+
+                        </ul>
+
+
 
                     </div>
+                    <p>Improving your relationships with your loved ones can also lead to
+                        improvements in other areas of functioning. Meaningful, secure relationships tend to
+                        enhance a person’s overall well-being. And learning how to love and be loved is a lesson
+                        you can carry with you throughout your life.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+    <div class=" content">
+        <div class="container-fluid " id="about">
+            <div class="container">
+                <h2 class=" text-uppercase text-success">What Are the 3 Goals of Family Therapy?</h2>
+                <div class="row align-items-center">
+
+                    <div class="p-5 col-lg-8">
+                        <p>While goals may differ from one family to the next, there are three main goals of
+                            family therapy:</p>
+                        <ol mx-2>
+                            <li>To educate. A family therapist can answer questions like the following:
+                                <ul>
+                                    <li>What is a mental health issue?</li>
+                                    <li>How might it be affecting other family members?</li>
+                                    <li>What are normal ways someone might react to trauma?</li>
+                                    <li>What is secure attachment and how can it be achieved?</li>
+                                    <li>What are healthy boundaries?</li>
+                                    <li>What is active listening?</li>
+                                </ul>
+                            </li>
+                            <li>To counsel. A family therapist uses different therapy interventions to help
+                                clients validate and support each other.</li>
+                            <li>To strengthen. A family therapist helps clients develop deeper bonds, better
+                                communication skills, inner resilience, and coping strategies that they need to
+                                manage family stressors.</li>
+                        </ol>
+
+
+
+                    </div>
+                    <div class="col-lg-4 pb-4 pb-lg-0 m-0 p-0">
+                        <img class="img-fluid rounded" style="width:600px; height:400px;"
+                            src="{% static 'img/ft _goals.jpg' %}" alt="image">
+                    </div>
+                    <p class="mt-2">But again, people seek family therapy for a wide variety of reasons. In
+                        fact, a Thriveworks family therapist usually begins treatment by asking what everyone’s
+                        goals are. Other objectives might include:</p>
+
                 </div>
             </div>
         </div>
         <!-- About End -->
-
-        <!-- Benefits of Family Therapy -->
-
-        <div class="container-fluid py-5" id="about">
-            <div class="container">
-                <div class="position-relative d-flex align-items-center justify-content-center">
-                    <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Benefits
-                        Of</h1>
-                    <h1 class="position-absolute text-uppercase text-primary">Family Therapy</h1>
-                </div>
-                <div class="row align-items-center mt-4">
-                    <div class="col-lg-5 pb-4 pb-lg-0">
-                        <img class="img-fluid rounded w-100" src="{% static 'img/phy.jpg' %}" alt=" image">
-                    </div>
-                    <div class="col-lg-7 text-dark fs-2">
-                        <ul class="text-secondary">
-                            <li>Improved family communication</li>
-                            <li>Resolution of conflicts and tensions</li>
-                            <li>Enhanced understanding of family dynamics</li>
-                            <li>Development of effective coping strategies</li>
-                            <li>Support for family members facing individual challenges</li>
-                            <li>Strengthened family bonds and relationships</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid py-5" id="about">
-            <div class="container">
-                <div class="position-relative d-flex align-items-center justify-content-center">
-                    <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">What Does
-                    </h1>
-                    <h1 class="position-absolute text-uppercase text-primary">Family Therapy Do</h1>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-lg-5 pb-4 pb-lg-0">
-                        <img class="img-fluid rounded w-100" src="{% static 'img/phy.jpg' %}" alt="image">
-                    </div>
-                    <div class="col-lg-7">
-                        <h3 class="mb-4">What Does Family Therapy Do?</h3>
-                        <p>Family therapy provides enormous value to families, as they work through their issues
-                            alongside a qualified mental health professional.
-
-                            Why? An objective third party can often point out blind spots and help loved ones identify
-                            the ultimate source of their challenges. But family therapists don’t just observe problems;
-                            they also assist in finding solutions.
-
-                            Some of the rewards of family therapy are unique to specific situations, and others are more
-                            general. For example, some common benefits of family therapy at Thriveworks include the
-                            following:
-                        <ul>
-                            <li>Improved family communication</li>
-                            <li>Resolution of conflicts and tensions</li>
-                            <li>Enhanced understanding of family dynamics</li>
-                            <li>Development of effective coping strategies</li>
-                            <li>Support for family members facing individual challenges</li>
-                            <li>Strengthened family bonds and relationships</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container-fluid py-5" id="about">
-            <div class="container">
-                <div class="position-relative d-flex align-items-center justify-content-center">
-                    <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Goals Of
-                    </h1>
-                    <h1 class="position-absolute text-uppercase text-primary">Family Therapy</h1>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-lg-5 pb-4 pb-lg-0">
-                        <img class="img-fluid rounded w-100" src="{% static 'img/phy.jpg' %}" alt="image">
-                    </div>
-                    <div class="col-lg-7">
-                        <h3 class="mb-4">What Are the 3 Goals of Family Therapy?</h3>
-                        <p>While goals may differ from one family to the next, there are three main goals of family
-                            therapy:
-
-                            To educate. A family therapist can answer questions like the following: What is a mental
-                            health issue? How might it be affecting other family members? What are normal ways someone
-                            might react to trauma? What is secure attachment and how can it be achieved? What are
-                            healthy boundaries? What is active listening?
-                            To counsel. A family therapist uses different therapy interventions to help clients validate
-                            and support each other.
-                            To strengthen. A family therapist helps clients develop deeper bonds, better communication
-                            skills, inner resilience, and coping strategies that they need to manage family stressors.
-                            But again, people seek family therapy for a wide variety of reasons. In fact, a Thriveworks
-                            family therapist usually begins treatment by asking what everyone’s goals are. Other
-                            objectives might include:</p>
-                        <ul>
-                            <li>To heal or reconcile</li>
-                            <li>To reduce conflict and tension</li>
-                            <li>To solve immediate problems or get over a specific hurdle</li>
-                            <li>To improve long-term problem-solving skills</li>
-                            <li>To forgive, or ask for forgiveness</li>
-                            <li>To establish healthy boundaries</li>
-                            <li>To manage anger</li>
-                            <li>To build or rebuild trust</li>
-                            <li>To explore misunderstandings</li>
-                            <li>To prevent future conflict</li>
-                            <li>To find individual support</li>
-                            <li>To understand and manage a mental health issue within the family</li>
-                            <li>To feel loved and appreciated</li>
-                            <li>To spend more time together</li>
-                            <li>To take on more or less responsibility</li>
-                            <li>To work through grief or trauma</li>
-                            <li>To handle a major family transition like a divorce</li>
-                            <li>To diagnose and improve maladaptive family dynamics</li>
-                        </ul>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="container-fluid py-5" id="about">
-            <div class="container">
-                <div class="position-relative d-flex align-items-center justify-content-center">
-                    <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Family
-                        Therapy</h1>
-                    <h1 class="position-absolute text-uppercase text-primary">Best For</h1>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-lg-5 pb-4 pb-lg-0">
-                        <img class="img-fluid rounded w-100" src="{% static 'img/phy.jpg' %}" alt="image">
-                    </div>
-                    <div class="col-lg-7">
-                        <h3 class="mb-4">What Is Family Therapy Best For?
-                        </h3>
-                        <p>Communication difficulties: Improving communication within the family can lead to better
-                            understanding and reduced conflicts.
-                            Family conflicts: Addressing and resolving conflicts can promote a more harmonious family
-                            environment.
-                            Behavioral problems in children or adolescents: Family therapy can help parents and children
-                            understand and cope with behavioral issues.
-                            Substance abuse or addiction: Working together as a family can support recovery and healing
-                            for the individual struggling with addiction.
-                            Mental health issues: Family therapy can provide support for family members dealing with
-                            mental health challenges and help reduce the stigma surrounding mental illness.
-                            Life transitions: Major life changes, such as divorce, remarriage, or the birth of a new
-                            child, can be challenging for families to navigate. Family therapy can help manage these
-                            transitions effectively.</p>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
     </div>
 
+    <div class=" content">
+        <div class="container-fluid " id="about">
+            <div class="container">
+                <h2 class=" text-uppercase text-success">What Are the 5 Stages of Family Therapy?</h2>
+                <div class="row align-items-center">
+
+                    <div class="p-5 col-lg-12">
+                        <p>Below are the five stages of family therapy:</p>
+                        <p>1. Engagement: The first stage involves building rapport and establishing a
+                            working relationship between the family and the therapist. The therapist works
+                            to create a safe and non-judgmental environment where family members feel
+                            comfortable sharing their thoughts and emotions. </p>
+                        <p>Initial assessments are conducted during this stage to gather information about
+                            the family’s history, structure, and specific issues.</p>
+                        <p class="mt-3">2. Assessment: In this stage, the therapist gathers more in-depth
+                            information
+                            about the family’s dynamics, relationships, and patterns of communication. The
+                            goal is to identify the root causes of the family’s difficulties and gain
+                            insight into how individual family members interact with each other. </p>
+                        <p>Various assessment techniques, such as genograms (family tree diagrams) and
+                            questionnaires, may be used to aid in understanding the family’s history and
+                            current functioning.</p>
+                        <p class="mt-3">3. Goal setting: After a comprehensive assessment, the therapist
+                            collaborates
+                            with the family to set specific and achievable therapeutic goals. These goals
+                            are often related to improving communication, resolving conflicts, changing
+                            dysfunctional patterns, and enhancing overall family functioning. It is crucial
+                            that the goals are agreed upon by all family members involved in therapy</p>
+                        <p class="mt-3">4. Intervention: During this stage, the therapist implements
+                            specific
+                            interventions and therapeutic techniques to address the identified issues and
+                            achieve the set goals. Different family therapy approaches, such as structural,
+                            strategic, narrative, or solution-focused therapy, may be used based on the
+                            family’s unique needs and circumstances. “One intervention that I love to use
+                            here is sculpting, where each family member has the chance to physically mold
+                            each other like a block of clay to model and demonstrate their view of the
+                            family,” says Alexandra Cromer, Licensed Professional Counselor at Thriveworks.
+                        </p>
+                        <p>The therapist encourages open communication, active listening, and
+                            problem-solving among family members.</p>
+                        <p class="mt-3">5. Termination and follow-up: As progress is made and therapeutic
+                            goals are met,
+                            the family therapy process enters the termination stage. The therapist works
+                            with the family to consolidate the gains made during therapy and develop a plan
+                            for the future. </p>
+                        <p>
+                            This may involve discussing ways to maintain positive changes, prevent relapse
+                            into old patterns, and provide resources for ongoing support if needed.
+                            Follow-up sessions might be scheduled to ensure the family’s continued progress
+                            and well-being.</p>
+                        <p>It is important to note that the stages of family therapy are not always linear,
+                            and the therapist may need to revisit or adapt certain stages based on the
+                            family’s progress and evolving needs throughout the therapeutic process.
+                            Additionally, the success of family therapy often depends on the willingness of
+                            family members to actively participate and engage in the therapeutic journey.
+                        </p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Benefits of Family Therapy -->
+
+    </div>
+    <div class=" content">
+        <div class="container-fluid " id="about">
+            <div class="container">
+                <h2 class=" text-uppercase text-success">What Are the 6 Stages of Family Life Cycle
+                    Family Medicine?</h2>
+                <div class="row align-items-center">
+                    <div class="col-lg-12 p-5 ">
+                        <img class="img-fluid rounded" style="height:440px; width:100%;"
+                            src="{% static 'img/ft-s.jpg' %}" alt="image">
+                    </div>
+                    <div class="p-5 col-lg-12">
+                        <p>In family medicine, the concept of the family life cycle refers to the
+                            various stages a family typically goes through over time. These stages are
+                            characterized by different developmental tasks and challenges that families
+                            must navigate. </p>
+                        <p>It’s important to note that not all families follow this exact progression,
+                            and individual experiences may vary. Some families may experience additional
+                            stages or face unique circumstances that can influence their family life
+                            cycle. Nonetheless, this framework provides a general understanding of the
+                            common stages families go through in their life journeys. Below is a common
+                            framework that consists of the following six stages of the family life
+                            cycle:</p>
+
+                        <ol class="p-5">
+                            <li>Independence/Young Adult: This stage typically involves young adults
+                                leaving their family of origin, establishing their independence, and
+                                forming new relationships. They may pursue higher education, start their
+                                careers, and explore their identities outside the family unit.</li>
+                            <li>Coupling/Marriage: This stage involves the formation of a committed
+                                relationship, such as marriage or long-term cohabitation. Couples may
+                                focus on building their relationship, establishing shared values, and
+                                planning for their future together.</li>
+                            <li>Parenting/Family with Young Children: In this stage, couples become
+                                parents and raise young children. They face the challenges of nurturing
+                                and raising their children, adapting to new roles as parents, and
+                                balancing work and family responsibilities.</li>
+                            <li>Family with Adolescents: As children grow into adolescents, the family
+                                faces new challenges related to parenting teenagers. Parents must adapt
+                                to the changing needs of their children and support them through the
+                                process of developing autonomy and independence.</li>
+                            <li>Launching/Empty Nest: This stage occurs when children leave home for
+                                college, work, or other pursuits, leading to an “empty nest.” Parents
+                                may experience a mix of emotions during this transition, as they adjust
+                                to their new roles as empty nesters and find new ways to connect as a
+                                couple.</li>
+                            <li>Aging Family/Retirement: In the final stage, the family faces the
+                                challenges of aging, retirement, and potential health concerns. Adult
+                                children may take on caregiving roles for their elderly parents, and the
+                                family may need to address issues related to aging and end-of-life
+                                planning.</li>
+                        </ol>
+
+                        <p>We all want happy families. Ones that support us and help us grow. Ones that
+                            provide security even when we’re feeling vulnerable. Ones that feel like
+                            home. But that harmony isn’t always easy to achieve. </p>
+                        <p class="mt-3">Sometimes it takes hard work, thoughtful communication, and an
+                            ability to see problems from different perspectives. These aren’t skills
+                            that everyone just develops naturally. Sometimes you have to make the
+                            intentional decision to do better—and that’s where family therapy at
+                            Thriveworks can make a big difference.</p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row bg-light" style="height: 400px;">
+        <div class="row" style="height: 50%;">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6  w-50 d-flex align-items-center justify-content-center">
+                <div class="bg-light">
+                    <img src="{% static 'img/f-ft.png' %}" style="height: 200px; width: 200px; ">
+                </div>
+
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+        <div class="row" style="height: 50%;">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6  ">
+                <div class="bg-light" >
+                    <h3 class="text-center">Find a Family Counselor</h3>
+                    <p class="text-center">Start counseling, therapy, or life-coaching today with a skilled, caring provider near you!</p>
+                    <div class="w-100 d-flex align-items-center justify-content-center">
+                    <a href="{% url 'familytherapist' %}"><button class="btn b-color text-dark w-100  rounded-pill mt-2 mb-5">Find a 
+                        Therapist</button></a>
+                    <div>
+                </div>
+
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+        
+    </div>
+
+
+
+
+
+
+
+
     <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-light mt-5 py-5">
+    <div class="container-fluid bg-dark text-light mt-0 py-5">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
@@ -426,10 +511,14 @@
                     </h4>
                     <div class="d-flex flex-column justify-content-start">
                         <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Home</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About Us</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Our Services</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Meet The Team</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Latest Blog</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About
+                            Us</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Our
+                            Services</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Meet The
+                            Team</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Latest
+                            Blog</a>
                         <a class="text-light" href="#"><i class="fa fa-angle-right me-2"></i>Contact Us</a>
                     </div>
                 </div>
@@ -439,10 +528,14 @@
                     </h4>
                     <div class="d-flex flex-column justify-content-start">
                         <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Home</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About Us</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Our Services</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Meet The Team</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Latest Blog</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About
+                            Us</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Our
+                            Services</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Meet The
+                            Team</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Latest
+                            Blog</a>
                         <a class="text-light" href="#"><i class="fa fa-angle-right me-2"></i>Contact Us</a>
                     </div>
                 </div>

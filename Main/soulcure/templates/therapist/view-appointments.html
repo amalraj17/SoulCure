@@ -167,7 +167,6 @@
                             <th>Time Slot</th>
                             <th>Status</th>
                             <th>Update Status</th>
-                            <!-- <th>Schedule Meeting</th> New column for scheduling meetings -->
                         </tr>
                     </thead>
                     <tbody class="text-dark">
@@ -181,9 +180,7 @@
                             <td>
                                 <button type="button" class="btn btn-secondary btn-update-status" data-toggle="modal" data-target="#updateStatusModal" data-appointment-id="{{ appointment.id }}">Update Status</button>
                             </td>
-                            <!-- <td>
-                                <button type="button" class="btn btn-primary btn-schedule-meeting" data-toggle="modal" data-target="#scheduleMeetingModal" data-appointment-id="{{ appointment.id }}" data-appointment-date="{{ appointment.date }}" data-appointment-time="{{ appointment.get_time_slot_display }}" data-client-name="{{ appointment.client.name }}">Schedule Meeting</button>
-                            </td> -->
+                           
                         </tr>
                         {% endfor %}
                     </tbody>

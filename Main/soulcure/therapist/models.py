@@ -33,38 +33,34 @@ class Therapist(models.Model):
 
 
 
-# class Meeting(models.Model):
-#     PLATFORM_CHOICES = [
-#         ('Platform1', 'Platform 1'),
-#         ('Platform2', 'Platform 2'),
-#         ('Platform3', 'Platform 3'),
-#     ]
 
-#     STATUS_CHOICES = [
-#         ('scheduled', 'Scheduled'),
-#         ('confirmed', 'Confirmed'),
-#         ('completed', 'Completed'),
-#     ]
 
-#     appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE)
-#     client = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='client_meetings')
-#     therapist = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='therapist_meetings')
-#     platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
-#     meeting_url = models.URLField()
-#     scheduled_time = models.DateTimeField()
-#     duration_minutes = models.PositiveIntegerField()
-#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
-#     created_date = models.DateTimeField(auto_now_add=True)
-#     modified_date = models.DateTimeField(auto_now=True)
+from django.db import models
+from datetime import datetime
+from accounts.models import CustomUser
 
-#     def save(self, *args, **kwargs):
-#         if not self.id:
-#             # This is a new Meeting, so let's copy data from the associated Appointment
-#             self.client = self.appointment.client
-#             self.therapist = self.appointment.therapist
-#             self.scheduled_time = self.appointment.date + self.appointment.time_slot
-#             self.duration_minutes = 60  # Set an initial duration (adjust as needed)
-#         super(Meeting, self).save(*args, **kwargs)
+class TherapySession(models.Model):
+    STATUS_CHOICES = [
+        ('scheduled', 'Scheduled'),
+        ('confirmed', 'Confirmed'),
+        ('completed', 'Completed'),
+    ]
+
+    appointment = models.OneToOneField(Appointment,on_delete=models.CASCADE,related_name='therapy_session',null=True,blank=True)
+    scheduled_datetime = models.DateTimeField(null=True, blank=True)
+    duration_minutes = models.PositiveIntegerField(null=True, blank=True)
+    meeting_link = models.URLField(null=True, blank=True)
+    is_confirmed = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Therapy Session with {self.appointment.client.name} and {self.appointment.therapist.name} on {self.scheduled_datetime}"
+
+    class Meta:
+        ordering = ['scheduled_datetime']
+
 
 
 

@@ -4,7 +4,7 @@ from django.contrib.auth import login as auth_login ,authenticate, logout
 from django.shortcuts import render, redirect
 from django.contrib  import messages,auth
 from .models import CustomUser,UserProfile
-from therapist.models import Therapist
+from therapist.models import Therapist,TherapistDayOff,LeaveRequest
 # from accounts.backends import EmailBackend
 from django.contrib.auth import get_user_model
 from .forms import CustomUserForm, UserProfileForm
@@ -69,12 +69,12 @@ def userlogin(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        print(email)  # Print the email for debugging
-        print(password)  # Print the password for debugging
+        print(email)  
+        print(password)  
 
         if email and password:
             user = authenticate(request, email=email, password=password)
-            print("Authenticated user:", user)  # Print the user for debugging
+            print("Authenticated user:", user)  
             if user is not None:
                 auth_login(request, user)
                 print("User authenticated:", user.email, user.role)
@@ -319,3 +319,53 @@ def update_therapy(request, therapy_id):
         form = TherapyForm(instance=therapy)
 
     return render(request, 'admin/update_therapy.html', {'form': form, 'therapy': therapy})
+
+
+
+
+########################################################################################################################
+
+#View-leave Request// admin main
+
+########################################################################################################################
+@login_required
+def view_leave_requests(request):
+    # Check if the user is an admin
+    if not request.user.role == 4:
+        return redirect('/')  # Redirect to the home page or any other appropriate page
+
+    # Query all pending holiday requests
+    pending_requests = LeaveRequest.objects.filter(status='pending')
+
+    # Render the template with the pending holiday requests data
+    return render(request, 'admin/leave-request.html', {'pending_requests': pending_requests})
+
+@login_required
+def admin_approve_reject_leave(request, request_id):
+    if request.method == 'POST':
+        # Retrieve the holiday request object by its ID
+        leave_request = get_object_or_404(LeaveRequest, pk=request_id)
+
+        if request.POST['action'] == 'approve':
+            # If the admin approves the holiday request, mark it as accepted
+            leave_request.status = 'accepted'
+            leave_request.save()
+
+            # Get the associated lawyer profile
+            therapist_profile = leave_request.therapist
+
+            # Create a LawyerDayOff instance for the approved holiday
+            TherapistDayOff.objects.create(therapist=therapist_profile, date=leave_request.date)
+            print("Request ID:", request_id)
+
+
+            messages.success(request, 'Leave request approved successfully.')
+
+        elif request.POST['action'] == 'reject':
+            # If the admin rejects the holiday request, mark it as rejected
+            leave_request.status = 'rejected'
+            leave_request.save()
+            messages.success(request, 'Leave request rejected successfully.')
+
+    # Redirect back to the admin dashboard or any other appropriate view
+    return redirect('adminindex')  # Update this to the appropriate view name

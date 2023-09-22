@@ -19,6 +19,10 @@ urlpatterns = [
         path('user-data/',views.user_data,name='user-data'),
         path('updateuserStauts/<int:update_id>',views.updateuserStatus,name="updateuserStatus"),
         path('view-appointments/',views.view_appointments,name='view-appointments'),
+        path('view-leave-requests/',views.view_leave_requests,name='view-leave-requests'),
+        path('admin_approve_reject_leave/<int:request_id>/', views.admin_approve_reject_leave, name='admin_approve_reject_leave'),
+        # path('view-appointments/',views.view_appointments,name='view-appointments'),
+
        
 
 

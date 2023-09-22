@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from .forms import CustomUserForm, UserProfileForm
-from therapist.models import Therapist
+from therapist.models import Therapist,TherapistDayOff
 from datetime import time
 from .models import Appointment
 
@@ -122,6 +122,7 @@ def change_password_client(request):
 from django.shortcuts import render, redirect
 from .models import Appointment
 from .forms import AppointmentForm,CurrentUserForm
+from datetime import date as c_date
 
 
 @login_required
@@ -139,7 +140,15 @@ def appointment(request, t_id):
         # Check if the current user (client) has already booked an appointment for the same date
         existing_appointment_same_date = Appointment.objects.filter(client=request.user, date=date).first()
 
-        if existing_appointment:
+        # Check if the selected date is in the therapist's day-offs
+        therapist_day_off = TherapistDayOff.objects.filter(therapist=therapist, date=date).first()
+
+        if therapist_day_off:
+            context = {
+                'error': f'The therapist is on leave on {date}. Please select a different date.',
+                'therapist': therapist,
+            }
+        elif existing_appointment:
             apps = Appointment.objects.filter(date=date, time_slot=time_slot)
             time_slots = {time(9, 0): 1, time(11, 0): 1, time(13, 0): 1, time(15, 0): 1, time(17, 0): 1}
             for app in apps:
@@ -147,7 +156,6 @@ def appointment(request, t_id):
 
             available_slots = [time_slot.strftime('%I:%M %p') for time_slot, available in time_slots.items() if available]
             available_slots = ", ".join(available_slots)
-            print(available_slots)
 
             user = request.user
             initial_data = {
@@ -157,7 +165,7 @@ def appointment(request, t_id):
                 'therapist': therapist.id,
                 'therapist_name': therapist.name,
             }
-            appointment_form = AppointmentForm(initial=initial_data)
+            appointment_form = AppointmentForm(initial=initial_data, therapist_leave_dates=[])
             user_form = CurrentUserForm(instance=user)
             context = {
                 'error': 'You have already scheduled an appointment for the selected Date and Time Slot',
@@ -175,7 +183,7 @@ def appointment(request, t_id):
                 'therapist': therapist.id,
                 'therapist_name': therapist.name,
             }
-            appointment_form = AppointmentForm(initial=initial_data)
+            appointment_form = AppointmentForm(initial=initial_data, therapist_leave_dates=[])
             user_form = CurrentUserForm(instance=user)
             context = {
                 'error': 'You have already scheduled an appointment for the selected Date',
@@ -184,13 +192,13 @@ def appointment(request, t_id):
                 'user_form': user_form,
             }
         else:
-            form = AppointmentForm(request.POST)
+            form = AppointmentForm(request.POST, therapist_leave_dates=[])
             form.instance.client = request.user
             form.instance.therapist = therapist
 
             if form.is_valid():
                 form.save()
-                return redirect('confirm-appointment')              
+                return redirect('confirm-appointment')
 
     else:
         user = request.user
@@ -201,14 +209,18 @@ def appointment(request, t_id):
             'therapist': therapist.id,
             'therapist_name': therapist.name,
         }
-        appointment_form = AppointmentForm(initial=initial_data)
+        current_date = c_date.today()
+        leave_dates = [str(date) for date in TherapistDayOff.objects.filter(therapist=therapist, date__gte=current_date).values_list('date', flat=True)]        
+        appointment_form = AppointmentForm(initial=initial_data, therapist_leave_dates=leave_dates)
         user_form = CurrentUserForm(instance=user)
-        context = {'appointment_form': appointment_form, 'user_form': user_form, 'therapist': therapist}
+
+        context = {'appointment_form': appointment_form, 'user_form': user_form, 'therapist': therapist, 'leave_dates': leave_dates}
 
     return render(request, 'appointment.html', context)
 
 
-def confirmappointment(request):
+
+def confirmappointment(request): 
     return render(request,'client/confirm-appointments.html')
 
 def cancel_appointment(request):

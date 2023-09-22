@@ -3,6 +3,7 @@
 from django import forms
 from .models import Appointment
 from accounts.models import CustomUser
+from datetime import date, timedelta
 
 class BootstrapTextInput(forms.TextInput):
     def __init__(self, *args, **kwargs):
@@ -25,7 +26,7 @@ class BootstrapDateInput(forms.DateInput):
         super().__init__(*args, **kwargs)
 from django import forms
 from datetime import date  # Import the date module from datetime
-
+tomorrow = date.today() + timedelta(days=1)
 class AppointmentForm(forms.ModelForm):
     date = forms.DateField(
         widget=forms.DateInput(
@@ -33,12 +34,16 @@ class AppointmentForm(forms.ModelForm):
                 'placeholder': 'YYYY-MM-DD',
                 'id': 'date',
                 'name': 'date',
-                'class': 'form-control form-control-lg',
-                'type': 'date',
-                'min': date.today().strftime('%Y-%m-%d')  # Set the minimum date to today
+                'class': 'form-control form-control-lg date-picker',
+                'type': 'date', 'min': tomorrow.strftime('%Y-%m-%d')
+                # 'min': date.today().strftime('%Y-%m-%d')  # Set the minimum date to today
             }
         )
     )
+    def __init__(self, *args, **kwargs):
+        therapist_leave_dates = kwargs.pop('therapist_leave_dates', [])
+        super().__init__(*args, **kwargs)
+        self.fields['date'].widget.attrs['data-therapist-leave-dates'] = ','.join(therapist_leave_dates)
 
 
     therapist_name = forms.CharField(
@@ -47,8 +52,8 @@ class AppointmentForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'placeholder': 'Enter Therapist Name', 'id': '','class':'form-control form-control-lg bg-white','disabled':'disabled'}),
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
 
 
         

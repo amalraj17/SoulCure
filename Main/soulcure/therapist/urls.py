@@ -13,6 +13,8 @@ urlpatterns = [
     path('tprofile/<int:therapist_id>/', views.therapist_profile, name='tprofile'),
     # path('therapist/tprofile/<int:therapist_id>/', views.therapist_profile, name='tprofile'),
     path('edit-therapist-profile/',views.edit_therapist_profile,name='edit-therapist-profile'),
+    path('leave_request/',views.leave_request,name='leave_request'),
+
 
     path('view-therapist/<int:user_id>/',views.viewtherapist,name='view-therapist'),
     path('view-appointment-therapist/',views.view_appointment_therapist,name='view-appointment-therapist'),

@@ -3,9 +3,12 @@ from django.contrib.auth import get_user_model
 from accounts.models import CustomUser
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-User = get_user_model
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
+
+User = get_user_model
 
 
 def index(request):
@@ -18,7 +21,7 @@ def index(request):
             return redirect(reverse('index'))
     
     return render(request, 'index.html', {'user': request.user})
-
+@login_required
 def adminindex(request):
     clients = CustomUser.objects.filter(role=CustomUser.CLIENT)
     client = clients.count()
@@ -31,12 +34,15 @@ def adminindex(request):
     users=CustomUser.objects.all()
 
     return render(request,'admin/admin-index.html',{'user':request.user,'client': client,'therapist': therapist,'users':users,'inactiveusers':inactiveusers,'activeusers':activeusers})
+@login_required
 def therapistindex(request):
     return render(request,'therapist/therapist-index.html')
+@login_required
 def deleteUser(request,delete_id):
     delUser=CustomUser.objects.get(id=delete_id)
     delUser.delete()    
     return redirect('adminindex')
+@login_required
 def updateStatus(request,update_id):
     updateUser=CustomUser.objects.get(id=update_id)
     if updateUser.is_active==True:
@@ -47,6 +53,7 @@ def updateStatus(request,update_id):
     return redirect('adminindex')
 def about(request):
     return render(request,'about.html')
+@login_required
 def familytherapy(request):
     return render(request,'family-therapy.html')
 

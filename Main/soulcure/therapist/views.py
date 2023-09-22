@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from .forms import TherapyForm
-from .models import Therapy,Meeting
+from .models import Therapy,LeaveRequest
 from accounts.models import CustomUser,UserProfile
 from .models import Therapist
 from itertools import zip_longest
@@ -282,3 +282,44 @@ def view_appointment_therapist(request):
 
     appointments = Appointment.objects.filter(therapist=therapist)
     return render(request,'therapist/view-appointments.html',{'appointments':appointments})
+
+
+
+
+########################################################################################################################
+
+#Leave
+
+########################################################################################################################
+
+@login_required
+def leave_request(request):
+    user = request.user  # Get the current user
+
+   
+    if user.is_authenticated and user.role == 2:
+        lawyer_profile = Therapist.objects.get(user=user)  
+
+        if request.method == 'POST':
+            leave_date = request.POST.get('leave_date')
+
+            # Check if the date is not already marked as a holiday
+            if not LeaveRequest.objects.filter(therapist=user, date=leave_date).exists():
+                # Create a holiday request
+                leave_request = LeaveRequest(therapist=user, date=leave_date)
+                leave_request.save()
+                messages.success(request, 'Holiday request sent for review.')
+            else:
+                messages.warning(request, 'You have applied leave for this date Already,Kindly wait for the Status.')
+
+        
+        leave_requests = LeaveRequest.objects.filter(therapist=user)
+
+        context = {
+            'leave_requests': leave_requests,
+        }
+        return render(request, 'therapist/leave.html', context)
+
+    else:
+        messages.error(request, 'Only Therapist can request holidays.')
+        return redirect('/')  #

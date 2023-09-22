@@ -33,19 +33,59 @@ class Therapist(models.Model):
 
 
 
-class Meeting(models.Model):
-    STATUS_CHOICES = [
-        ('scheduled', 'Scheduled'),
-        ('completed', 'Completed'),
-    ]
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
-    platform = models.CharField(max_length=100)
-    meeting_url = models.URLField()
-    scheduled_time = models.DateTimeField()
-    duration_minutes = models.PositiveIntegerField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
-    created_date = models.DateTimeField(auto_now_add=True)
-    modified_date = models.DateTimeField(auto_now=True)
+# class Meeting(models.Model):
+#     PLATFORM_CHOICES = [
+#         ('Platform1', 'Platform 1'),
+#         ('Platform2', 'Platform 2'),
+#         ('Platform3', 'Platform 3'),
+#     ]
 
-    def __str__(self):
-        return f"Meeting for Appointment with {self.appointment.client.name} and {self.appointment.therapist.name} on {self.scheduled_time}"
+#     STATUS_CHOICES = [
+#         ('scheduled', 'Scheduled'),
+#         ('confirmed', 'Confirmed'),
+#         ('completed', 'Completed'),
+#     ]
+
+#     appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE)
+#     client = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='client_meetings')
+#     therapist = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='therapist_meetings')
+#     platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
+#     meeting_url = models.URLField()
+#     scheduled_time = models.DateTimeField()
+#     duration_minutes = models.PositiveIntegerField()
+#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
+#     created_date = models.DateTimeField(auto_now_add=True)
+#     modified_date = models.DateTimeField(auto_now=True)
+
+#     def save(self, *args, **kwargs):
+#         if not self.id:
+#             # This is a new Meeting, so let's copy data from the associated Appointment
+#             self.client = self.appointment.client
+#             self.therapist = self.appointment.therapist
+#             self.scheduled_time = self.appointment.date + self.appointment.time_slot
+#             self.duration_minutes = 60  # Set an initial duration (adjust as needed)
+#         super(Meeting, self).save(*args, **kwargs)
+
+
+
+class LeaveRequest(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    )
+
+    therapist = models.ForeignKey(CustomUser,on_delete=models.CASCADE,limit_choices_to={'role': 2})
+    date = models.DateField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+
+    def str(self):
+        return f'{self.therapist.name} - {self.date} ({self.status})'
+    
+
+class TherapistDayOff(models.Model):
+    therapist = models.ForeignKey(CustomUser,on_delete=models.CASCADE,limit_choices_to={'role': 2})
+    date = models.DateField()
+
+    def str(self):
+        return f"{self.therapist.name} - {self.date}"

@@ -99,6 +99,22 @@
             margin-left: 10%;
             margin-right: 10%;
         }
+        .leave-dates-heading {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .leave-dates-list {
+            list-style-type: disc; /* You can use 'circle' or 'square' as well */
+            margin-left: 20px; /* Adjust the indentation as needed */
+        }
+        
+        .leave-dates-list li {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
     </style>
 </head>
 
@@ -128,9 +144,9 @@
                                 {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
                                 <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
-                        </div> 
+                        </div>
                         <a href="{% url 'about' %}" class="nav-item nav-link">About Us</a>
- 
+
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle"
@@ -161,7 +177,7 @@
                                 {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
                                 <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
-                        </div> 
+                        </div>
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
 
@@ -184,15 +200,28 @@
     <div class="container-fluid py-5">
         <div class="dcontainer">
             <div class="row gx-5">
-                <div class="col-lg-6"></div>
+                <div class="col-lg-6 mx-auto" >
+                {% if leave_dates %}
+                <div class="mx-auto ccontainer ">
+                    
+                    <h2 class="leave-dates-heading text-center">{{ therapist.name }} is on leave on the following dates:</h2>
+                    <ul class="leave-dates-list">
+                        {% for leave_date in leave_dates %}
+                            <li class="btn btn-warning round">{{ leave_date }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
                 <div class="col-lg-6 mx-auto ccontainer">
+                    
 
                     <h1 class="no-slots text-center mb-3" id="available-slots-description">
                         Select a Date to Check Slot Availability
                     </h1>
-                        <ul class="list-inline time-slots" id="available-slots">
-                            <!-- Time slots will be dynamically generated here -->
-                        </ul>
+                    <ul class="list-inline time-slots" id="available-slots">
+                        <!-- Time slots will be dynamically generated here -->
+                    </ul>
                     <p class="text-success text-center" id="navslot"></p>
 
                     <p class="no-slots " id="available-slots-description"></p>
@@ -228,17 +257,18 @@
         </div>
     </div>
     <!-- Appointment End -->
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const appointmentForm = document.getElementById("appointmentForm");
             const dateInput = document.getElementById("date");
-    
+
             appointmentForm.addEventListener("submit", function (event) {
                 const selectedDate = new Date(dateInput.value);
                 const today = new Date();
                 const maxDate = new Date();
                 maxDate.setMonth(today.getMonth() + 3); // Allow up to 3 months in the future
-    
+
                 if (selectedDate < today || selectedDate > maxDate) {
                     event.preventDefault(); // Prevent form submission
                     alert("Please select a date within the next 3 months.");
@@ -257,14 +287,24 @@
                 // Get the selected date from the date input field
                 var selectedDate = $("#date").val();
                 var therapistId = "{{ therapist.id }}"; // Replace with the therapist's ID
-
+    
                 // Validate the selected date format
                 var datePattern = /^\d{4}-\d{2}-\d{2}$/;
                 if (!datePattern.test(selectedDate)) {
                     // Invalid date format, do not make the AJAX request
                     return;
                 }
-
+    
+                // Check if the selected date is in the therapist's leave dates
+                var leaveDates = {{ leave_dates | safe }}; // Get the therapist's leave dates from the template
+                if (leaveDates.includes(selectedDate)) {
+                    // Date is a therapist's leave date, do not show available slots
+                    $("#available-slots").empty();
+                    $("#available-slots-description").text("Therapist is on leave on this date.");
+                    $("#navslot").text("");
+                    return;
+                }
+    
                 // Send an AJAX request to your Django view to get available slots
                 $.ajax({
                     type: "GET",
@@ -277,7 +317,7 @@
                         var slotsList = $("#available-slots");
                         var description = $("#available-slots-description");
                         var navslot = $("#navslot");
-
+    
                         slotsList.empty(); // Clear the existing list
                         if (availableSlots.length > 0) {
                             description.text(
@@ -288,10 +328,10 @@
                                 var slotButton = $("<button></button>")
                                     .addClass("slot-button")
                                     .text(slot);
-
+    
                                 // Always set the button's class to "available"
                                 slotButton.addClass("available");
-
+    
                                 // Append the button to the list
                                 slotsList.append(slotButton);
                                 slotButton.css("margin-right", "10px");
@@ -310,16 +350,17 @@
                     },
                 });
             }
-
+    
             // Listen for changes in the date input field
             $("#date").on("change", function () {
                 updateAvailableSlots();
             });
-
+    
             // Initialize available slots when the page loads
             updateAvailableSlots();
         });
     </script>
+    
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light mt-5 py-5">

@@ -157,11 +157,22 @@ class TherapistForm(forms.ModelForm):
 
 ###########################################################################################################################################
 
+# forms.py
 from django import forms
+from .models import TherapySessionSchedule
 
-class MeetingScheduleForm(forms.Form):
-    appointment_id = forms.IntegerField(widget=forms.HiddenInput())
-    date = forms.DateField(label='Meeting Date', widget=forms.DateInput(attrs={'type': 'date'}))
-    time = forms.TimeField(label='Meeting Time', widget=forms.TimeInput(attrs={'type': 'time'}))
-    meeting_platform = forms.CharField(label='Meeting Platform', max_length=100)
-    meeting_url = forms.URLField(label='Meeting URL', max_length=200, required=False)
+class TherapySessionForm(forms.ModelForm):
+    class Meta:
+        model = TherapySessionSchedule
+        fields = ['platform', 'meeting_url']
+        widgets = {
+           
+            'platform': forms.Select(attrs={
+                "class": "form-control form-control-lg",
+                'placeholder': 'Enter Certification Name'
+            }),
+            'meeting_url': forms.URLInput(attrs={
+                "class": "form-control form-control-lg",
+                'placeholder': 'Enter the Meeting Url'
+            }),
+        }

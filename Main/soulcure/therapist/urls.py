@@ -15,13 +15,13 @@ urlpatterns = [
     # path('therapist/tprofile/<int:therapist_id>/', views.therapist_profile, name='tprofile'),
     path('edit-therapist-profile/',views.edit_therapist_profile,name='edit-therapist-profile'),
     path('leave_request/',views.leave_request,name='leave_request'),
+    path('schedule-therapy-session/<int:appointment_id>/', views.schedule_therapy_session, name='schedule_therapy_session'),
+    path('fetch_appointments/', views.fetch_appointments, name='fetch_appointments'),
 
 
     path('view-therapist/<int:user_id>/',views.viewtherapist,name='view-therapist'),
     path('view-appointment-therapist/',views.view_appointment_therapist,name='view-appointment-therapist'),
     path('update-appointment-status/', views.update_appointment_status, name='update-appointment-status'),
 
-
- 
 
 ]

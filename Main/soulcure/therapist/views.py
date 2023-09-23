@@ -7,7 +7,7 @@ from itertools import zip_longest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-from .forms import CustomUserForm, TherapistForm, UserProfileForm,MeetingScheduleForm
+from .forms import CustomUserForm, TherapistForm, UserProfileForm
 from client.models import Appointment
 
 
@@ -237,53 +237,95 @@ def update_appointment_status(request):
             else:
                 pass
         except Appointment.DoesNotExist:
-            # Handle appointment not found
             pass 
 
     return redirect('view-appointment-therapist')
 
 
-# from django.shortcuts import render, redirect
-# from .forms import MeetingScheduleForm  # Import your MeetingScheduleForm or create one
-# from .models import Appointment  # Import your Appointment model or adjust the import
+from .models import TherapySessionSchedule
+from .forms import TherapySessionForm
 
-# def schedule_meeting(request, appointment_id):
-#     try:
-#         appointment = Appointment.objects.get(id=appointment_id)
-#     except Appointment.DoesNotExist:
-#         # Handle appointment not found
-#         messages.error(request, 'Appointment not found.')
-#         return redirect('view-appointment-therapist')
+def schedule_therapy_session(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
 
-#     if request.method == 'POST':
-#         form = MeetingScheduleForm(request.POST)
-#         if form.is_valid():
-#             meeting = form.save(commit=False)
-#             meeting.appointment = appointment
-#             meeting.save()
-#             messages.success(request, 'Meeting scheduled successfully.')
-#             return redirect('view-appointment-therapist')
+    # Check if a therapy session is already scheduled for this appointment
+    existing_session = TherapySessionSchedule.objects.filter(appointment=appointment).first()
 
-#     else:
-#         form = MeetingScheduleForm()
+    if request.method == 'POST':
+        form = TherapySessionForm(request.POST)
+        if form.is_valid():
+            if existing_session:
+                return render(request, 'therapist/schedule-meeting.html', {
+                    'form': form,
+                    'appointment': appointment,
+                    'error_message': 'A therapy session is already scheduled for this appointment.'
+                })
+            
+            therapy_session = form.save(commit=False)
+            therapy_session.appointment = appointment
+            therapy_session.status = 'scheduled'
+            therapy_session.save()
+            appointment.status = 'scheduled'
+            appointment.save()
+            return redirect('view-appointment-therapist')
+    else:
+        if existing_session:
+            return render(request, 'therapist/schedule-meeting.html', {
+                'form': None,
+                'appointment': appointment,
+                'error_message': 'A therapy session is already scheduled for this appointment.'
+            })
+        
+        form = TherapySessionForm()
 
-#     context = {
-#         'form': form,
-#         'appointment': appointment,
-#     }
+    return render(request, 'therapist/schedule-meeting.html', {'form': form, 'appointment': appointment})
 
-#     return render(request, 'therapist/schedule_meeting_modal.html', context)
-
-
+from datetime import date as datetoday
+from django.http import JsonResponse
 
 @login_required
 def view_appointment_therapist(request):
     therapist = request.user
 
     appointments = Appointment.objects.filter(therapist=therapist)
-    return render(request,'therapist/view-appointments.html',{'appointments':appointments})
 
+    for appointment in appointments:
+        if appointment.date < datetoday.today() and appointment.status != 'completed':
+            appointment.status = 'completed'
+            appointment.save()
 
+    # Fetch the updated list of appointments
+    appointments = Appointment.objects.filter(therapist=therapist)
+
+    return render(request, 'therapist/view-appointments.html', {'appointments': appointments})
+
+@login_required
+def fetch_appointments(request):
+    therapist = request.user
+    status = request.GET.get('status')
+
+    today = datetoday.today()
+
+    if status == 'completed':
+        appointments = Appointment.objects.filter(therapist=therapist, date__lt=today)
+    elif status == 'today':
+        appointments = Appointment.objects.filter(therapist=therapist, date=today)
+    elif status == 'upcoming':
+        appointments = Appointment.objects.filter(therapist=therapist, date__gt=today)
+    else:
+        appointments = []
+
+    data = []
+    for appointment in appointments:
+        data.append({
+            'sl_no': appointment.id,
+            'client': appointment.client.name,
+            'appointment_date': appointment.date.strftime('%Y-%m-%d'),
+            'time_slot': appointment.get_time_slot_display(),
+            'status': appointment.get_status_display(),
+        })
+
+    return JsonResponse({'appointments': data})
 
 
 ########################################################################################################################

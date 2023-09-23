@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+
 <html>
     <head>
         <meta charset="utf-8">
@@ -11,41 +8,62 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        <!-- Include Bootstrap CSS (add appropriate paths) -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- Include Bootstrap JS (add appropriate paths) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+    .forms-expanded {
+      margin-top: px;
+    }
+
+    h2 {
+      color: aliceblue;
+      text-align: center;
+    }
+
+    button {
+      justify-content: center;
+    }
+  </style>
     </head>
     <body>
-        <!-- schedule_meeting_modal.html -->
+        
+        <div class="mt-5">
+            <h2 class="align-center text-center text-success">Schedule Therapy Session</h2>
+            <div class="container p-5 card ">
+        
+              <form method="post" class=" mx-auto w-75" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group mt-2">
+                    <label for="{{appointment.client.name }}">Client Name and Appointment Date:</label>
+                    <h3>{{appointment.client.name}}, &nbsp{{appointment.date}},{{appointment.time_slot}}</h3>
 
-<div class="modal fade" id="scheduleMeetingModal" tabindex="-1" role="dialog" aria-labelledby="scheduleMeetingModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="scheduleMeetingModalLabel">Schedule Meeting</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <div id="phoneValidation" class="invalid-feedback">
+                      Please enter 10 digit valid phone number
+                    </div>
+                  </div>
+
+                  {{ form.as_p }}
+
+        
+        
+                {% if error_message %}
+                <p  class="text-danger">{{error_message}}</p>
+                {% endif%}
+                <div class="d-flex mt-5 justify-content-center w-100 align-items-center">
+                  <a href="{% url 'view-appointment-therapist' %}"   class="btn btn-dark sub-btn w-25 mx-4" type="submit">Back</button></a>
+                  <button class="btn btn-dark sub-btn w-25" type="submit">Schedule</button>
+
+                </div>
+              </form>
             </div>
-            <div class="modal-body">
-                <form id="scheduleMeetingForm" method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" form="scheduleMeetingForm" class="btn btn-primary">Schedule Meeting</button>
-            </div>
+        
+
+    
         </div>
-    </div>
-</div>
-
-<script>
-    // JavaScript to set the appointment_id when the "Schedule Meeting" button is clicked
-    $(document).on('click', '.btn-update-status', function () {
-        var appointmentId = $(this).data('appointment-id');
-        $('#id_appointment_id').val(appointmentId);
-    });
-</script>
-
-        <script src="" async defer></script>
     </body>
 </html>

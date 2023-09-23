@@ -32,34 +32,54 @@ class Therapist(models.Model):
 
 
 
-
-
-
 from django.db import models
 from datetime import datetime
 from accounts.models import CustomUser
 
-class TherapySession(models.Model):
+class TherapySessionSchedule(models.Model):
+
+    PLATFORM_CHOICES = [
+    ('Zoom', 'Zoom'),
+    ('Microsoft Teams', 'Microsoft Teams'),
+    ('Google Meet', 'Google Meet'),
+    ('Skype', 'Skype'),
+    ('Cisco Webex', 'Cisco Webex'),
+    ]
+
+
     STATUS_CHOICES = [
+        ('pending', 'Pending'),
         ('scheduled', 'Scheduled'),
-        ('confirmed', 'Confirmed'),
         ('completed', 'Completed'),
     ]
 
-    appointment = models.OneToOneField(Appointment,on_delete=models.CASCADE,related_name='therapy_session',null=True,blank=True)
-    scheduled_datetime = models.DateTimeField(null=True, blank=True)
-    duration_minutes = models.PositiveIntegerField(null=True, blank=True)
-    meeting_link = models.URLField(null=True, blank=True)
-    is_confirmed = models.BooleanField(default=False)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    appointment = models.OneToOneField(
+        Appointment,
+        on_delete=models.CASCADE,
+        related_name='therapy_session',
+        null=True,
+        blank=True
+    )
+    platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
+    meeting_url = models.URLField()
+    scheduled_time = models.DateTimeField()
+    duration_minutes = models.PositiveIntegerField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            # This is a new TherapySession, so let's copy data from the associated Appointment
+            self.scheduled_time = datetime.combine(self.appointment.date, self.appointment.time_slot)
+            self.duration_minutes = 60  # Set an initial duration (adjust as needed)
+        super(TherapySessionSchedule, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f"Therapy Session with {self.appointment.client.name} and {self.appointment.therapist.name} on {self.scheduled_datetime}"
+        return f"Therapy Session with {self.appointment.client.name} and {self.appointment.therapist.name} on {self.scheduled_time}"
 
     class Meta:
-        ordering = ['scheduled_datetime']
+        ordering = ['scheduled_time']
 
 
 

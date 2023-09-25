@@ -13,6 +13,7 @@ class Appointment(models.Model):
     ]
 
     STATUS_CHOICES = [
+        ("not_paid", "Not_paid"),
         ('pending', 'Pending'),
         ('scheduled', 'Scheduled'),
         ('completed', 'Completed'),
@@ -35,7 +36,8 @@ class Appointment(models.Model):
     created_date = models.DateTimeField(auto_now_add=True,null=True)
     modified_date = models.DateTimeField(auto_now=True, null=True)
     cancelled_date = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_paid')
+    order_id = models.CharField(max_length=100, blank=True, null=True)
 
 
 

@@ -80,6 +80,39 @@
             background-color: #000;
             /* Optional: Change the background color */
         }
+
+        .profile-card-5{
+            margin-top:20px;
+        }
+        .profile-card-5 .btn{
+            border-radius:2px;
+            text-transform:uppercase;
+            font-size:12px;
+            padding:7px 20px;
+        }
+        .profile-card-5 .card-img-block {
+            width: 91%;
+            margin: 0 auto;
+            position: relative;
+            top: -20px;
+            
+        }
+        .profile-card-5 .card-img-block img{
+            border-radius:5px;
+            box-shadow:0 0 10px rgba(0,0,0,0.63);
+        }
+        .profile-card-5 h2{
+            color:#4E5E30;
+            font-weight:600;
+        }
+        .profile-card-5 p{
+            font-size:14px;
+            font-weight:300;
+        }
+        .profile-card-5 .btn-primary{
+            background-color:#4E5E30;
+            border-color:#4E5E30;
+        }
     </style>
 </head>
 
@@ -165,8 +198,8 @@
     <div class="container-fluid py-5">
         <div class="container">
             <div class="text-center mx-auto mb-5" style="max-width: 600px;">
-                <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">Our Team Of Experts</h5>
-                <h1 class="display-5">Qualified Therapeutic Professionals</h1>
+                <h5 class="d-inline-block text-success text-uppercase border-bottom border-5">Our Team Of Experts</h5>
+                <h1 class="display-5 text-success">Qualified Therapeutic Professionals</h1>
             </div>
             <!-- Search Start -->
             <div class="container-fluid pt-5">
@@ -177,7 +210,7 @@
                             <div class="input-group" style="height:50px">
                                 <input class="form-control border-primary w-50" type="text" id="query" name="query"
                                     placeholder="Search by Therapist Name or Therapy">
-                                <button type="submit" class="btn btn-dark border-0 w-25">Search</button>
+                                <button type="submit" class="btn btn-success border-0 w-25">Search</button>
                             </div>
                         </form>
 
@@ -194,8 +227,35 @@
                 <!-- Results will be displayed here using JavaScript -->
             </div>
 
+            <div class="container"  id="therapists-list">
+                <div class="row">
+                    
+                    {% for user, profile, therapist in therapists_page %}
 
-            <div class="container" id="therapists-list">
+                    
+                    <!--Profile Card 5-->
+                    <div class="col-md-3 mt-4">
+                        <a href="{% url 'view-therapist' user_id=therapist.user.id %}">
+                        <div class="card profile-card-5">
+                            <div class="card-img-block">
+                                <img class="card-img-top" src="{{ profile.profile_picture.url }}" alt="Card image cap">
+                            </div>
+                            <div class="card-body pt-0">
+                            <h2 class="mt-3 w-100 float-left text-success text-center">{{ user.name }}</h2>
+                            <h5 class="mt-2 w-100 float-left text-center">{{therapist.therapy.therapy_name}}</h5>
+                            <p class="mt-2 w-100 float-left text-center"><strong>Experience: {{ therapist.experience }} Years</strong></p>
+                            <p class="mt-2 w-100 float-left text-center"><strong>{{ therapist.certification_name }}</strong></p>
+                          </div>
+                        </div>
+                    </a>
+
+                    </div>
+                    {% endfor %}
+   
+                </div>
+            </div>
+
+            {% comment %} <div class="container" id="therapists-list">
                 <div class="row g-5">
                     {% for user, profile, therapist in therapists_page %}
                     <div class="col-lg-6 team-item">
@@ -222,7 +282,7 @@
                     </div>
                     {% endfor %}
                 </div>
-            </div>
+            </div> {% endcomment %}
             
 
 
@@ -247,72 +307,66 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#search-form").submit(function (e) {
-            e.preventDefault();
-    
-            // Get search query from form
-            var query = $("#query").val();
-    
-            // Send AJAX request
-            $.ajax({
-                type: "GET",
-                url: "{% url 'search_therapists2' %}",  // Replace with the actual URL
-                data: { query: query },
-                dataType: "json",
-                success: function (data) {
-                    // Check if there are therapists in the results
-                    if (data.therapists.length === 0) {
-                        // Display a "No results found" message
-                        $("#therapists-list").html("<p>No results found</p>");
-                        return; // Exit the function early
-                    }
-    
-                    // Initialize the results HTML
-                    var resultsHtml = "<div class='row mb-3'>";
-                    
-                    data.therapists.forEach(function (therapist, index) {
-                        if (index % 2 === 0 && index > 0) {
-                            resultsHtml += "</div>"; // Close the previous row
-                            resultsHtml += "<div class='row mb-3'>"; // Open a new row with margin
+    <script>
+        $(document).ready(function () {
+            $("#query").keyup(function () {
+                // Get search query from input field
+                var query = $(this).val();
+        
+                // Send AJAX request
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'search_therapists2' %}",  // Replace with the actual URL
+                    data: { query: query },
+                    dataType: "json",
+                    success: function (data) {
+                        // Check if there are therapists in the results
+                        if (data.therapists.length === 0) {
+                            // Display a "No results found" message
+                            $("#therapists-list").html("<p>No results found</p>");
+                            return; // Exit the function early
                         }
-                        // Create the therapist URL using JavaScript
-                        var therapistUrl = '/therapist/view-therapist/' + therapist.id + '/';
+        
+                        // Initialize the results HTML
+                        var resultsHtml = "<div class='row'>";
                         
-                        resultsHtml += '<div class="col-lg-6 team-item">';
-                        resultsHtml += '<a href="' + therapistUrl + '">';
-                        resultsHtml += '<div class="row g-0 bg-light rounded overflow-hidden">';
-                        resultsHtml += '<div class="col-12 col-sm-5 h-100">';
-                        resultsHtml += '<img class="img-fluid h-100" src="' + therapist.profile_picture + '" style="object-fit: cover;">';
-                        resultsHtml += '</div>';
-                        resultsHtml += '<div class="col-12 col-sm-6 h-100 d-flex flex-column">';
-                        resultsHtml += '<div class="mt-3 p-5">';
-                        resultsHtml += '<h3 class="mb-5">' + therapist.name + '</h3>';
-                        resultsHtml += '<h5 class="fw-normal fst-italic text-primary mb-2">' + therapist.therapy + '</h5>';
-                        resultsHtml += '<h5 class="fw-normal text-dark mb-4">Experience: ' + therapist.experience + ' Years</h5>';
-                        resultsHtml += '<p class="m-0">' + therapist.certification_name + '</p>';
-                        resultsHtml += '</div>';
-                        resultsHtml += '</div>';
-                        resultsHtml += '<div class="col-12 col-sm-1 h-100">';
-                        resultsHtml += '</div>';
-                        resultsHtml += '</div>';
-                        resultsHtml += '</a>';
-                        resultsHtml += '</div>';
-                    });
-                    
-                    // Replace the content of the therapists list container
-                    $("#therapists-list").html(resultsHtml);
-                },
-                error: function (xhr, status, error) {
-                    // Log any errors to the console
-                    console.error(xhr.responseText);
-                },
+                        data.therapists.forEach(function (therapist) {
+                            // Create the therapist URL using JavaScript
+                            var therapistUrl = '/therapist/view-therapist/' + therapist.id + '/';
+                            
+                            resultsHtml += '<div class="col-md-3 mt-4">';
+                            resultsHtml += '<a href="' + therapistUrl + '">';
+                            resultsHtml += '<div class="card profile-card-5">';
+                            resultsHtml += '<div class="card-img-block">';
+                            resultsHtml += '<img class="card-img-top" src="' + therapist.profile_picture + '" alt="Card image cap">';
+                            resultsHtml += '</div>';
+                            resultsHtml += '<div class="card-body pt-0">';
+                            resultsHtml += '<h2 class="mt-3 w-100 float-left text-success text-center">' + therapist.name + '</h2>';
+                            resultsHtml += '<h5 class="mt-2 w-100 float-left text-center">' + therapist.therapy + '</h5>';
+                            resultsHtml += '<p class="mt-2 w-100 float-left text-center"><strong>Experience: ' + therapist.experience + ' Years</strong></p>';
+                            resultsHtml += '<p class="mt-2 w-100 float-left text-center"><strong>' + therapist.certification_name + '</strong></p>';
+                            resultsHtml += '</div>';
+                            resultsHtml += '</div>';
+                            resultsHtml += '</a>';
+                            resultsHtml += '</div>';
+                        });
+                        
+                        // Close the row
+                        resultsHtml += "</div>";
+                        
+                        // Replace the content of the therapists list container
+                        $("#therapists-list").html(resultsHtml);
+                    },
+                    error: function (xhr, status, error) {
+                        // Log any errors to the console
+                        console.error(xhr.responseText);
+                    },
+                });
             });
         });
-    });
+    </script>
     
-</script>
+    
 
 
     <!-- Footer Start -->

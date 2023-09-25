@@ -313,12 +313,11 @@
                                 '<td>' + appointment.status + '</td>';
 
                             var appointment_id = appointment.sl_no
-                            console.log('appointment.sl_no:', appointment.sl_no);
                             var appointmentUrl = '/therapist/schedule-therapy-session/' + appointment.sl_no + '/';
 
                             if (showActionColumns) {
                                 row += '<td>' +
-                                    '<button type="button" class="btn btn-success btn-update-status" data-toggle="modal" data-target="#updateStatusModal" data-appointment-id="' + appointment.sl_no + '">Update Status</button>' +
+                                    '<button id="modal_button" type="button" class="btn btn-success btn-update-status" data-toggle="modal" data-target="#updateStatusModal" data-appointment-id="' + appointment.sl_no + '">Update Status</button>' +
                                     '</td>' +
                                     '<td>' +
                                     '<a href="' + appointmentUrl + '"><button type="button" class="btn btn-warning btn-update-status">Schedule</button></a>' +
@@ -327,6 +326,17 @@
                             
                             row += '</tr>';
                             $('#appointment-table-body').append(row);
+                            
+                            modalButton=$(".btn-update-status");
+                            modalButton.click(function () {
+                                console.log("hello");
+                                var appointmentId = $(this).data('appointment-id'); // Use 'data-appointment-id' here
+                                
+                                
+                                // Update the input field value inside the modal
+                                $('#updateStatusModal input[name="appointment_id"]').val(appointmentId);
+                            });
+                        console.log(modalButton);
                         });
                         
                         // Show/hide the "Update Status" and "Schedule Session" columns based on the condition
@@ -352,23 +362,17 @@
             $('#upcoming-button').click(function() {
                 changeButtonColors(this);
                 loadAppointments('upcoming');
+                
             });
         
             loadAppointments('today'); 
+            
         });
         </script>
 
 
     <script>
-        $(document).ready(function () {
-            $('.btn-update-status').click(function () {
-                var appointmentId = $(this).data('appointment-id'); // Use 'data-appointment-id' here
-                console.log('appointmentId:', appointmentId);
-                
-                // Update the input field value inside the modal
-                $('#updateStatusModal input[name="appointment_id"]').val(appointmentId);
-            });
-        });
+        
         
         
     </script>

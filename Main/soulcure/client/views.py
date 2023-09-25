@@ -197,6 +197,7 @@ def appointment(request, t_id):
             form.instance.therapist = therapist
 
             if form.is_valid():
+                
                 form.save()
                 return redirect('confirm-appointment')
 
@@ -266,14 +267,102 @@ def get_available_time_slots(request):
 
 
 
-
+from datetime import date as datetoday
+from django.template.loader import render_to_string
 
 
 def view_appointment_client(request):
     client = request.user
 
-    active_appointments = Appointment.objects.filter(client=client)
+    active_appointments = Appointment.objects.filter(client=client)   
     return render(request,'client/view-appointments.html',{'appointments':active_appointments})
+
+# def view_completed_appointment_client(request):
+#     client = request.user
+#     today = datetoday.today()
+
+#     active_appointments = Appointment.objects.filter(client=client,date__lt=today)
+       
+#     return redirect('client/view-appointments.html',{'appointments':active_appointments})
+
+from datetime import date as datetoday
+def fetch_appointments_clients(request):
+    client = request.user
+
+    # Determine the status based on the request parameter
+    status = request.GET.get('status')
+    print(status)
+
+    # Get the current date
+    today = datetoday.today()
+
+    if status == 'completed':
+        appointments = Appointment.objects.filter(client=client, date__lt=today)
+    elif status == 'upcoming':
+        appointments = Appointment.objects.filter(client=client, date__gte=today)
+    else:
+        appointments = []
+
+    data = []
+    for appointment in appointments:
+        data.append({
+            'sl_no': appointment.id,
+            'therapist': appointment.therapist.name,
+            'appointment_date': appointment.date.strftime('%Y-%m-%d'),
+            'time_slot': appointment.get_time_slot_display(),
+            'status': appointment.get_status_display(),
+        })
+
+    return JsonResponse({'appointments': data})
+
+
+# def get_appointments(request):
+#     filter_type = request.GET.get("filter")
+#     client = request.user
+#     today = datetoday.today()
+
+#     if filter_type == "completed":
+#         appointments = Appointment.objects.filter(client=client, date__lt=today)
+#     elif filter_type == "upcoming":
+#         appointments = Appointment.objects.filter(client=client, date__gte=today)
+#     else:
+#         appointments = []
+
+#     # Render the appointments using a template
+#     appointments_html = render_to_string("client/view-appointments.html", {"appointments": appointments})
+
+#     return JsonResponse({"appointments_html": appointments_html})
+
+
+# @login_required
+# def fetch_client_appointments(request):
+#     client = request.user
+#     status = request.GET.get('status')
+#     print(status)
+
+#     today = datetoday.today()
+
+#     if status == 'completed':
+#         appointments = Appointment.objects.filter(client=client, date__lt=today)
+#         print(appointments)
+
+
+#     else:
+#         appointments = []
+
+#     data = []
+#     for appointment in appointments:
+#         therapist_name = appointment.therapist.name  # Get therapist name
+#         print(therapist_name)
+#         data.append({
+#             'sl_no': appointment.id,
+#             'therapist': appointment.therapist.name,
+#             'appointment_date': appointment.date.strftime('%Y-%m-%d'),
+#             'time_slot': appointment.get_time_slot_display(),
+#             'status': appointment.get_status_display(),
+#         })
+
+#     return JsonResponse({'appointments': data})
     
 
 ########################################################################################################################
@@ -319,3 +408,71 @@ def search_therapists2(request):
     ]
 
     return JsonResponse({'therapists': therapists_data})
+
+
+
+
+
+
+
+
+
+########################################################################################################################
+
+#payment
+
+########################################################################################################################
+
+from django.shortcuts import render
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
+
+razorpay_client = razorpay.Client(
+    auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+@csrf_exempt
+def paymenthandler(request):
+ 
+    # only accept POST request.
+    if request.method == "POST":
+        try:
+           
+            # get the required parameters from post request.
+            payment_id = request.POST.get('razorpay_payment_id', '')
+            razorpay_order_id = request.POST.get('razorpay_order_id', '')
+            signature = request.POST.get('razorpay_signature', '')
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': payment_id,
+                'razorpay_signature': signature
+            }
+ 
+            # verify the payment signature.
+            result = razorpay_client.utility.verify_payment_signature(
+                params_dict)
+            if result is not None:
+                amount = 20000  # Rs. 200
+                try:
+ 
+                    # capture the payemt
+                    razorpay_client.payment.capture(payment_id, amount)
+ 
+                    # render success page on successful caputre of payment
+                    return render(request, 'paymentsuccess.html')
+                except:
+ 
+                    # if there is an error while capturing payment.
+                    return render(request, 'paymentfail.html')
+            else:
+ 
+                # if signature verification fails.
+                return render(request, 'paymentfail.html')
+        except:
+ 
+            # if we don't find the required parameters in POST data
+            return HttpResponseBadRequest()
+    else:
+       # if other than POST request is made.
+        return HttpResponseBadRequest()

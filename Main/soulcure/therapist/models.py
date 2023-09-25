@@ -11,7 +11,7 @@ class Therapy(models.Model):
     duration = models.CharField(max_length=30)
     benefits = models.TextField(blank=True, null=True)
     status = models.BooleanField(default=True)
-
+  
     def __str__(self):
         return self.therapy_name 
     

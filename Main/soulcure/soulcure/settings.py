@@ -186,10 +186,12 @@ EMAIL_HOST_PASSWORD = 'kuolsyqgaawnvlfl'
 DEFAULT_FROM_EMAIL = 'amalraj686513@gmail.com'
 PASSWORD_RESET_TIMEOUT = 14400
 
+RAZORPAY_KEY_ID = 'rzp_test_JSYD5lhMrEdJ7G'
+RAZORPAY_KEY_SECRET = 'mFTHfcds2icl5MrljTW5ScAM'
 
 
-RAZOR_KEY_ID = 'rzp_test_JSYD5lhMrEdJ7G'
-RAZOR_KEY_SECRET = 'mFTHfcds2icl5MrljTW5ScAM'
+# RAZOR_KEY_ID = 'rzp_test_JSYD5lhMrEdJ7G'
+# RAZOR_KEY_SECRET = 'mFTHfcds2icl5MrljTW5ScAM'
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

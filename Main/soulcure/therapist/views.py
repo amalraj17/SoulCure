@@ -302,16 +302,16 @@ def view_appointment_therapist(request):
 @login_required
 def fetch_appointments(request):
     therapist = request.user
-    status = request.GET.get('status')
+    status1 = request.GET.get('status')
 
     today = datetoday.today()
 
-    if status == 'completed':
-        appointments = Appointment.objects.filter(therapist=therapist, date__lt=today)
-    elif status == 'today':
-        appointments = Appointment.objects.filter(therapist=therapist, date=today)
-    elif status == 'upcoming':
-        appointments = Appointment.objects.filter(therapist=therapist, date__gt=today)
+    if status1 == 'completed':
+        appointments = Appointment.objects.filter(therapist=therapist, date__lt=today).exclude(status='not_paid')
+    elif status1 == 'today':
+        appointments = Appointment.objects.filter(therapist=therapist, date=today).exclude(status='not_paid')
+    elif status1 == 'upcoming':
+        appointments = Appointment.objects.filter(therapist=therapist, date__gt=today).exclude(status='not_paid')
     else:
         appointments = []
 

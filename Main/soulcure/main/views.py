@@ -15,7 +15,7 @@ import razorpay
 from django.conf import settings
 
 # Initialize the Razorpay client
-razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 def index(request):
     if request.user.is_authenticated:
@@ -48,7 +48,7 @@ def index(request):
     context = {
         'user': request.user,
         'razorpay_order_id': razorpay_order_id,
-        'razorpay_merchant_key': settings.RAZOR_KEY_ID,
+        'razorpay_merchant_key': settings.RAZORPAY_KEY_ID,
         'razorpay_amount': amount,
         'currency': currency,
         'callback_url': callback_url

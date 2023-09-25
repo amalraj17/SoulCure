@@ -123,6 +123,8 @@ from django.shortcuts import render, redirect
 from .models import Appointment
 from .forms import AppointmentForm,CurrentUserForm
 from datetime import date as c_date
+from django.conf import settings
+
 
 
 @login_required
@@ -197,9 +199,60 @@ def appointment(request, t_id):
             form.instance.therapist = therapist
 
             if form.is_valid():
-                
-                form.save()
-                return redirect('confirm-appointment')
+
+                # appointment1=form.save()
+                appointment1 = form.save(commit=False)  # Save the form data to the appointment instance but don't commit to the database yet
+
+                # appointment1_id = appointment1.id
+
+                client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+                # Create an order with Razorpay
+                order_amount = 150000  # Amount in paise (Change as needed)
+                order_currency = 'INR'
+                order_receipt = str(appointment1.id)
+                order_notes = {'appointment_id': appointment1.id}
+                order_payload = {
+                    'amount': order_amount,
+                    'currency': order_currency,
+                    'receipt': order_receipt,
+                    'notes': order_notes,
+                }
+                order = client.order.create(data=order_payload)
+
+                # Set the order_id attribute on the appointment instance
+                appointment1.order_id = order.get('id')
+
+                # Save the appointment instance to the database
+                appointment1.save()
+                order_id = appointment1.order_id
+                phone=appointment1.client.phone
+                print(phone)
+                # Render the Razorpay payment page
+                return render(request, 'client/razorpay_payment.html', {'order': order, 'appointment': appointment1,'order_id': order_id,'phone': phone})
+
+
+
+
+                #     # Create an order with Razorpay
+                # order_amount = 10000  # Amount in paise (Change as needed)
+                # order_currency = 'INR'
+                # order_receipt = str(appointment1.id)
+                # order_notes = {'appointment_id': appointment1.id}
+                # order_payload = {
+                #         'amount': order_amount,
+                #         'currency': order_currency,
+                #         'receipt': order_receipt,
+                #         'notes': order_notes,
+                # }
+                # order = client.order.create(data=order_payload)
+
+                #     # Update the appointment with the Razorpay order ID
+                # appointment1.order_id = order.get('id')  # Set the order_id attribute
+                # appointment1.save() 
+
+                #     # Render the Razorpay payment page
+                # return render(request, 'client/razorpay_payment.html', {'order': order, 'appointment': appointment1})
+                # return redirect('confirm-appointment')
 
     else:
         user = request.user
@@ -222,6 +275,7 @@ def appointment(request, t_id):
 
 
 def confirmappointment(request): 
+    user=request
     return render(request,'client/confirm-appointments.html')
 
 def cancel_appointment(request):
@@ -428,51 +482,81 @@ import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest
+import logging
+from django.http import HttpResponseForbidden , HttpResponseNotFound , HttpResponse ,HttpResponseBadRequest
 
-razorpay_client = razorpay.Client(
-    auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+
+
+logger = logging.getLogger(__name__)
+
+# razorpay_client = razorpay.Client(
+#     auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+# @csrf_exempt
+# def paymenthandler(request):
+ 
+#     # only accept POST request.
+#     if request.method == "POST":
+#         try:
+           
+#             # get the required parameters from post request.
+#             payment_id = request.POST.get('razorpay_payment_id', '')
+#             razorpay_order_id = request.POST.get('razorpay_order_id', '')
+#             signature = request.POST.get('razorpay_signature', '')
+#             params_dict = {
+#                 'razorpay_order_id': razorpay_order_id,
+#                 'razorpay_payment_id': payment_id,
+#                 'razorpay_signature': signature
+#             }
+ 
+#             # verify the payment signature.
+#             result = razorpay_client.utility.verify_payment_signature(
+#                 params_dict)
+#             if result is not None:
+#                 amount = 20000  # Rs. 200
+#                 try:
+ 
+#                     # capture the payemt
+#                     razorpay_client.payment.capture(payment_id, amount)
+ 
+#                     # render success page on successful caputre of payment
+#                     return render(request, 'paymentsuccess.html')
+#                 except:
+ 
+#                     # if there is an error while capturing payment.
+#                     return render(request, 'paymentfail.html')
+#             else:
+ 
+#                 # if signature verification fails.
+#                 return render(request, 'paymentfail.html')
+#         except:
+ 
+#             # if we don't find the required parameters in POST data
+#             return HttpResponseBadRequest()
+#     else:
+#        # if other than POST request is made.
+#         return HttpResponseBadRequest()
 
 @csrf_exempt
-def paymenthandler(request):
- 
-    # only accept POST request.
-    if request.method == "POST":
-        try:
-           
-            # get the required parameters from post request.
-            payment_id = request.POST.get('razorpay_payment_id', '')
-            razorpay_order_id = request.POST.get('razorpay_order_id', '')
-            signature = request.POST.get('razorpay_signature', '')
-            params_dict = {
-                'razorpay_order_id': razorpay_order_id,
-                'razorpay_payment_id': payment_id,
-                'razorpay_signature': signature
-            }
- 
-            # verify the payment signature.
-            result = razorpay_client.utility.verify_payment_signature(
-                params_dict)
-            if result is not None:
-                amount = 20000  # Rs. 200
-                try:
- 
-                    # capture the payemt
-                    razorpay_client.payment.capture(payment_id, amount)
- 
-                    # render success page on successful caputre of payment
-                    return render(request, 'paymentsuccess.html')
-                except:
- 
-                    # if there is an error while capturing payment.
-                    return render(request, 'paymentfail.html')
-            else:
- 
-                # if signature verification fails.
-                return render(request, 'paymentfail.html')
-        except:
- 
-            # if we don't find the required parameters in POST data
-            return HttpResponseBadRequest()
-    else:
-       # if other than POST request is made.
-        return HttpResponseBadRequest()
+def payment_confirmation(request, order_id):
+    try:
+        # Retrieve the appointment based on the order_id
+        appointment = Appointment.objects.get(order_id=order_id)
+
+        # Check if the appointment status is 'not_paid'
+        if appointment.status == 'not_paid':
+            # Update the appointment status to 'confirmed' since payment is successful
+            appointment.status = 'pending'
+            appointment.save()
+
+            # Render the payment confirmation page with appointment details
+            return render(request, 'client/payment_confirmation.html', {'appointment': appointment})
+        else:
+            # Handle cases where the appointment status is already 'confirmed' or 'cancelled'
+            return HttpResponse('Payment Failed')
+
+    except Appointment.DoesNotExist:
+        # Handle cases where the appointment with the given order_id does not exist
+        logger.error(f"Appointment with order_id {order_id} does not exist")
+        return HttpResponse('Appointment DoesNotExist')

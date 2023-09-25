@@ -17,13 +17,14 @@ urlpatterns = [
     path('fetch_appointments_clients/', views.fetch_appointments_clients, name='fetch_appointments_clients'),
     # path('view-completed-appointment-client/', views.view_completed_appointment_client, name='view-completed-appointment-client'),
     # path('get_appointments/', views.get_appointments, name='get_appointments'),
+    path('payment-confirmation/<str:order_id>/', views.payment_confirmation, name='payment_confirmation'),
 
 
 
 
 
 
-    path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
+    # path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
 
 
 ]

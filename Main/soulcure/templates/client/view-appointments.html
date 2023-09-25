@@ -329,7 +329,8 @@
                             $('#appointment-table-body').append(row);
                             btnCancel=$(".cancel-appointment");
                             console.log(btnCancel)
-                            btnCancel.click(function () {
+                            btnCancel.on('click',function (e) {
+                                e.stopPropagation()
                                 console.log("Cancel appointment button clicked!");
                                 console.log('fn called')
                 
@@ -353,7 +354,7 @@
                                                 // Reload the page dynamically upon successful cancellation
                                                 location.reload();
                                             } else {
-                                                alert("Failed to cancel appointment. Please try again later.");
+                                                location.reload();
                                             }
                                         },
                                         error: function (xhr, status, error) {

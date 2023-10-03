@@ -181,13 +181,24 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'amalraj686513@gmail.com'
-EMAIL_HOST_PASSWORD = 'kuolsyqgaawnvlfl' 
-DEFAULT_FROM_EMAIL = 'amalraj686513@gmail.com'
+EMAIL_HOST_USER = 'info.soulcure@gmail.com'
+EMAIL_HOST_PASSWORD = 'qpyxppfyrxwefovf' 
+DEFAULT_FROM_EMAIL = 'info.soulcure@gmail.com'
 PASSWORD_RESET_TIMEOUT = 14400
 
-RAZORPAY_KEY_ID = 'rzp_test_JSYD5lhMrEdJ7G'
-RAZORPAY_KEY_SECRET = 'mFTHfcds2icl5MrljTW5ScAM'
+RAZOR_KEY_ID = 'rzp_test_GLpf05y5RSWd1L'
+RAZOR_KEY_SECRET = 'nr65az2N96cnD7lX02om1KdP'
+
+
+
+# settings.py
+
+TWILIO_ACCOUNT_SID = 'ACecfbd00335513ce4f6274fadae54fecb'
+TWILIO_AUTH_TOKEN = 'f772916c22d43a36a346740848b2ae43'
+TWILIO_PHONE_NUMBER = '+17732426132'  # This is the Twilio phone number you obtained
+
+WHATSAPP_SANDBOX_NUMBER = 'whatsapp:+919074386935'  # Your WhatsApp sandbox number
+
 
 
 # RAZOR_KEY_ID = 'rzp_test_JSYD5lhMrEdJ7G'

@@ -11,7 +11,8 @@ class Therapy(models.Model):
     duration = models.CharField(max_length=30)
     benefits = models.TextField(blank=True, null=True)
     status = models.BooleanField(default=True)
-  
+    fees = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
     def __str__(self):
         return self.therapy_name 
     
@@ -46,7 +47,7 @@ class TherapySessionSchedule(models.Model):
     ('Cisco Webex', 'Cisco Webex'),
     ]
 
-
+    
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('scheduled', 'Scheduled'),

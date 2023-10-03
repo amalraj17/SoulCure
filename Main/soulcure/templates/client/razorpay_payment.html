@@ -39,6 +39,10 @@
 
                             </p>
 
+                            <h3 class="form-label text-center text-danger mt-4 ">Amount: &#8377;{{amount}} 
+
+                            </h3>
+
                             <div class="mb-3">
                                 <label for="name" class="form-label">Name:</label>
                                 <input type="text" id="name" name="name" value="{{ appointment.client.name }}" disabled required class="form-control">
@@ -59,8 +63,8 @@
     
                             
                             <div class="mb-3 text-center">
-                                <button class="btn btn-danger mt-3 mr-2" type="button">Cancel this Appointment</button>
-                                <button class="btn btn-success mt-3" type="button" id="rzp-button">Confirm & Pay Now</button>
+                               <a href="{% url 'index' %}"> <button class="btn btn-danger mt-3 mr-2"  type="button">Cancel this Appointment</button></a>
+                                <button class="btn btn-success mt-3" type="button" id="pay-btn">Confirm & Pay Now</button>
                             </div>
                         </form>
                     </div>
@@ -71,7 +75,38 @@
     
 
 
-    <script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    var options = {
+       
+      // Enter the Key ID generated from the Dashboard
+      key: "{{ razorpay_merchant_key }}",
+       
+      // Amount is in currency subunits.
+      // Default currency is INR. Hence,
+      // 50000 refers to 50000 paise
+      amount: "{{ razorpay_amount }}",
+      currency: "{{ currency }}",
+       
+      // Your/store name.
+      name: "SoulCure",
+       
+      // Pass the `id` obtained in the response of Step 1
+      order_id: "{{ razorpay_order_id }}",
+      callback_url: "{{ callback_url }}",
+    };
+     
+    // initialise razorpay with the options.
+    var rzp1 = new Razorpay(options);
+     
+    // add event listener to the payment button.
+    document.getElementById("pay-btn").onclick = function (e) {
+      rzp1.open();
+      e.preventDefault();
+    };
+  </script>
+
+    {% comment %} <script>
         // Initialize orderId as null
         var orderId = null;
 
@@ -94,7 +129,7 @@
                 redirectToPaymentConfirmation();
             },
             prefill: {
-                name: document.getElementById('name').value,
+                name: document.getElementById('name').value, 
                 email: document.getElementById('email').value,
                 contact: document.getElementById('phone').value
             }
@@ -118,6 +153,6 @@
                 console.log("orderId is null. Unable to redirect.");
             }
         }
-    </script>
+    </script> {% endcomment %}
 </body>
 </html>

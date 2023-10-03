@@ -67,9 +67,17 @@ class UserProfileForm(forms.ModelForm):
         'placeholder': 'Enter Date of Birth'
     }))  
 
+    addressline2: forms.CharField(
+                widget=forms.TextInput(attrs={
+                    "class": "form-control form-control-lg",
+                    'placeholder': 'Address Line 3'
+                }),
+                required=False  # Make this field optional
+            )
+
     class Meta:
         model = UserProfile
-        fields = ['profile_picture', 'address','addressline1','addressline2', 'country', 'state', 'city', 'pin_code', 'gender', 'dob']
+        fields = ['profile_picture', 'address', 'addressline1', 'addressline2', 'country', 'state', 'city', 'pin_code', 'gender', 'dob']
         widgets = {
             'profile_picture': forms.ClearableFileInput(attrs={
                 "class": "form-control form-control-lg"
@@ -78,14 +86,11 @@ class UserProfileForm(forms.ModelForm):
                 "class": "form-control form-control-lg",
                 'placeholder': 'Address Line 1'
             }),
-            'addresslline1': forms.TextInput(attrs={
+            'addressline1': forms.TextInput(attrs={
                 "class": "form-control form-control-lg",
                 'placeholder': 'Address Line 2'
             }),
-            'addressline2': forms.TextInput(attrs={
-                "class": "form-control form-control-lg",
-                'placeholder': 'Address Line 3'
-            }),
+            
             'country': forms.TextInput(attrs={
                 "class": "form-control form-control-lg",
                 'placeholder': 'Enter Country'
@@ -105,6 +110,7 @@ class UserProfileForm(forms.ModelForm):
                 "class": "form-control form-control-lg"
             }),
         }
+
 
 
 class TherapistForm(forms.ModelForm):

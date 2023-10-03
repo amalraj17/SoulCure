@@ -165,7 +165,7 @@
                         growth. Your health and happiness are our top priorities, and we take pride in being your
                         trusted partner in achieving a better quality of life. Welcome to a brighter, healthier future
                         with SoulCure Therapeutic Care." </p>
-                        <button class="btn" id="pay-btn">Book</button>
+                        
 
                     <div class="row g-3 pt-3">
                         <div class="col-sm-3 col-6">
@@ -877,37 +877,7 @@
         </div>
     </div>
     <!-- Footer End -->
-    <!-- Razorpay's Javascript code. -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-      var options = {
-         
-        // Enter the Key ID generated from the Dashboard
-        key: "{{ razorpay_merchant_key }}",
-         
-        // Amount is in currency subunits.
-        // Default currency is INR. Hence,
-        // 50000 refers to 50000 paise
-        amount: "{{ razorpay_amount }}",
-        currency: "{{ currency }}",
-         
-        // Your/store name.
-        name: "Dj Razorpay",
-         
-        // Pass the `id` obtained in the response of Step 1
-        order_id: "{{ razorpay_order_id }}",
-        callback_url: "{{ callback_url }}",
-      };
-       
-      // initialise razorpay with the options.
-      var rzp1 = new Razorpay(options);
-       
-      // add event listener to the payment button.
-      document.getElementById("pay-btn").onclick = function (e) {
-        rzp1.open();
-        e.preventDefault();
-      };
-    </script>
+    
       
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-success btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>

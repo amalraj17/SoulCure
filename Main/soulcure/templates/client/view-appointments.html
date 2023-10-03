@@ -235,18 +235,21 @@
             <h1 class="text-center">Your Appointments</h1>
 
             <div class="row view-app-row">
-                <div class="col-lg-3 btn text-center view-app-coll bg-light text-success active-button" id="completed-button" data-filter="completed">
+                <div class="col-lg-3 btn text-center view-app-coll bg-light text-success active-button"
+                    id="completed-button" data-filter="completed">
                     Completed
                 </div>
-                <div class="col-lg-3 btn text-center view-app-coll bg-light text-success inactive-button" id="upcoming-button" data-filter="upcoming">
+                <div class="col-lg-3 btn text-center view-app-coll bg-light text-success inactive-button"
+                    id="upcoming-button" data-filter="upcoming">
                     Upcoming
                 </div>
-                
+                {% comment %} <div class="col-lg-3 btn text-center view-app-coll bg-light text-success inactive-button">
+                    <a href="">Session Schedule</a>
+                </div> {% endcomment %}
+
             </div>
             <div class="table-responsive">
                 <table id="example" class="table rounded text-center table-hover table-bordered">
-                    
-
                     <thead class="thead fw-bold bg-success text-dark text-center">
                         <tr>
                             <th>Sl_No</th>
@@ -254,6 +257,7 @@
                             <th>Appointment Date</th>
                             <th>Time Slot</th>
                             <th>Status</th>
+                            <th>Session Schedule</th> <!-- New column -->
                             <th class="action-columns">Cancel Appointment</th>
                         </tr>
                     </thead>
@@ -266,6 +270,10 @@
                             <td>{{ appointment.get_time_slot_display }}</td>
                             <td>{{ appointment.get_status_display }}</td>
                             <td>
+                                <button class="btn btn-primary session-schedule"
+                                    data-appointment-id="{{ appointment.id }}"> View Session Schedule</button>
+                            </td> <!-- New column with the button -->
+                            <td>
                                 {% if appointment.status != 'Canceled' %}
                                 <button class="btn btn-danger cancel-appointment"
                                     data-appointment-id="{{ appointment.id }}">Cancel</button>
@@ -274,7 +282,6 @@
                         </tr>
                         {% endfor %}
                     </tbody>
-                    
                 </table>
             </div>
         </div>
@@ -287,85 +294,67 @@
         document.querySelector('div.dataTables_wrapper div.dataTables_filter input').setAttribute('placeholder', 'Search anything')
     </script>
 
-
-
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             console.log("Document is ready!");
             // Function to load appointments based on status
             function loadAppointments(status) {
                 $.ajax({
                     url: '{% url "fetch_appointments_clients" %}',
-                    data: {'status': status},
+                    data: { 'status': status },
                     dataType: 'json',
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}'
                     },
-                    success: function(data) {
+                    success: function (data) {
                         // Clear existing table rows
                         $('#appointment-table-body').empty();
-    
+
                         // Determine whether to show the "Cancel Appointment" column
                         var showCancelColumn = (status === 'upcoming');
-    
+
                         // Populate the table with new data
-                        data.appointments.forEach(function(appointment) {
+                        data.appointments.forEach(function (appointment) {
                             var row = '<tr>' +
                                 '<td>' + appointment.sl_no + '</td>' +
                                 '<td>' + appointment.therapist + '</td>' +
                                 '<td>' + appointment.appointment_date + '</td>' +
                                 '<td>' + appointment.time_slot + '</td>' +
-                                '<td>' + appointment.status + '</td>';
-    
+                                '<td>' + appointment.status + '</td>' +
+                                '<td>'; // Opening tag for the "Session Schedule" column
+                            var appointment_id = appointment.sl_no
+                            var appointmentUrl = '/client/view_therapy_schedule/' + appointment.sl_no + '/';
+                            // Conditionally add the "Session Schedule" button based on the appointment status
+                            if (appointment.status === 'Scheduled') {
+                                row += '<a href="' + appointmentUrl + '"><button type="button" class="btn btn-primary text-dark ">View Session Schedule</button></a>' ;
+                            }
+
+                            row += '</td>'; // Closing tag for the "Session Schedule" column
+
                             // Add the "Cancel Appointment" button if needed
                             if (showCancelColumn) {
                                 row += '<td>' +
                                     '<button class="btn btn-danger cancel-appointment" ' +
-                                    'data-appointment-id="' + appointment.sl_no + '">Cancel</button>' +
+                                    'data-appointment-id="' + appointment.id + '">Cancel</button>' +
                                     '</td>';
                             }
-    
+
                             row += '</tr>';
                             $('#appointment-table-body').append(row);
-                            btnCancel=$(".cancel-appointment");
-                            console.log(btnCancel)
-                            btnCancel.on('click',function (e) {
-                                e.stopPropagation()
-                                console.log("Cancel appointment button clicked!");
-                                console.log('fn called')
-                
-                                var appointmentId = $(this).data("appointment-id");
-                
-                                // Display a confirmation dialog
-                                var confirmation = confirm("Are you sure you want to cancel this appointment?");
-                
-                                if (confirmation) {
-                                    // User clicked "OK," send an AJAX request to cancel the appointment
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "{% url 'cancel-appointment' %}",
-                                        data: {
-                                            csrfmiddlewaretoken: '{{ csrf_token }}',  // Include the CSRF token
-                                            appointment_id: appointmentId
-                                        },
-                                        dataType: "json",
-                                        success: function (data) {
-                                            if (data.success) {
-                                                // Reload the page dynamically upon successful cancellation
-                                                location.reload();
-                                            } else {
-                                                location.reload();
-                                            }
-                                        },
-                                        error: function (xhr, status, error) {
-                                            console.error(xhr.responseText);
-                                            alert("An error occurred while processing your request.");
-                                        },
-                                    });
-                                }
-                            });
+
+                            // Attach click event handler for the "Session Schedule" button
+                            if (appointment.status === 'Scheduled') {
+                                var sessionScheduleButton = $('.session-schedule');
+                                sessionScheduleButton.on('click', function (e) {
+                                    e.stopPropagation();
+                                    console.log("Session Schedule button clicked!");
+                                    // Implement your logic to handle the session schedule button click here
+                                    // You can use the appointment ID from $(this).data("appointment-id") to identify the appointment
+                                });
+                            }
                         });
-    
+
+
                         // Show/hide the "Cancel Appointment" column based on the condition
                         if (showCancelColumn) {
                             $('.action-columns').show();
@@ -373,38 +362,34 @@
                             $('.action-columns').hide();
                         }
                     }
-
                 });
             }
-    
+
             // Function to change button colors
             function changeButtonColors(clickedButton) {
                 $('.view-app-coll').removeClass('active-button').addClass('inactive-button');
                 $(clickedButton).removeClass('inactive-button').addClass('active-button');
             }
-    
-            $('#completed-button').click(function() {
+
+            $('#completed-button').click(function () {
                 console.log('Completed button clicked');
                 changeButtonColors(this);
                 loadAppointments('completed');
             });
-    
-            $('#upcoming-button').click(function() {
-                console.log('upcoming button clicked');
+
+            $('#upcoming-button').click(function () {
+                console.log('Upcoming button clicked');
                 changeButtonColors(this);
                 loadAppointments('upcoming');
             });
-    
+
             // Initial load with "Upcoming" appointments
             loadAppointments('upcoming');
-
-
-
-
         });
     </script>
-    
-    
+
+
+
     {% comment %} <!-- Include this script in your template -->
     <script>
         $(document).ready(function () {

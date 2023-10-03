@@ -66,7 +66,16 @@ def activateEmail(request, user, to_email):
         messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
 
 def userlogin(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        if request.user.role == CustomUser.CLIENT:
+            return redirect('http://127.0.0.1:8000/')
+        elif request.user.role == CustomUser.THERAPIST:
+            return redirect(reverse('therapist'))
+        elif request.user.role == CustomUser.ADMIN:
+            return redirect(reverse('adminindex'))
+        else:
+            return redirect('http://127.0.0.1:8000/')
+    elif request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
         print(email)  
@@ -79,16 +88,12 @@ def userlogin(request):
                 auth_login(request, user)
                 print("User authenticated:", user.email, user.role)
                 if request.user.role == CustomUser.CLIENT:
-                    print("user is client")
                     return redirect('http://127.0.0.1:8000/')
                 elif request.user.role == CustomUser.THERAPIST:
-                    print("user is therapist")
                     return redirect(reverse('therapist'))
                 elif request.user.role == CustomUser.ADMIN:
-                    print("user is admin")                   
                     return redirect(reverse('adminindex'))
                 else:
-                    print("user is normal")
                     return redirect('http://127.0.0.1:8000/')
 
             else:
@@ -101,7 +106,16 @@ def userlogin(request):
     return render(request, 'login.html')
 @user_not_authenticated
 def register(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        if request.user.role == CustomUser.CLIENT:
+            return redirect('http://127.0.0.1:8000/')
+        elif request.user.role == CustomUser.THERAPIST:
+            return redirect(reverse('therapist'))
+        elif request.user.role == CustomUser.ADMIN:
+            return redirect(reverse('adminindex'))
+        else:
+            return redirect('http://127.0.0.1:8000/')
+    elif request.method == 'POST':
         name1 = request.POST.get('name', None)
         email = request.POST.get('email', None)
         phone = request.POST.get('phone', None)

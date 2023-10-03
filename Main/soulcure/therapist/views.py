@@ -245,6 +245,45 @@ def update_appointment_status(request):
 from .models import TherapySessionSchedule
 from .forms import TherapySessionForm
 
+# def schedule_therapy_session(request, appointment_id):
+#     appointment = get_object_or_404(Appointment, id=appointment_id)
+
+#     # Check if a therapy session is already scheduled for this appointment
+#     existing_session = TherapySessionSchedule.objects.filter(appointment=appointment).first()
+
+#     if request.method == 'POST':
+#         form = TherapySessionForm(request.POST)
+#         if form.is_valid():
+#             if existing_session:
+#                 return render(request, 'therapist/schedule-meeting.html', {
+#                     'form': form,
+#                     'appointment': appointment,
+#                     'error_message': 'A therapy session is already scheduled for this appointment.'
+#                 })
+            
+#             therapy_session = form.save(commit=False)
+#             therapy_session.appointment = appointment
+#             therapy_session.status = 'scheduled'
+#             therapy_session.save()
+#             appointment.status = 'scheduled'
+#             appointment.save()
+#             return redirect('view-appointment-therapist')
+#     else:
+#         if existing_session:
+#             return render(request, 'therapist/schedule-meeting.html', {
+#                 'form': None,
+#                 'appointment': appointment,
+#                 'error_message': 'A therapy session is already scheduled for this appointment.'
+#             })
+        
+#         form = TherapySessionForm()
+
+#     return render(request, 'therapist/schedule-meeting.html', {'form': form, 'appointment': appointment})
+
+from twilio.rest import Client
+from django.conf import settings
+
+
 def schedule_therapy_session(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
 
@@ -267,6 +306,10 @@ def schedule_therapy_session(request, appointment_id):
             therapy_session.save()
             appointment.status = 'scheduled'
             appointment.save()
+
+            # Send WhatsApp notification
+            send_whatsapp_notification(appointment,therapy_session)
+
             return redirect('view-appointment-therapist')
     else:
         if existing_session:
@@ -279,6 +322,40 @@ def schedule_therapy_session(request, appointment_id):
         form = TherapySessionForm()
 
     return render(request, 'therapist/schedule-meeting.html', {'form': form, 'appointment': appointment})
+
+def send_whatsapp_notification(appointment,therapy_session):
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    
+    to_number = 'whatsapp:+919074386935'  # Replace with the recipient's WhatsApp number
+    date_formatted = appointment.date.strftime('%Y-%m-%d')
+    time_slot = appointment.time_slot  # Make sure this is properly formatted
+    platform = therapy_session.platform
+    url = therapy_session.meeting_url
+     
+    message_body = (
+    f"Dear client, we are pleased to inform you that your therapy session has been scheduled. \n\n"
+    f"📅 Date: {date_formatted}\n"
+    f"⏰ Time: {time_slot}\n"
+    f"🌐 Platform: {platform}\n\n"
+    f"🔗 Please use the following link to join the meeting:\n"
+    f"{url}\n\n"
+    f"⏱️ Be sure to join on time.\n\n\n"
+    f"Thank you for choosing our services. "
+    f"[Team SoulCure]"
+
+    )
+
+    
+    try:
+        message = client.messages.create(
+            from_='whatsapp:+14155238886',
+            body=message_body,
+            to=to_number
+        )
+        print(f"WhatsApp notification sent to {to_number}: {message.sid}")
+    except Exception as e:
+        print(f"Error sending WhatsApp notification: {str(e)}")
+
 
 from datetime import date as datetoday
 from django.http import JsonResponse

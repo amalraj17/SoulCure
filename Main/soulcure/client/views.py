@@ -1,3 +1,4 @@
+from email.message import EmailMessage
 from io import BytesIO
 from django.shortcuts import render,redirect, get_object_or_404
 from accounts.models import CustomUser,UserProfile
@@ -8,6 +9,15 @@ from .forms import CustomUserForm, UserProfileForm
 from therapist.models import Therapist,TherapistDayOff
 from datetime import time
 from .models import Appointment
+from datetime import datetime
+from django.core.mail import send_mail, EmailMessage
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import render
+from django.core.mail import send_mail, EmailMessage
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+import io
+
 
 
 
@@ -281,26 +291,17 @@ def confirmappointment(request):
     user=request
     return render(request,'client/confirm-appointments.html')
 
-def cancel_appointment(request):
-    if request.method == 'POST':
-        appointment_id = request.POST.get('appointment_id')
-        try:
-            appointment = Appointment.objects.get(id=appointment_id)
-            if appointment.status != 'canceled':
-                # appointment.status = 'not_paid'
-                # appointment.payment_status = False
-                # appointment.save()
-                # if appointment.save():
-                #     print(appointment.status)
-                appointment.delete()
-                return JsonResponse({'success': True})
-            else:
-                print(appointment.status)
-                return JsonResponse({'success': False, 'message': 'Appointment is already canceled.'})
-        except Appointment.DoesNotExist:
-            print(appointment.status)
-            return JsonResponse({'success': False, 'message': 'Appointment not found.'})
-    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+def cancel_appointment(request,appointment_id):
+    print("Entered")
+
+    
+    print(appointment_id)
+    appo=Appointment.objects.get(id=appointment_id)
+    appo.cancel_status=True
+    appo.time_slot=None
+    appo.status='cancelled'
+    appo.save()
+    return redirect('view-appointment-client')
 
 def get_available_time_slots(request):
     therapist_id = request.GET.get('therapist_id')
@@ -362,10 +363,10 @@ def fetch_appointments_clients(request):
     today = datetoday.today()
 
     if status1 == 'completed':
-        appointments = Appointment.objects.filter(client=client, date__lt=today)
+        appointments = Appointment.objects.filter(client=client, date__lt=today,cancel_status=False)
     elif status1 == 'upcoming':
         # appointments = Appointment.objects.filter(client=client, date__gte=today).exclude(status='not_paid')
-        appointments = Appointment.objects.filter(client=client, date__gte=today).exclude(status='not_paid')
+        appointments = Appointment.objects.filter(client=client, date__gte=today,cancel_status=False).exclude(status='not_paid')
 
         print(appointments)
     else:
@@ -675,6 +676,155 @@ def payment(request, appointment_id,t_fees):
 # def payment_confirmation(request, order_id):
 #     try:
 #         # Retrieve the appointment based on the order_id
+@csrf_exempt
+def paymenthandler(request, appointment_id):
+    # Only accept POST requests.
+    if request.method == "POST":
+        # Get the required parameters from the POST request.
+        payment_id = request.POST.get('razorpay_payment_id', '')
+        razorpay_order_id = request.POST.get('razorpay_order_id', '')
+        signature = request.POST.get('razorpay_signature', '')
+        params_dict = {
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_payment_id': payment_id,
+            'razorpay_signature': signature
+        }
+    # Verify the payment signature.
+        result = razorpay_client.utility.verify_payment_signature(params_dict)
+
+        payment = Payment.objects.get(razorpay_order_id=razorpay_order_id)
+        amount = int(payment.amount * 100)  # Convert Decimal to paise
+
+        # Capture the payment.
+        razorpay_client.payment.capture(payment_id, amount)
+        payment = Payment.objects.get(razorpay_order_id=razorpay_order_id)
+
+        # Update the order with payment ID and change status to "Successful."
+        payment.payment_id = payment_id
+        payment.payment_status = Payment.PaymentStatusChoices.SUCCESSFUL
+        payment.save()
+
+        try:
+            update_appointment = Appointment.objects.get(id=appointment_id)
+            print(update_appointment)
+            update_appointment.status = 'pending'
+            update_appointment.save()
+            pay_amt= payment.amount
+            payee = update_appointment.client.name
+            email = update_appointment.client.email
+            ap_date=update_appointment.date
+            ap_time=update_appointment.time_slot
+            therapist = update_appointment.therapist.name
+            appointment_email(email,  payee, ap_date, ap_time, pay_amt,therapist,payment)
+        except Appointment.DoesNotExist:
+            # Handle the case where the appointment with the given ID does not exist
+            return HttpResponseBadRequest("Invalid appointment ID")
+       
+        # Render the success page on successful capture of payment.
+        return render(request, 'client/payment_confirmation.html',{'appointment':update_appointment})
+
+    else:
+        update_appointment = Appointment.objects.get(id=appointment_id)
+        update_appointment.payment_status = False
+        update_appointment.save()
+
+        # If other than POST request is made.
+        return HttpResponseBadRequest()
+
+
+
+
+def appointment_email(email, payee, ap_date, ap_time, therapist,payment,pay_amt):
+    subject = "Appointment Confirmation"
+
+    formatted_time = ap_time.strftime('%I:%M %p')
+    formatted_date = ap_date.strftime('%B %d, %Y')
+
+    message = f"Dear {payee},\n\nWe are pleased to confirm your upcoming appointment with our therapist, {therapist}, scheduled for {formatted_date} at {formatted_time}.\n\nYour payment receipt is attached to this email for your reference.\n\nThank you for choosing our services. We look forward to providing you with the best care possible.\n\nBest regards,\nSoulCure Team"
+    from_email = 'info.soulcure@gmail.com'
+    recipient_list = [email]
+    pdf_invoice = generate_pdf_invoice(payee, pay_amt, payment)
+    email = EmailMessage(subject, message, from_email, recipient_list)
+    email.attach(f"{payee}_invoice.pdf", pdf_invoice, 'application/pdf')
+    email.send()
+
+def generate_pdf_invoice(payee, pay_amt, payment):
+    # Create a PDF document using xhtml2pdf
+    template_path = "invoice.html"  # Replace with the path to your HTML template
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{payee}_invoice.pdf"'
+
+    template = get_template(template_path)
+    context = {
+        'payee': payee,
+        'amount': pay_amt,
+        'payment':payment # Format the timestamp as desired
+        }
+    html = template.render(context)
+
+    pdf_buffer = io.BytesIO()
+    pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), pdf_buffer)
+
+    pdf_content = pdf_buffer.getvalue()
+    pdf_buffer.close()
+
+    return pdf_content
+
+def payment(request, appointment_id,t_fees):
+    # Use get_object_or_404 to get the Subscription object based on sub_id
+        # Retrieve subscription features from a specific Subscription instance
+    # You may want to retrieve a specific subscription
+    print(t_fees)
+    t_fees = float(request.resolver_match.kwargs['t_fees'])
+    print(t_fees)
+
+    appointments = Appointment.objects.all()
+    current_appointment = Appointment.objects.get(pk=appointment_id)
+    # For Razorpay integration
+    currency = 'INR'
+    amount = t_fees  # Get the subscription price
+    amount_in_paise = int(amount * 100)  # Convert to paise
+    print(amount_in_paise)
+
+    # Create a Razorpay Order
+    razorpay_order = razorpay_client.order.create(dict(
+        amount=amount_in_paise,
+        currency=currency,
+        payment_capture='0'
+    ))
+
+    # Order ID of the newly created order
+    razorpay_order_id = razorpay_order['id']
+    callback_url = reverse('paymenthandler', args=[appointment_id])  # Define your callback URL here
+
+    phone=current_appointment.client.phone
+    print(phone)
+    payment = Payment.objects.create(
+        user=request.user,
+        razorpay_order_id=razorpay_order_id,
+        payment_id="",
+        amount=amount,
+        currency=currency,
+        payment_status=Payment.PaymentStatusChoices.PENDING,
+        appointment=current_appointment
+    )
+    appointment=current_appointment
+    # Prepare the context data
+    context = {
+        'user': request.user,
+        'appointment':appointment,
+        # 'therapy_fee':t_fees,
+        'razorpay_order_id': razorpay_order_id,
+        'razorpay_merchant_key': settings.RAZOR_KEY_ID,
+        'razorpay_amount': amount_in_paise,
+        'currency': currency,
+        'amount': amount_in_paise / 100,
+        'callback_url': callback_url,
+        'phone':phone,
+        
+    }
+
+    return render(request, 'client/razorpay_payment.html', context)
 #         appointment = Appointment.objects.get(order_id=order_id)
 
 #         # Check if the appointment status is 'not_paid'

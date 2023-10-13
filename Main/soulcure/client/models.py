@@ -40,6 +40,7 @@ class Appointment(models.Model):
     cancelled_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_paid')
     payment_status= models.BooleanField(default=True)
+    cancel_status=models.BooleanField(default=False)
 
 
     # def get_time_slot_display(self):

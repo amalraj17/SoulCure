@@ -308,12 +308,19 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+
         $(document).ready(function () {
+
+            const searchResultsContainer = $('#therapists-list');
+            const initial_state = searchResultsContainer.html();
+
             $("#query").keyup(function () {
                 // Get search query from input field
                 var query = $(this).val();
         
                 // Send AJAX request
+                if (query.length>=3){
                 $.ajax({
                     type: "GET",
                     url: "{% url 'search_therapists2' %}",  // Replace with the actual URL
@@ -362,6 +369,11 @@
                         console.error(xhr.responseText);
                     },
                 });
+                }
+                else if (query.length==0){
+                    searchResultsContainer.html(initial_state);
+                    searchResultsContainer.show();
+                }
             });
         });
     </script>

@@ -324,6 +324,7 @@
                                 '<td>'; // Opening tag for the "Session Schedule" column
                             var appointment_id = appointment.sl_no
                             var appointmentUrl = '/client/view_therapy_schedule/' + appointment.sl_no + '/';
+                            var cancelUrl = '/client/cancel-appointment/' + appointment.sl_no + '/';
                             // Conditionally add the "Session Schedule" button based on the appointment status
                             if (appointment.status === 'Scheduled') {
                                 row += '<a href="' + appointmentUrl + '"><button type="button" class="btn btn-primary text-dark ">View Session Schedule</button></a>' ;
@@ -334,8 +335,8 @@
                             // Add the "Cancel Appointment" button if needed
                             if (showCancelColumn) {
                                 row += '<td>' +
-                                    '<button class="btn btn-danger cancel-appointment" ' +
-                                    'data-appointment-id="' + appointment.id + '">Cancel</button>' +
+                                    '<a href="' + cancelUrl + '"><button class="btn btn-danger cancel-appointment" ' +
+                                    'data-appointment-id="' + appointment_id + '">Cancel</button>' +
                                     '</td>';
                             }
 

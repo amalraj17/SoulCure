@@ -33,6 +33,7 @@ def addTherapy(request):
         form = TherapyForm()
     return render(request, 'add-therapy.html', {'form': form})
 
+@login_required
 def listTherapist(request):
     therapists = Therapist.objects.all()
     cuser = CustomUser.objects.filter(role=CustomUser.THERAPIST, id__in=therapists.values_list('user_id', flat=True))
@@ -336,7 +337,7 @@ def send_whatsapp_notification(appointment,therapy_session):
     f"Dear client, we are pleased to inform you that your therapy session has been scheduled. \n\n"
     f"📅 Date: {date_formatted}\n"
     f"⏰ Time: {time_slot}\n"
-    f"🌐 Platform: {platform}\n\n"
+    f"🌐 Platform: {platform}\n\n"  
     f"🔗 Please use the following link to join the meeting:\n"
     f"{url}\n\n"
     f"⏱️ Be sure to join on time.\n\n\n"

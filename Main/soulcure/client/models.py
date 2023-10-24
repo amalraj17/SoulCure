@@ -43,11 +43,7 @@ class Appointment(models.Model):
     cancel_status=models.BooleanField(default=False)
 
 
-    # def get_time_slot_display(self):
-    #     for time_choice in self.TIME_CHOICES:
-    #         if time_choice[0] == self.time_slot:
-    #             return time_choice[1]
-    #     return ""
+
 
     def __str__(self):
         return f"Appointment with {self.client.name} and {self.therapist.name} on {self.date} at {self.get_time_slot_display()}"

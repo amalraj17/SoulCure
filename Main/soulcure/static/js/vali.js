@@ -333,8 +333,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     const bioInput = document.getElementById("bio");
-
-    bioInput.addEventListener("blur", validateBio);
+    if (bioInput) {
+      // Check if the addressInput element exists
+      bioInput.addEventListener("blur", validateBio);
+    }
+    
 
     function validateBio() {
       console.log("validateBio function called");
@@ -363,8 +366,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     const certificationNameInput = document.getElementById("certname");
-
-    certificationNameInput.addEventListener("blur", validateCertificationName);
+    if (certificationNameInput) {
+      // Check if the addressInput element exists
+      certificationNameInput.addEventListener("blur", validateCertificationName);
+    }
 
     function validateCertificationName() {
       console.log("validateCertificationName function called");
@@ -391,8 +396,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     const certificationIdInput = document.getElementById("certificationId");
-
-    certificationIdInput.addEventListener("blur", validateCertificationId);
+    if (certificationIdInput) {
+      // Check if the addressInput element exists
+      certificationIdInput.addEventListener("blur", validateCertificationId);
+    }
 
     function validateCertificationId() {
       console.log("validateCertificationId function called");
@@ -419,8 +426,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     const experienceInput = document.getElementById("experience");
-
-    experienceInput.addEventListener("blur", validateExperience);
+    if (experienceInput) {
+      // Check if the addressInput element exists
+      experienceInput.addEventListener("blur", validateExperience);
+    }
 
     function validateExperience() {
       console.log("validateExperience function called");
@@ -446,8 +455,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const pictureInput = document.getElementById("pictureInput");
     const pictureForm = document.getElementById("pictureForm");
-
-    pictureInput.addEventListener("change", validatePicture);
+    if (pictureInput) {
+      // Check if the addressInput element exists
+      pictureInput.addEventListener("change", validatePicture);
+    }
 
     function validatePicture() {
       console.log("validatePicture function called");

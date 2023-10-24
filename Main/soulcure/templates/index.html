@@ -65,11 +65,11 @@
                         <a href="{% url 'about' %}" class="nav-item nav-link">About Us</a>
  
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
-                        <div class="nav-item dropdown">
+                        <div class="nav-item dropdown" >
                             <a href="#" class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown">Welcome,{{user.name}}</a>
+                                data-bs-toggle="dropdown" id="ProfileDropdown">Welcome,{{user.name}}</a>
                             <div class="dropdown-menu m-0">
-                                <a href="{% url 'profile' %}" class="dropdown-item nav-linkd">My Profile</a>
+                                <a href="{% url 'profile' %}" id="profile" class="dropdown-item nav-linkd">My Profile</a>
                                 <a href="{% url 'view-appointment-client' %}" class="dropdown-item nav-linkd">View
                                     Appointments</a>
                                 <a href="{% url 'logout' %}" class="dropdown-item nav-linkd ">Logout</a>

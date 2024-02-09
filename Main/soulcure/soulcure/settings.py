@@ -36,6 +36,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 AUTH_USER_MODEL='accounts.CustomUser'
 
 
+
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,6 +54,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'channels',
+    'room',
 ]
 
 SITE_ID = 1
@@ -66,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'soulcure.urls'
@@ -87,6 +92,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'soulcure.wsgi.application'
+ASGI_APPLICATION = 'soulcure.asgi.application'
+
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 
 # Database

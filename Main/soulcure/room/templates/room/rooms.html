@@ -1,0 +1,26 @@
+{% extends 'room/cbase.html' %}
+
+{% block title %}Rooms | SoulCure {% endblock %}
+
+{% block content %}
+<div class="container mt-5 p-4 text-center">
+    <h1 class="display-4 text-success">Support Group Chats</h1>
+</div> 
+
+<div class="container-fluid">
+    {% if userrooms %}------------ {% endif %}
+    <div class="row justify-content-center">
+        {% for room in rooms %}
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">{{ room.name }}</h2>
+                    <a href="{% url 'room' room.slug %}" class="btn btn-primary btn-block">Join</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

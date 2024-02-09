@@ -265,3 +265,14 @@
     width: 150px;
     height: 150px;
 }
+
+
+.h-chat {
+    max-height: 400px; /* Set a maximum height for the scrollable area */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional: Add a border for visual clarity */
+}
+.messages {
+    height: 400px;
+    overflow-y: auto;
+}

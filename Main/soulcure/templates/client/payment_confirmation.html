@@ -50,7 +50,7 @@
                 
                 <h4 class="text-center fs-4">&nbsp; Date: {{ appointment.date }}  <br> Time: {{ appointment.time_slot }}</h4>
 
-                <a href="{% url 'generate_appointment_pdf' appointment.id %}" download>[Download payment reciept(pdf)]</a>
+                {% comment %} <a href="{% url 'generate_appointment_pdf' appointment.id %}" download>[Download payment reciept(pdf)]</a> {% endcomment %}
                 <br>
                 <p class="text-danger text-center fs-4">Your Meeting Schedule will be provided soon via E-mail</p>
             </div>
@@ -61,10 +61,5 @@
             </div>
         </div>
     </div>
-    
-
-
-   
-
 </body>
 </html>

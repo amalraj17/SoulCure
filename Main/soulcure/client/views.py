@@ -8,7 +8,7 @@ from django.contrib import messages
 from .forms import CustomUserForm, UserProfileForm
 from therapist.models import Therapist,TherapistDayOff
 from datetime import time
-from .models import Appointment
+from .models import Appointment,FeedbackOption
 from datetime import datetime
 from django.core.mail import send_mail, EmailMessage
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -146,14 +146,9 @@ def book_appointment(request, t_id):
     current_therapists=Therapist.objects.filter(user=therapist)
     print(current_therapists)
     if current_therapists.exists():
-    # Access the first therapist in the queryset (you may need to loop through if there are multiple therapists)
         current_therapist = current_therapists.first()
-
-        # Access the associated therapy
         associated_therapy = current_therapist.therapy
-
         if associated_therapy:
-            # Access the fee for the associated therapy
             therapy_fee = associated_therapy.fees
             print("Therapy Fee:", therapy_fee)
         else:
@@ -233,40 +228,11 @@ def book_appointment(request, t_id):
 
             if form.is_valid():
 
-                # appointment1=form.save()
                 appointment1 = form.save(commit=False)  # Save the form data to the appointment instance but don't commit to the database yet
-
-                # appointment1_id = appointment1.id
-
-                # client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-                # # Create an order with Razorpay
-                
-                # order_amount = t_fees  # Amount in paise (Change as needed)
-                # order_currency = 'INR'
-                # order_receipt = str(appointment1.id)
-                # order_notes = {'appointment_id': appointment1.id}
-                # order_payload = {
-                #     'amount': order_amount,
-                #     'currency': order_currency,
-                #     'receipt': order_receipt,
-                #     'notes': order_notes,
-                # }
-                # order = client.order.create(data=order_payload)
-
-                # # Set the order_id attribute on the appointment instance
-                # appointment1.order_id = order.get('id')
-
-                # Save the appointment instance to the database
-                
                 appointment1.save()
                 t_fee=int(therapy_fee)
                 return redirect('payment',appointment_id=appointment1.id,t_fees=therapy_fee)
-                # order_id = appointment1.order_id                                                 'order': order,'order_id': order_id,
-                # phone=appointment1.client.phone
-                # print(phone)
-                # Render the Razorpay payment page
-                # return render(request, 'client/razorpay_payment.html', {'therapy_fee':therapy_fee, 'appointment': appointment1,'phone': phone})
-
+                
     else:
         user = request.user
         initial_data = {
@@ -573,7 +539,7 @@ def paymenthandler(request, appointment_id):
             'razorpay_payment_id': payment_id,
             'razorpay_signature': signature
         }
-    # Verify the payment signature.
+        # Verify the payment signature.
         result = razorpay_client.utility.verify_payment_signature(params_dict)
 
         payment = Payment.objects.get(razorpay_order_id=razorpay_order_id)
@@ -911,5 +877,71 @@ def view_therapy_schedule(request,appointment_id):
     return render(request,'client/view-schedule.html',{'current_schedule':current_schedule,'appointment':appointment})
 
 
+# User FeedBack
+
+from .models import FeedbackQuestions, TherapySessionFeedbacks
+
+# def feedback_form(request,app_id):
+#     print(app_id)
+#     ar=[]
+#     que=FeedbackQuestions.objects.all()
+#     for i in que:
+#         obj=FeedbackOption.objects.filter(question_id=i.id)
+#         ar.append(obj)
+#     count=range(0,que.count())
+#     print(range)
+#     return render(request,'client/feedback.html',{'que':que,'ar':ar,'count':count})
+
+from .models import TherapySessionFeedbacks
+
+def feedback_view(request, app_id):
+    if request.method == 'POST':
+        for key, value in request.POST.items():
+            if key.startswith('option_'):
+                question_index = key.split('_')[1]
+                question_id = request.POST.get(f'question_id_{question_index}')
+                print(f"Question ID: {question_id}, Option: {value}")
+                appointment = Appointment.objects.get(pk=app_id)
+                # Create a new TherapySessionFeedbacks object with the extracted data
+                feedback = TherapySessionFeedbacks.objects.create(
+                    question=FeedbackQuestions.objects.get(pk=question_id),
+                    appointment=appointment,
+                    Answer=value
+                )
+                
+
+        return redirect('feedback_success')
+
+    # If the request method is not POST, render the feedback form page
+    questions_with_options = []
+    questions = FeedbackQuestions.objects.all()
+    for question in questions:
+        options = FeedbackOption.objects.filter(question=question)
+        question_dict = {
+            'question': question,
+            'options': options
+        }
+        questions_with_options.append(question_dict)
+
+    return render(request, 'client/feedback.html', {'questions_with_options': questions_with_options})
+
+def feedback_success(request):
+    return render(request, 'client/feedback_success.html')
 
 
+def add_questions(request):
+    if request.method == 'POST':
+        question_text = request.POST.get('question')
+        options = request.POST.getlist('options')
+
+        # Create the FeedbackQuestions instance
+        question = FeedbackQuestions.objects.create(question=question_text)
+        print(options)
+        # Create FeedbackOptions instances for each option
+        for option_text in options:
+            FeedbackOption.objects.create(question=question, option_text=option_text)
+
+        # Redirect to therapist index after adding questions and options
+        return redirect('http://127.0.0.1:8000/therapist-index/')
+
+    return render(request, 'add_questions.html')

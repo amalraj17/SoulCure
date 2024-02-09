@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therapy Session Feedback Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        form {
+            max-width: 700px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease;
+        }
+        select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        select option {
+            font-size: 16px; /* Adjust the font size as needed */
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            width: 120px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>Therapy Session Feedback Form</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        {% for question_with_options in questions_with_options %}
+            <h2>{{ question_with_options.question }}</h2>
+            <!-- Hidden input field for question ID -->
+            <input type="hidden" name="question_id_{{ forloop.counter }}" value="{{ question_with_options.question.id }}">
+            <label for="option_{{ forloop.counter }}">Select an option:</label>
+            <select name="option_{{ forloop.counter }}" id="option_{{ forloop.counter }}">
+                {% for option in question_with_options.options %}
+                    <option value="{{ option.option_text }}">{{ option.option_text }}</option>
+                {% endfor %}
+            </select>
+        {% endfor %}
+        <button type="submit">Submit Feedback</button>
+    </form>
+    
+    
+</body>
+</html>

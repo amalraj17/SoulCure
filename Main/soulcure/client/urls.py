@@ -16,8 +16,10 @@ urlpatterns = [
     path('confirm-appointment/', views.confirmappointment, name='confirm-appointment'),
     path('fetch_appointments_clients/', views.fetch_appointments_clients, name='fetch_appointments_clients'),
     path('view_therapy_schedule/<int:appointment_id>/', views.view_therapy_schedule, name='view_therapy_schedule'),
-
-    
+    # path('feedback/<int:app_id>',views.feedback_form,name='feedback'),
+    path('feedbackk/<int:app_id>',views.feedback_view,name='feedbackk'),
+    path('feedback/success/',views.feedback_success, name='feedback_success'),
+    path('add_questions/',views.add_questions, name='add_questions'),
 
 
 

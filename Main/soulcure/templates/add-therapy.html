@@ -109,7 +109,9 @@
   <div class="mt-5">
     <h2 class="align-center text-dark">Add New Therapy</h2>
     <div class="container p-5 card ">
-
+      {% if error_message %}
+      <div><span style="color:red;">{{error_message}}</span><br/><br/></div>
+      {% endif %}
       <form method="post" class=" mx-auto w-75" enctype="multipart/form-data">
         <div id="therapyNameValidation" class="invalid-feedback text-center">
           Please enter a valid therapy name containing only letters
@@ -120,12 +122,16 @@
         <div id="durationValidation" class="invalid-feedback text-center">
           Duration upto 20 weeks
         </div>
+        <div id="feesValidation" class="invalid-feedback text-center">
+          Please enter a valid positive numbers.
+        </div>
+        
         <div id="benefitsValidation" class="invalid-feedback">
           Benefits must contain at least 25 words.
         </div>
         {% csrf_token %}
         {{ form.as_p}}
-
+        
 
 
         <div class="d-flex mt-5 justify-content-center w-100 align-items-center">
@@ -202,7 +208,7 @@
           const durationValid = document.getElementById("durationValid");
           const inputValue = durationInput.value.trim();
 
-          const isValid = /^([1-9]|1[0-9]|20)$/.test(inputValue);
+          const isValid = /^[1-9]\d*$/.test(inputValue);
 
           if (!isValid) {
             durationInput.classList.add("is-invalid");
@@ -214,6 +220,31 @@
             durationInput.classList.add("is-valid");
             durationValidation.style.display = "none";
             durationValid.style.display = "block";
+          }
+        }
+
+        const feesInput = document.getElementById("fees");
+
+        feesInput.addEventListener("keyup", validatefees);
+
+        function validatefees() {
+          console.log("validateDuration function called");
+          const feesValidation = document.getElementById("feesValidation");
+          const feesValid = document.getElementById("feesValid");
+          const inputValue = durationInput.value.trim();
+
+          const isValid = /^([1-9]|1[0-9]|20)$/.test(inputValue);
+
+          if (!isValid) {
+            feesInput.classList.add("is-invalid");
+            feesInput.classList.remove("is-valid");
+            feesValidation.style.display = "block";
+            feesValid.style.display = "none";
+          } else {
+            feesInput.classList.remove("is-invalid");
+            feesInput.classList.add("is-valid");
+            feesValidation.style.display = "none";
+            feesValid.style.display = "block";
           }
         }
 

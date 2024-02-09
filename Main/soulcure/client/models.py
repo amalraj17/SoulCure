@@ -2,6 +2,10 @@ from django.db import models
 from datetime import datetime
 from accounts.models import CustomUser
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 
 
 class Appointment(models.Model):
@@ -41,8 +45,7 @@ class Appointment(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_paid')
     payment_status= models.BooleanField(default=True)
     cancel_status=models.BooleanField(default=False)
-
-
+    feedback_status=models.BooleanField(default=False)
 
 
     def __str__(self):
@@ -53,7 +56,48 @@ class Appointment(models.Model):
             self.time_slot = None
         super(Appointment, self).save(*args, **kwargs)
 
+        if self.status == 'completed' and not self.feedback_status:
+            # TherapySessionFeedback.objects.create(appointment=self)
+            self.send_feedback_email()
+    def send_feedback_email(self):
+        # Prepare email subject and content
+        subject = 'Feedback Request for your therapy session'
+        message = render_to_string('email/feedback_request_email.html', {'appointment': self})
+        client_email = self.client.email
 
+        # Send email
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [client_email])
+
+@receiver(post_save, sender=Appointment)
+def send_feedback_email_on_completion(sender, instance, created, **kwargs):
+    print("function")
+    if instance.status == 'completed' and not instance.feedback_status:
+        instance.send_feedback_email()
+
+
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
+from django.utils import timezone
+
+class FeedbackQuestions(models.Model):
+    question = models.CharField(max_length=255)
+    def __str__(self):
+        return self.question
+
+class FeedbackOption(models.Model):
+    question = models.ForeignKey(FeedbackQuestions, on_delete=models.CASCADE)
+    option_text = models.CharField(max_length=255)
+    
+    def __str__(self):
+        return self.option_text
+
+class TherapySessionFeedbacks(models.Model):
+    question = models.ForeignKey(FeedbackQuestions, on_delete=models.CASCADE)
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    Answer = models.CharField(max_length=255, null=True)
+    def __str__(self):
+        return f"Feedback for {self.question} of {self.appointment}"
+# models.py
 
 
 class Payment(models.Model):
@@ -61,8 +105,6 @@ class Payment(models.Model):
         PENDING = 'pending', 'Pending'
         SUCCESSFUL = 'successful', 'Successful'
         FAILED = 'failed', 'Failed'
-    
-
         
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Link the payment to a user
     razorpay_order_id = models.CharField(max_length=255)  # Razorpay order ID
@@ -76,8 +118,6 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment for {self.appointment}"
-
-
 
     class Meta:
         ordering = ['-timestamp']

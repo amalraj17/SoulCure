@@ -9,7 +9,7 @@ urlpatterns = [
     path('therapist-index/',views.therapistindex,name='therapist'),
     path('about/',views.about,name='about'),
     path('familytherapy/',views.familytherapy,name='familytherapy'),
-    path('chooseoption/',views.choosetherapy,name='chooseoption'),
+    path('chooseoption/',views.choosetherapy,name='chooseoption'), 
 
 
 

@@ -18,6 +18,7 @@ from client.models import Appointment
 
 
 # Create your views here.
+@login_required
 def addTherapy(request):
     if request.method == 'POST':
         form = TherapyForm(request.POST)
@@ -26,12 +27,22 @@ def addTherapy(request):
             des = form.cleaned_data['description']
             duration = form.cleaned_data['duration']
             benefits = form.cleaned_data['benefits']
-            therapy = Therapy.objects.create(therapy_name=therapy_name, description=des, duration=duration, benefits=benefits)
-            therapy.save()
-            return redirect('index')  # Redirect to login page after successful registration
+            fees = form.cleaned_data['fees']
+            # Check if a therapy with the same name already exists
+            if Therapy.objects.filter(therapy_name=therapy_name).exists():
+                error_message = "Therapy with this name already exists."
+            else:
+                therapy = Therapy.objects.create(therapy_name=therapy_name, description=des, duration=duration, benefits=benefits,fees=fees)
+                therapy.save()
+                return redirect('index')  # Redirect to the index page after successful registration
+        else:
+            error_message = "Form is not valid."
     else:
         form = TherapyForm()
-    return render(request, 'add-therapy.html', {'form': form})
+        error_message = None
+
+    return render(request, 'add-therapy.html', {'form': form, 'error_message': error_message})
+
 
 @login_required
 def listTherapist(request):

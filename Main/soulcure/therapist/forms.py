@@ -43,11 +43,19 @@ class TherapyForm(forms.ModelForm):
                 }
             )
         )
-
+    fees = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id":"fees",
+                'placeholder': 'Enter Fees for a session'
+            }
+        )
+    )
 
     class Meta:
         model = Therapy
-        fields = ['therapy_name','description', 'duration','benefits']
+        fields = ['therapy_name','description', 'duration','benefits','fees']
 
 
 

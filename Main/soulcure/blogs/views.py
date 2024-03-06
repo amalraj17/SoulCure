@@ -11,7 +11,7 @@ def blog(request):
     posts = Posts.objects.filter(is_published=True, is_active =True)
     # print(list(posts))
     return render(request, 'blog.html', {'posts': posts})
-
+@login_required
 def catblog(request,catid):
     # Retrieve all published posts
     cat = BlogCategory.objects.get(pk= catid)
@@ -26,7 +26,7 @@ def view_blog_editor(request):
     # print(list(posts))
     return render(request, 'editor/lists-blog-editors.html', {'posts': posts})
 
-
+@login_required
 def single_blog(request, post_id):
     # Retrieve single post by its id
     post = get_object_or_404(Posts, pk=post_id)

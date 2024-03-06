@@ -284,6 +284,7 @@
 
     <script>
         $(document).ready(function() {
+            var serialNumber = 1;
             function changeButtonColors(clickedButton) {
                 // Reset all buttons to inactive color
                 $('.view-app-coll').removeClass('active-button').addClass('inactive-button');
@@ -307,7 +308,7 @@
                         // Populate the table with new data
                         data.appointments.forEach(function(appointment) {
                             var row = '<tr>' +
-                                '<td>' + appointment.sl_no + '</td>' +
+                                '<td>' + serialNumber++ + '</td>' +
                                 '<td>' + appointment.client + '</td>' +
                                 '<td>' + appointment.appointment_date + '</td>' +
                                 '<td>' + appointment.time_slot + '</td>' +

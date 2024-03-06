@@ -76,25 +76,22 @@ def room(request, slug):
 
 
 @login_required
-def notification(request,room_slug):
-    room = Room.objects.get(slug=room_slug)
+def notification(request):
     try:
-        # Retrieve notifications sent by other users (excluding the current user)
-        # noti = Notification.objects.exclude(user=request.user).order_by('-time')[:10]
-        notifications = Notification.objects.filter(room=room, user=request.user, status=True)
+        noti = Notification.objects.exclude(user=request.user).filter(status=True).order_by('-time')[:10]
     except IndexError:
-        # Handle the case where no notification is found
         noti = None
     
     print(noti)
-    return render(request, 'notification.html', {'notifications': noti,'room': room})
+    return render(request, 'notification.html', {'notifications': noti})
 
 @login_required
 def mark_notifications_as_read(request):
     if request.method == 'POST':
-        noti = Notification.objects.exclude(user=request.user)
-        for i in noti:
-            i.status = False
-            i.save()
+        user_rooms = UserRooms.objects.filter(user=request.user)
+
+        # Loop through each chatroom and mark notifications as read for that chatroom
+        for user_room in user_rooms:
+            Notification.objects.filter(room=user_room.room).update(status=False)
 
     return redirect('notification')

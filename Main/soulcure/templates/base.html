@@ -65,6 +65,8 @@
                         </div> 
                         <a href="{% url 'about' %}" class="nav-item nav-link">About Us</a>
                         <a href="{% url 'rooms' %}" class="nav-item nav-link">Rooms</a>
+                        <a href="{% url 'blogs' %}" class="nav-item nav-link">Blogs</a>
+
                         
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
                         <div class="nav-item dropdown" >
@@ -93,18 +95,20 @@
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{% url 'familytherapy' %}" class="dropdown-item">Family Therapy</a>
-                                <a href="{% url 'notification' %}" class="dropdown-item">Notification</a>
+                                {% comment %} <a href="{% url 'notification' %}" class="dropdown-item">Notification</a> {% endcomment %}
                                 {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
                                 <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
                         </div> 
+                        <a href="{% url 'blogs' %}" class="nav-item nav-link">Blogs</a>
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
+                        <a href="" class="nav-item nav-link"></a>
 
                     </div>
 
                     <div class="d-flex">
-                        <a href="{% url 'notification' %}" class="dropdown-item">Notification</a>
+                        {% comment %} <a href="{% url 'notification' %}" class="dropdown-item">Notification</a> {% endcomment %}
                         <a href="{% url 'login' %}" class="nav-item nav-link btn btn-success mx-2 text-dark">Login</a>
 
                         <!-- Register button -->

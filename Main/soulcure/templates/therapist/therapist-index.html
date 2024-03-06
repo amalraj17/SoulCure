@@ -57,9 +57,15 @@
                         <a href="{% url 'view-appointment-therapist' %}" class="nav-item nav-link ">Appointments</a>
                         <a href="{% url 'leave_request' %}" class="nav-item nav-link ">Apply Leave</a>
                         <a href="{% url 'rooms' %}" class="nav-item nav-link">Rooms</a>
+                        <a href="{% url 'blogs' %}" class="nav-item nav-link">Blogs</a>
+
                         {% comment %} <a href="{% url 'add_questions' %}" class="nav-item nav-link ">Add Questions</a> {% endcomment %}
 
+                        <a href="" class="nav-item nav-link"></a>
+                        <a href="" class="nav-item nav-link"></a>
 
+                    
+                        <a href="{% url 'notification' %}" class="nav-item nav-link"><i class="fa-solid fa-bell"></i></a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle"
                                 data-bs-toggle="dropdown">Welcome,{{user.name}}</a>
@@ -90,6 +96,7 @@
                         </div> 
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
+                        <a href="{% url 'blogs' %}" class="nav-item nav-link">Blogs</a>
 
                     </div>
 

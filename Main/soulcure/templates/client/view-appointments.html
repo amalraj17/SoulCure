@@ -297,6 +297,7 @@
 
     <script>
         $(document).ready(function () {
+            var serialNumber = 1;
             console.log("Document is ready!");
             // Function to load appointments based on status
             function loadAppointments(status) {
@@ -317,7 +318,7 @@
                         // Populate the table with new data
                         data.appointments.forEach(function (appointment) {
                             var row = '<tr>' +
-                                '<td>' + appointment.sl_no + '</td>' +
+                                '<td>' + serialNumber++ + '</td>' +
                                 '<td>' + appointment.therapist + '</td>' +
                                 '<td>' + appointment.appointment_date + '</td>' +
                                 '<td>' + appointment.time_slot + '</td>' +
@@ -526,7 +527,31 @@
         </div>
     </div>
     <!-- Footer End -->
-
+    <script src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+    <script type="text/javascript"
+     src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+    <script>
+      var alanBtnInstance = alanBtn({
+        key: "0462a2f2cb3d0087c4c4bd612766873e2e956eca572e1d8b807a3e2338fdd0dc/stage",
+        onCommand: function (commandData) {
+          if (commandData.command === "blogs") {
+            window.location.href = "http://127.0.0.1:8000/blogs/blogs/";
+          }else if (commandData.command === "view-appointment-client") {
+                window.location.href = "http://127.0.0.1:8000/client/view-appointment-client/";
+            } else if (commandData.command === "logout") {
+                window.location.href = "http://127.0.0.1:8000/logout/";
+            } else if (commandData.command === "listtherapist") {
+                window.location.href = "http://127.0.0.1:8000/therapist/listtherapist/";
+            } else if (commandData.command === "profile") {
+                window.location.href = "http://127.0.0.1:8000/client/profile/";
+            }else if (commandData.command === "home") {
+                window.location.href = "http://127.0.0.1:8000/";
+            }
+          
+        },
+        rootEl: document.getElementById("alan-btn"),
+      });
+    </script>
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-success btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 

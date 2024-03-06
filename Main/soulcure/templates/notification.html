@@ -1,11 +1,9 @@
-<!DOCTYPE html> 
-<html lang="en"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Notifications</title> 
-    <!-- Bootstrap CSS --> 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> 
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
     <style> 
         body { 
             background-color: #f8f9fa; 
@@ -58,13 +56,14 @@
                 {% for notification in notifications %} 
                 <li class="list-group-item">
                     {% if notification%} 
-                    <div class='row'>
-                        <div class='col-lg-6'>
-                            <strong class="text-success">{{ notification.content }}</strong>
+                    <div class='row d-flex'>
+                        <div class='col-lg-6 col-6'>
+                            <a href="{% url 'rooms'  %}"><strong class="text-success">{{ notification.content }}</strong>
                         </div>
-                        <div class='col-lg-6'>
+                        <div class='col-lg-6 col-6'>
                             <strong class="text-success">{{ notification.time }}</strong>
                         </div>
+                    </div>
                     {% else %} 
                     <span class="success-message">{{ notification.content }}</span> 
                     {% endif %} 
@@ -75,14 +74,17 @@
             </ul>
         </div> 
         <div class="card-footer text-center"> 
-            <form method="post" action="{% url 'mark_notifications_as_read' room.slug %}"> 
+            <form method="post" action="{% url 'mark_notifications_as_read'  %}"> 
                 {% csrf_token %} 
                 <button type="submit" class="btn btn-primary">Mark All as Read</button> 
             </form>
         </div> 
     </div> 
 </div> 
-<!-- Bootstrap JS --> 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> 
-</body> 
-</html>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+{% endblock %}

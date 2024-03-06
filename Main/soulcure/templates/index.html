@@ -65,7 +65,13 @@
                         </div> 
                         <a href="{% url 'about' %}" class="nav-item nav-link">About Us</a>
                         <a href="{% url 'rooms' %}" class="nav-item nav-link">Rooms</a>
+                        <a href="{% url 'blogs' %}" class="nav-item nav-link">Blogs</a>
+
                         
+                        <a href="" class="nav-item nav-link"></a>
+
+                    
+                        <a href="{% url 'notification' %}" class="nav-item nav-link"><i class="fa-solid fa-bell"></i></a>
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
                         <div class="nav-item dropdown" >
                             <a href="#" class="nav-link dropdown-toggle"
@@ -93,11 +99,14 @@
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{% url 'familytherapy' %}" class="dropdown-item">Family Therapy</a>
+                                <a href="{% url 'yoga' %}" class="dropdown-item">Meditation</a>
                                 {% comment %} <a href="{% url 'notification' %}" class="dropdown-item">Notification</a> {% endcomment %}
                                 {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
                                 <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
-                        </div> 
+                        </div>
+                        <a href="{% url 'blogs' %}" class="nav-item nav-link">Blogs</a>
+
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
                         {% comment %} <a href="contact.html" class="nav-item nav-link">Contact</a> {% endcomment %}
 
@@ -904,16 +913,18 @@
         onCommand: function (commandData) {
           if (commandData.command === "blogs") {
             window.location.href = "http://127.0.0.1:8000/blogs/blogs/";
-          }else if (commandData.command === "scout") {
-                window.location.href = "http://127.0.0.1:8000/PlayerScout";
-            } else if (commandData.command === "club") {
-                window.location.href = "http://127.0.0.1:8000/player-club";
-            } else if (commandData.command === "trail") {
-                window.location.href = "http://127.0.0.1:8000/trial_list";
-            } else if (commandData.command === "tour") {
-                window.location.href = "http://127.0.0.1:8000/tournaments";
+          }else if (commandData.command === "view-appointment-client") {
+                window.location.href = "http://127.0.0.1:8000/client/view-appointment-client/";
+            } else if (commandData.command === "logout") {
+                window.location.href = "http://127.0.0.1:8000/logout/";
+            } else if (commandData.command === "listtherapist") {
+                window.location.href = "http://127.0.0.1:8000/therapist/listtherapist/";
+            } else if (commandData.command === "profile") {
+                window.location.href = "http://127.0.0.1:8000/client/profile/";
             }else if (commandData.command === "home") {
                 window.location.href = "http://127.0.0.1:8000/";
+            }else if (commandData.command === "rooms") {
+                window.location.href = "http://127.0.0.1:8000/rooms/";
             }
           
         },

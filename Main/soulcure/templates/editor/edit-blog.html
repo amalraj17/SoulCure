@@ -1,0 +1,64 @@
+{% extends 'editor/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- Blog Start -->
+<div class="container py-5" style="margin-left:20%; margin-top:6%;">
+    <div class="row g-5">
+
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <!-- Blog Detail Start -->
+            <!-- Blog Detail Start -->
+            <h1 class="display-4 text-center mb-3">Edit Blog</h1>
+
+            <form id="editPostForm" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-5">
+                    <!-- Image -->
+                    <img id="postImage" class="img-fluid w-100 rounded mb-5" src="{{ post.image.url }}" alt="">
+                    <input type="file" id="image" name="image" class="form-control mb-5">
+                    <!-- Editable Title -->
+
+                    <h2 class="mb-4">Title and Introduction</h2>
+                    <input type="text" id="title" name="title" class="form-control mb-4" value="{{ post.title }}">
+                    <!-- Editable Intro -->
+                    <textarea id="intro" name="intro" class="form-control mb-4" rows="4">{{ post.intro }}</textarea>
+                    <!-- Editable Subtitle1 -->
+                    <h2 class="mb-4">Subtitle 1</h2>
+                    <input type="text" id="subtitle1" name="subtitle1" class="form-control mb-4"
+                        value="{{ post.subtitle1 }}">
+                    <!-- Editable Content1 -->
+                    <textarea id="content1" name="content1" class="form-control mb-4"
+                        rows="4">{{ post.content1 }}</textarea>
+                    <!-- Editable Subtitle2 -->
+                    <h2 class="mb-4">Subtitle 2</h2>
+                    <input type="text" id="subtitle2" name="subtitle2" class="form-control mb-4"
+                        value="{{ post.subtitle2 }}">
+                    <!-- Editable Content2 -->
+                    <textarea id="content2" name="content2" class="form-control mb-4"
+                        rows="4">{{ post.content2 }}</textarea>
+                    <!-- Editable Subtitle3 -->
+                    <h2 class="mb-4">Subtitle 3</h2>
+                    <input type="text" id="subtitle3" name="subtitle3" class="form-control mb-4"
+                        value="{{ post.subtitle3 }}">
+                    <!-- Editable Content3 -->
+                    <textarea id="content3" name="content3" class="form-control mb-4"
+                        rows="4">{{ post.content3 }}</textarea>
+                    
+                    <!-- Save Button -->
+                    <div class="text-center">
+                        <a href="{% url "view_blog_editor" %}" class="btn btn-danger w-25 mt-5 py-3">DISCARD</a>
+                        <button type="submit" class="btn btn-success w-25 mt-5 py-3">SAVE</button>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+
+    {% endblock %}

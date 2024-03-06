@@ -11,6 +11,7 @@ urlpatterns = [
         path('logout/',views.userLogout,name='logout'),
         path('',include('allauth.urls')), 
         path('add-therapist/',views.addTherapist,name='addTherapist'),
+        path('add-editors/',views.addEditors,name='add-editors'),
         path('view-therapies/', views.view_therapies, name='view-therapies'),
         path('users-lists/',views.users_list,name='users-lists'),
         path('change-therapy-status/<int:therapy_id>/', views.change_therapy_status, name='change-therapy-status'),

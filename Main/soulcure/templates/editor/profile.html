@@ -1,0 +1,180 @@
+{% extends 'editor/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+</head>
+{% block content %}
+<body>
+
+  <div class="container bg-white" style="margin-left:400px; margin-top:50px;">
+    <div class="row">
+      <div class="col-12" >
+        <!-- Page title -->
+        <div class="my-5">
+          <h3 class="">My Profile</h3>
+          <hr />
+        </div>
+
+        <!-- Form START -->
+        {% comment %}
+        <form class="file-upload">
+          {% endcomment %}
+          <div class="row mb-5 gx-5 file-upload" style="margin- ">
+            <!-- Upload profile -->
+            <div class="col-xxl-5">
+              <div class="bg-secondary-soft px-4 py-5 rounded">
+                <div class="row g-3">
+                  <div class="text-center mb-5">
+                    <!-- Image upload -->
+                    <div class="square position-relative display-2 mb-3">
+                      <i
+                        class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
+
+                      {% if user.userprofile.profile_picture %}
+                      <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture"style="width: 255px; height: 255px"
+                        class="position-absolute top-0 start-0 pp" />
+                      {% comment %} {% else %} 
+                       <div class="rounded-circle no-file-message">
+                        <img class="rounded-circle" src="{% static 'img/profile_pic.png' %}" alt="Profile Picture"
+                          style="width: 200px; height: 200px" />
+                      </div>  {% endcomment %}
+                      {% endif %}
+                    </div>
+
+                    <!-- Button -->
+                    <a href="{% url 'edit-profile' %}"><input type="submit"id="customFile" name="file" hidden="" />
+                    <label class="btn btn-success-soft btn-block" for="customFile">Change</label></a>
+
+                    <p class="txtsize mx-3 mt-3">
+                      {{ user.userprofile.user.name }}
+                    </p>
+                  </div>
+                  <form method="post" action="{% url 'change_password_client' %}">
+                    {% csrf_token %}
+                    <div class="mt-5">
+                      <h3 class="my-4 mt-5">Change Password</h3>
+                      <hr />
+                      <!-- New password -->
+                      <div class="col-md-12">
+                        <label for="exampleInputPassword2" class="form-label">New password *</label>
+                        <input type="password" name="new_password" class="form-control" id="exampleInputPassword2" />
+                      </div>
+                      <!-- Confirm password -->
+                      <div class="col-md-12">
+                        <label for="exampleInputPassword3" class="form-label">Confirm Password *</label>
+                        <input type="password" class="form-control" name="confirm_password"
+                          id="exampleInputPassword3" />
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-center w-100 align-items-center">
+                      <button class="btn btn-success sub-btn mt-3" id="submit" type="submit">
+                        Update Password
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              {% if msg == 1 %}
+              <span>Your password was successfully updated.</span>
+              {% elif msg == 2 %}
+              <span>Please fill in both password fields.</span>
+              {% endif %}
+            </div>
+
+            <!-- Contact detail -->
+            <div class="col-xxl-7 mb-5 mb-xxl-0">
+              <div class="bg-secondary-soft px-4 py-5 rounded">
+                <div class="row g-3">
+                  <!-- First Name -->
+
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> Name :</strong></label>
+                    <p class="txtsize mx-3">
+                      {{ user.userprofile.user.name }}
+                    </p>
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> Email :</strong></label>
+                    <p class="txtsize mx-3">
+                      {{ user.userprofile.user.email }}
+                    </p>
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> Phone :</strong></label>
+                    <p class="txtsize mx-3">
+                      +91 {{ user.userprofile.user.phone }}
+                    </p>
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> Address :</strong></label>
+                    <p class="txtsize mx-3">{{ user.userprofile.address }},{{ user.userprofile.addressline1 }},{{user.userprofile.addressline2 }}</p>
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> Country :</strong></label>
+                    <p class="txtsize mx-3">{{ user.userprofile.country }}</p>
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> State :</strong></label>
+                    <p class="txtsize mx-3">{{ user.userprofile.state }}</p>
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> City :</strong></label>
+                    <p class="txtsize mx-3">{{ user.userprofile.city }}</p>
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> Pin Code :</strong></label>
+                    <p class="txtsize mx-3">
+                      {{ user.userprofile.pin_code }}
+                    </p>
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> Gender :</strong></label>
+                    <p class="txtsize mx-3">
+                      {{ user.userprofile.get_gender_display }}
+                    </p>
+                  </div>
+                  <div class="col-md-12 d-flex">
+                    <label class="txtsize"><strong> Date of Birth :</strong></label>
+                    <p class="txtsize mx-3">{{ user.userprofile.dob }}</p>
+                  </div>
+
+
+                </div>
+              </div>
+
+              <div class="gap-3 d-md-flex justify-content-md-center text-center">
+                <!-- <button type="button" class="btn btn-danger btn-lg">Delete profile</button> -->
+                <a href="{% url 'edit-profile-editor' %}"><button id="edit" type="button" class="btn btn-primary btn-lg mb-5">
+                    Edit profile
+                  </button></a>
+              </div>
+            </div>
+          </div>
+          <!-- Row END -->
+          {% comment %}
+        </form>
+        {% endcomment %}
+        <!-- Form END -->
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+  <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'lib/tempusdominus/js/moment.min.js' %}"></script>
+  <script src="{% static 'lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
+  <script src="{% static 'lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+  <!-- Template Javascript -->
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

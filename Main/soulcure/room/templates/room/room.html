@@ -199,7 +199,12 @@
             'email': email,
             'room': roomName
         })
-        window.location.href = "http://127.0.0.1:8000/rooms/Addiction/";
+        // Construct the URL with the room slug
+        const roomSlug = encodeURIComponent(roomName); // Encode the room name for safe URL usage
+        const redirectUrl = `http://127.0.0.1:8000/rooms/room/${roomSlug}/`;
+
+        // Redirect to the constructed URL
+        window.location.href = redirectUrl;
 
         chatSocket.send(JSON.stringify({
             'message': message,
@@ -211,7 +216,6 @@
 
         return false
     };
-
     /**
     * A function for finding the messages element, and scroll to the bottom of it.
     */
@@ -219,7 +223,6 @@
         let objDiv = document.getElementById("chat-messages");
         objDiv.scrollTop = objDiv.scrollHeight;
     }
-
     // Add this below the function to trigger the scroll on load.
     scrollToBottom();
 </script>

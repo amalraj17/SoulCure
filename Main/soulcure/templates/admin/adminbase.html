@@ -184,13 +184,7 @@
               </li>
             </ul>
           </li>
-          <!-- <li class="{% if request.path == '/accounts/list-student-requests/' %}active{% endif %}">
-            <a class="has-arrow" href="{% url 'index' %}">
-              <div class="parent-icon"><i class="material-icons-outlined">child_care</i>
-              </div>
-              <div class="menu-title">Approve Students</div>
-            </a>
-          </li> --> 
+          
           <li class="{% if request.path == '/accounts/add_lawyer/' %}active{% endif %}">
             <a href="{% url 'addTherapist' %}" class="has-arrow">
               <div class="parent-icon"><i class="material-icons-outlined">person_add</i>
@@ -198,13 +192,13 @@
               <div class="menu-title">Add Therapist</div>
             </a>
           </li>
-          <!-- <li class="{% if request.path == '/list_cases/' %}active{% endif %}">
-            <a href="{% url 'index' %}" class="has-arrow">
-              <div class="parent-icon"><i class="material-icons-outlined">cases</i>
+          <li class="{% if request.path == '/accounts/add_lawyer/' %}active{% endif %}">
+            <a href="{% url 'add-editors' %}" class="has-arrow">
+              <div class="parent-icon"><i class="material-icons-outlined">person_add</i>
               </div>
-              <div class="menu-title">Cases</div>
+              <div class="menu-title">Add Editors</div>
             </a>
-          </li> -->
+          </li>
         </div>
     
   </aside>

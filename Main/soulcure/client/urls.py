@@ -3,6 +3,8 @@ from . import views
 
 
 urlpatterns = [
+    path('editor-profile/',views.profileeditor,name='editorprofile'),
+    path('edit-profile-editor/',views.editprofileeditor,name='edit-profile-editor'),
     path('profile/',views.profile,name='profile'),
     path('edit-profile/',views.editprofile,name='edit-profile'),
     path('change-password-client/',views.change_password_client,name='change_password_client'),

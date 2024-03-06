@@ -77,6 +77,10 @@ class CustomUser(AbstractUser):
     def has_module_perms(self, app_label):
         return True
 
+    def has_visited_post(self, post_id):
+        return self.viewed_posts.filter(id=post_id).exists()
+
+
 
 
 class UserProfile(models.Model):

@@ -9,6 +9,7 @@ from .models import Room, Message
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
+        print(self.room_name)
         self.room_group_name = 'chat_%s' % self.room_name
 
         await self.channel_layer.group_add(
@@ -59,5 +60,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def save_message(self, email, room, message):
         user = User.objects.get(email=email)
         room = Room.objects.get(slug=room)
-
         Message.objects.create(user=user, room=room, content=message)

@@ -1,0 +1,49 @@
+{% extends 'editor/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    <!-- Blog Start -->
+    <div class="container py-5" style="margin-left:20%; margin-top:6%;">
+        <div class="row g-5">
+            {% if not post.is_published %}
+            <div class="col-lg-8">
+            {% else %}
+            <div class="col-lg-12">
+            {% endif %}
+
+                <!-- Blog Detail Start -->
+                <div class="mb-5">
+                    <img class="img-fluid w-100 rounded mb-5" src="{{ post.image.url }}" alt="">
+                    <h1 class="mb-4">{{post.title}}</h1>
+                    <p>{{post.intro}}</p>
+                    <br>
+                    <h2 class="mb-4">{{post.subtitle1}}</h2>
+                    <p>{{post.content1}}</p>
+                    <h2 class="mb-4">{{post.subtitle2}}</h2>
+                    <p>{{post.content2}}</p>
+                    <h2 class="mb-4">{{post.subtitle3}}</h2>
+                    <p>{{post.content3}}</p>
+                    <div class="d-flex justify-content-between bg-light rounded p-4 mt-4 mb-4">
+                        <div class="d-flex align-items-center">
+                            <img class="rounded-circle me-2" src="{% static "img/user.jpg" %}" width="40" height="40" alt="">
+                            <span>{{post.author.name}}</span>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            {% if not post.is_published %}
+            <div class="col-lg-4">
+                <div class="d-flex align-items-center justify-content-center">
+                   <a href="{% url 'post_status' post.id %}" > <button  class="btn btn-primary py-3 px-5">Publish This blog</button></a>
+                </div>
+            </div>
+            {% endif %}
+                <!-- Blog Detail End -->
+        </div>
+    </div>
+
+{% endblock %}

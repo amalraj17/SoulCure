@@ -1,0 +1,388 @@
+{% extends 'editor/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+{% block content %}
+<head>
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap-extended.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/fonts/simple-line-icons/style.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/colors.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet"> 
+</head>
+<body>
+    <div class=" marclass d-flex justify-content-center admin-class " style="  margin-top:4%  ">
+        <div class="bg-white shadow-lg mt-4 pb-3 rounded col-12 col-lg-8" style="width:100%;  margin-top:30px ">
+            <div class="container-fluid m-5 hero">
+                <h1 class="text-success  mt-5">Welcome, {{user.name}}</h1>
+                <strong class="text-dark fs-5 " > "You hold the power to inspire, inform, and ignite imagination."</strong> <br> 
+                     {% comment %} Your voice is a beacon, guiding readers through the labyrinth of thought and experience.<br> So, let your creativity soar, and may your words illuminate the path for others to follow."</strong> {% endcomment %}
+            </div>
+            <hr class="mx-5">
+            <div class="grey-bg container-fluid">
+                {% comment %} <section id="minimal-statistics">
+                  <div class="row">
+                    <div class="col-12 mt-3 mb-1">
+                      <h4 class="text-uppercase">Minimal Statistics Cards</h4>
+                      <p>Statistics on minimal cards.</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-3 col-sm-6 col-12"> 
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="align-self-center">
+                                <i class="icon-pencil primary font-large-2 float-left"></i>
+                              </div>
+                              <div class="media-body text-right">
+                                <h3>278</h3>
+                                <span>New Posts</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="align-self-center">
+                                <i class="icon-speech warning font-large-2 float-left"></i>
+                              </div>
+                              <div class="media-body text-right">
+                                <h3>156</h3>
+                                <span>New Comments</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="align-self-center">
+                                <i class="icon-graph success font-large-2 float-left"></i>
+                              </div>
+                              <div class="media-body text-right">
+                                <h3>64.89 %</h3>
+                                <span>Bounce Rate</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="align-self-center">
+                                <i class="icon-pointer danger font-large-2 float-left"></i>
+                              </div>
+                              <div class="media-body text-right">
+                                <h3>423</h3>
+                                <span>Total Visits</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                  <div class="row">
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="media-body text-left">
+                                <h3 class="danger">278</h3>
+                                <span>New Projects</span>
+                              </div>
+                              <div class="align-self-center">
+                                <i class="icon-rocket danger font-large-2 float-right"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="media-body text-left">
+                                <h3 class="success">156</h3>
+                                <span>New Clients</span>
+                              </div>
+                              <div class="align-self-center">
+                                <i class="icon-user success font-large-2 float-right"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="media-body text-left">
+                                <h3 class="warning">64.89 %</h3>
+                                <span>Conversion Rate</span>
+                              </div>
+                              <div class="align-self-center">
+                                <i class="icon-pie-chart warning font-large-2 float-right"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="media-body text-left">
+                                <h3 class="primary">423</h3>
+                                <span>Support Tickets</span>
+                              </div>
+                              <div class="align-self-center">
+                                <i class="icon-support primary font-large-2 float-right"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                  <div class="row">
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="media-body text-left">
+                                <h3 class="primary">278</h3>
+                                <span>New Posts</span>
+                              </div>
+                              <div class="align-self-center">
+                                <i class="icon-book-open primary font-large-2 float-right"></i>
+                              </div>
+                            </div>
+                            <div class="progress mt-1 mb-0" style="height: 7px;">
+                              <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="media-body text-left">
+                                <h3 class="warning">156</h3>
+                                <span>New Comments</span>
+                              </div>
+                              <div class="align-self-center">
+                                <i class="icon-bubbles warning font-large-2 float-right"></i>
+                              </div>
+                            </div>
+                            <div class="progress mt-1 mb-0" style="height: 7px;">
+                              <div class="progress-bar bg-warning" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="media-body text-left">
+                                <h3 class="success">64.89 %</h3>
+                                <span>Bounce Rate</span>
+                              </div>
+                              <div class="align-self-center">
+                                <i class="icon-cup success font-large-2 float-right"></i>
+                              </div>
+                            </div>
+                            <div class="progress mt-1 mb-0" style="height: 7px;">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                      <div class="card">
+                        <div class="card-content">
+                          <div class="card-body">
+                            <div class="media d-flex">
+                              <div class="media-body text-left">
+                                <h3 class="danger">423</h3>
+                                <span>Total Visits</span>
+                              </div>
+                              <div class="align-self-center">
+                                <i class="icon-direction danger font-large-2 float-right"></i>
+                              </div>
+                            </div>
+                            <div class="progress mt-1 mb-0" style="height: 7px;">
+                              <div class="progress-bar bg-danger" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section> {% endcomment %}
+                
+                <section id="stats-subtitle">
+                <div class="row ">
+                  <div class="col-12 mt-3 mb-1">
+                    <h4 class="text-uppercase">Your Blogging Stats</h4>
+                    <p>Gain insights into your audience engagement and content performance..</p>
+                  </div>
+                </div>
+              
+                <div class="row">
+                  <div class="col-xl-6 col-md-12">
+                    <div class="card overflow-hidden">
+                      <div class="card-content">
+                        <div class="card-body cleartfix">
+                          <div class="media align-items-stretch">
+                            <div class="align-self-center">
+                              <i class="icon-pencil primary font-large-2 mr-2"></i>
+                            </div>
+                            <div class="media-body">
+                              <h4>Total Posts</h4>
+                              <span>Your blog posts</span>
+                            </div>
+                            <div class="align-self-center">
+                              <h1>{{count}}</h1>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="col-xl-6 col-md-12">
+                    <div class="card">
+                      <div class="card-content">
+                        <div class="card-body cleartfix">
+                          <div class="media align-items-stretch">
+                            <div class="align-self-center">
+                              <i class="icon-speech warning font-large-2 mr-2"></i>
+                            </div>
+                            <div class="media-body">
+                              <h4>Total Comments</h4>
+                              <span>Blog comments</span>
+                            </div>
+                            <div class="align-self-center"> 
+                              <h1>0</h1>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              
+                {% comment %} <div class="row">
+                  <div class="col-xl-6 col-md-12">
+                    <div class="card">
+                      <div class="card-content">
+                        <div class="card-body cleartfix">
+                          <div class="media align-items-stretch">
+                            <div class="align-self-center">
+                              <h1 class="mr-2">$76,456.00</h1>
+                            </div>
+                            <div class="media-body">
+                              <h4>Total Sales</h4>
+                              <span>Monthly Sales Amount</span>
+                            </div>
+                            <div class="align-self-center">
+                              <i class="icon-heart danger font-large-2"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="col-xl-6 col-md-12">
+                    <div class="card">
+                      <div class="card-content">
+                        <div class="card-body cleartfix">
+                          <div class="media align-items-stretch">
+                            <div class="align-self-center">
+                              <h1 class="mr-2">$36,000.00</h1>
+                            </div>
+                            <div class="media-body">
+                              <h4>Total Cost</h4>
+                              <span>Monthly Cost</span>
+                            </div>
+                            <div class="align-self-center">
+                              <i class="icon-wallet success font-large-2"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> {% endcomment %}
+              </section>
+              </div>
+
+
+
+        </div>
+
+        <hr>
+
+    </div>
+ 
+
+
+
+    {% endblock %}
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-success btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/moment.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

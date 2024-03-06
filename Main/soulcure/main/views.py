@@ -4,6 +4,7 @@ from accounts.models import CustomUser
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from blogs.models import Posts
 
 # Create your views here.
 
@@ -23,6 +24,8 @@ def index(request):
             return redirect(reverse('adminindex'))
         elif request.user.role == 2 and not request.path == reverse('therapist'):
             return redirect(reverse('therapist'))
+        elif request.user.role == 3 and not request.path == reverse('editor'):
+            return redirect(reverse('editor'))
         elif request.user.role == 1 and not request.path == reverse('index'):
             return redirect(reverse('index'))
 
@@ -48,6 +51,8 @@ def adminindex(request):
             return redirect(reverse('adminindex'))
         elif request.user.role == 2 and not request.path == reverse('therapist'):
             return redirect(reverse('therapist'))
+        elif request.user.role == 3 and not request.path == reverse('editor'):
+            return redirect(reverse('editor'))
         elif request.user.role == 1 and not request.path == reverse('index'):
             return redirect(reverse('index'))
     # if request.user.role != 3 or (not request.path == reverse("adminindex")) :
@@ -69,9 +74,31 @@ def therapistindex(request):
             return redirect(reverse('adminindex'))
         elif request.user.role == 2 and not request.path == reverse('therapist'):
             return redirect(reverse('therapist'))
+        elif request.user.role == 3 and not request.path == reverse('editor'):
+            return redirect(reverse('editor'))
         elif request.user.role == 1 and not request.path == reverse('index'):
             return redirect(reverse('index'))
     return render(request,'therapist/therapist-index.html')
+
+
+@login_required
+def editorindex(request):
+    if request.user.is_authenticated:
+        if request.user.role == 4 and not request.path == reverse('adminindex'):
+            return redirect(reverse('adminindex'))
+        elif request.user.role == 2 and not request.path == reverse('therapist'):
+            return redirect(reverse('therapist'))
+        elif request.user.role == 3 and not request.path == reverse('editor'):
+            return redirect(reverse('editor'))    
+        elif request.user.role == 1 and not request.path == reverse('index'):
+            return redirect(reverse('index'))
+
+    cuser = request.user
+    count = 0
+    count = Posts.objects.filter(author=cuser).count()
+    return render(request,'editor/index.html',{'count': count})
+
+
 
 @login_required
 def deleteUser(request,delete_id):

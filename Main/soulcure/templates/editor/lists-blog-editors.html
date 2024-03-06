@@ -1,0 +1,44 @@
+{% extends 'editor/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-5" style="margin-top:4%; margin-left:12%; width:1000px;">
+    <div class="container" style="margin-top:4%; margin-left:25%; width:1000px;">
+        <h1 class="display-4 text-center">Your Blog Posts</h1>
+        <div class="row g-5 mt-4">
+            {% for post in posts %}
+            <div class="col-xl-6 col-lg-6">
+                <div class="bg-light rounded overflow-hidden custom-card">
+                    <img class="img-fluid w-100" src="{{ post.image.url }}" alt="{{ post.title }}">
+                    <div class="p-4">
+                        <a class="h3 d-block mb-3" href="{% url 'single_view_editor' post.id %}">{{ post.title }}</a>
+                        <p class="m-0">{{ post.subtitle }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between border-top p-4">
+                        {% if not post.is_published %}
+                        <div class="col-4 text-center">
+                            <a href="{% url "delete_blog" post.id %}"><button class="btn btn-danger py-3 px-5">Delete</button></a>
+                        </div>
+                        <div class="col-3 text-center">
+                            <a href='{% url "edit_blog" post.id %}'><button  class="btn btn-primary py-3 px-5 editBtn">Edit</button></a>
+                        </div>
+                        <div class="col-4 text-center">
+                            <a href="{% url 'post_status' post.id %}" > <button class="btn btn-success py-3 px-5">Publish</button> </a>
+                        </div>
+                        {% else %}
+                        <div class="col-6 text-center">
+                            <a href="{% url "delete_blog" post.id %}"><button class="btn btn-danger py-3 px-5">Delete</button></a>
+                        </div>
+                        <div class="col-6 text-center">
+                            <a href='{% url "edit_blog" post.id %}'><button  class="btn btn-primary py-3 px-5 editBtn">Edit</button></a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

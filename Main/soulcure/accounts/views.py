@@ -223,6 +223,76 @@ def send_welcome_email(email, password, therapist_name):
     send_mail(subject, message, from_email, recipient_list)
 
 
+
+########################################################################################################################
+
+#Add Editors
+
+########################################################################################################################
+
+@login_required
+def addEditors(request):
+    if request.method == 'POST':
+        user_form = CustomUserForm(request.POST)
+
+        if user_form.is_valid():
+            email = user_form.cleaned_data.get('email')
+            if User.objects.filter(email=email).exists():
+                msg = 'Email already exists. Please use a different email address.'
+            else:
+                user = user_form.save(commit=False)
+                password = user_form.cleaned_data['password']
+
+            # Send welcome email
+                send_welcome_email_editor  (user.email, password, user.name)
+
+                user.set_password(password)
+                user.is_active = True
+
+                user.role = CustomUser.EDITOR  # Set the role to "EDITOR"
+                user.save()
+
+            # Check if the user has the role=2 (Therapist)
+                if user.role == CustomUser.THERAPIST:
+                    therapist = Therapist(user=user)  # Create a Therapist instance
+                    therapist.save()
+
+                user_profile = UserProfile(user=user)
+            
+                user_profile.save()
+
+                return redirect('adminindex')
+
+    else:
+        user_form = CustomUserForm()
+
+    context = {
+        'user_form': user_form
+    }
+
+    return render(request, 'admin/add-editors.html', context)
+
+
+
+def send_welcome_email_editor(email, password, editor_name):
+    login_url = 'http://127.0.0.1:8000/accounts/login/'  # Update with your actual login URL
+    login_button = f'Click here to log in: {login_url}'
+
+    subject = 'Welcome to SoulCure - Blog Editor Registration'
+    message = f"Hello {editor_name},\n\n"
+    message += f"Welcome to SoulCure, your platform for holistic wellness and healing. We're excited to have you join us as a Blog Editor, where you'll play a crucial role in curating insightful content for our community.\n\n"
+    message += f"Your registration is complete, and we're thrilled to have you on board. Here are your login credentials:\n\n"
+    message += f"Email: {email}\nPassword: {password}\n\n"
+    message += "Please take a moment to log in to your account using the provided credentials. Once logged in, feel free to explore our platform and start contributing to our blog section.\n\n"
+    message += login_button
+    message += "\n\nSoulCure is committed to providing a safe and supportive environment for all members of our community. We believe in the power of words to inspire, educate, and heal, and we're excited to have you share your expertise with us.\n\n"
+    message += "Thank you for joining the SoulCure team. We look forward to the meaningful contributions you'll make to our platform.\n\n"
+    message += "Warm regards,\nThe SoulCure Team\n\n"
+
+    from_email = 'info.soulcure@gmail.com'  # Replace with your actual email
+    recipient_list = [email]
+
+    send_mail(subject, message, from_email, recipient_list)
 ########################################################################################################################
 
 #List Users

@@ -37,7 +37,7 @@ AUTH_USER_MODEL='accounts.CustomUser'
 
 
 
-os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+# os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 # Application definition
 
 INSTALLED_APPS = [
@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'channels',
-    'room',
+    'room','blogs',
+    # 'music',
 ]
 
 SITE_ID = 1

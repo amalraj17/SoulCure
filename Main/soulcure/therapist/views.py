@@ -9,7 +9,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from .forms import CustomUserForm, TherapistForm, UserProfileForm
 from client.models import Appointment
-
+from urllib.parse import urlparse, parse_qs
 
 
 
@@ -313,6 +313,7 @@ def schedule_therapy_session(request, appointment_id):
                 })
             
             therapy_session = form.save(commit=False)
+            therapy_session.platform = 'SoulCure'
             therapy_session.appointment = appointment
             therapy_session.status = 'scheduled'
             therapy_session.save()
@@ -343,14 +344,20 @@ def send_whatsapp_notification(appointment,therapy_session):
     time_slot = appointment.time_slot  # Make sure this is properly formatted
     platform = therapy_session.platform
     url = therapy_session.meeting_url
+
+    parsed_url = urlparse(url)
+    query_parameters = parse_qs(parsed_url.query)
+    meeting_id = query_parameters.get('roomID')[0] if query_parameters.get('roomID') else None
+    print(meeting_id) 
      
     message_body = (
     f"Dear client, we are pleased to inform you that your therapy session has been scheduled. \n\n"
     f"📅 Date: {date_formatted}\n"
     f"⏰ Time: {time_slot}\n"
     f"🌐 Platform: {platform}\n\n"  
-    f"🔗 Please use the following link to join the meeting:\n"
+    f"🔗 Please use the following link to join the meeting:\n\n"
     f"{url}\n\n"
+    f"🔑 Meeting ID: {meeting_id}\n\n"
     f"⏱️ Be sure to join on time.\n\n\n"
     f"Thank you for choosing our services. "
     f"[Team SoulCure]"

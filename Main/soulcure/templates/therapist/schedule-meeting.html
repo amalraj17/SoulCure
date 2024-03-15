@@ -37,22 +37,16 @@
   <div class="mt-5">
     <h2 class="align-center text-center text-success">Schedule Therapy Session</h2>
     <div class="container p-5 card ">
-
+      <div class="text-center mb-5">
+        <h2 class="text-dark mb-2">Create New Meeting</h2>
+          <a href="{% url 'meeting' %}?session_id={{ appointment.id }}"><button class="btn btn-dark sub-btn w-25 mb-5">Create</button></a>      </div>
       <form method="post" class=" mx-auto w-75" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group mt-2">
           <label for="{{appointment.client.name }}">Client Name and Appointment Date:</label>
           <h3>{{appointment.client.name}}, &nbsp{{appointment.date}},{{appointment.time_slot}}</h3>
-
-          <div id="phoneValidation" class="invalid-feedback">
-            Please enter 10 digit valid phone number
-          </div>
         </div>
-
         {{ form.as_p }}
-
-
-
         {% if error_message %}
         <p class="text-danger">{{error_message}}</p>
         {% endif%}

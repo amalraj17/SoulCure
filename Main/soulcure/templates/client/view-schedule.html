@@ -75,15 +75,14 @@
 
 
 
-
+    <form method='post' >
+      {% csrf_token %}
         <div class="d-flex mt-5 justify-content-center w-100 align-items-center">
           <a href="{% url 'view-appointment-client' %}" class="btn btn-danger sub-btn w-25 mx-4" type="submit">Back
             to Appointments</button></a>
-            <a class="btn btn-primary w-25" href="{{ current_schedule.meeting_url }}"target="_blank"> Join </a>
-
+            <button class="btn btn-primary w-25" type="submit">Join</button>            {% comment %} href="{{ current_schedule.meeting_url }}" {% endcomment %}
         </div>
-
-
+      </form>
       </div>
     </div>
 

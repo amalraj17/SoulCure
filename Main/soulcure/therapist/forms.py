@@ -172,13 +172,9 @@ from .models import TherapySessionSchedule
 class TherapySessionForm(forms.ModelForm):
     class Meta:
         model = TherapySessionSchedule
-        fields = ['platform', 'meeting_url']
+        fields = [ 'meeting_url']
         widgets = {
            
-            'platform': forms.Select(attrs={
-                "class": "form-control form-control-lg",
-                'placeholder': 'Enter Certification Name'
-            }),
             'meeting_url': forms.URLInput(attrs={
                 "class": "form-control form-control-lg",
                 'placeholder': 'Enter the Meeting Url'

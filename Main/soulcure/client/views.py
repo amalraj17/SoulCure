@@ -971,11 +971,19 @@ def generate_appointment_pdf(request, appointment_id):
 ########################################################################################################################
 
 from therapist.models import *
+from django.http import HttpResponseRedirect
 
 def view_therapy_schedule(request,appointment_id):
     appointment = Appointment.objects.get(id=appointment_id)
     current_schedule = TherapySessionSchedule.objects.get(appointment=appointment_id)
     print(current_schedule)
+
+    if request.method == 'POST':
+        meeturl = current_schedule.meeting_url
+        print(meeturl)
+        # return redirect('dashboard',meeturl=meeturl)
+        return HttpResponseRedirect(reverse('dashboard') + f'?meeturl={meeturl}')
+
 
     return render(request,'client/view-schedule.html',{'current_schedule':current_schedule,'appointment':appointment})
 

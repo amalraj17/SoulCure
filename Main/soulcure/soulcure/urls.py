@@ -29,5 +29,7 @@ urlpatterns = [
     path('yoga/',include('yoga.urls')),
     # path('music/', include('music.urls')),
     path('blogs/', include('blogs.urls')),
+    path('chat/', include('videoconference_app.urls')),
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

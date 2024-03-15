@@ -40,11 +40,11 @@ from accounts.models import CustomUser
 class TherapySessionSchedule(models.Model):
 
     PLATFORM_CHOICES = [
-    ('Zoom', 'Zoom'),
-    ('Microsoft Teams', 'Microsoft Teams'),
-    ('Google Meet', 'Google Meet'),
-    ('Skype', 'Skype'),
-    ('Cisco Webex', 'Cisco Webex'),
+    ('SoulCure', 'SoulCure'),
+    # ('Microsoft Teams', 'Microsoft Teams'),
+    # ('Google Meet', 'Google Meet'),
+    # ('Skype', 'Skype'),
+    # ('Cisco Webex', 'Cisco Webex'),
     ]
 
     

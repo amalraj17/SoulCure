@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'channels',
-    'room','blogs',
+    'room','blogs','videoconference_app',
     # 'music',
 ]
 

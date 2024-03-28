@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SoulCure</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <!-- Include Bootstrap CSS (add appropriate paths) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Include Bootstrap JS (add appropriate paths) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .forms-expanded {
+            margin-top: px;
+        }
+
+        h2 {
+            color: aliceblue;
+            text-align: center;
+        }
+
+        button {
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mt-5">
+        <h2 class="align-center text-center text-success">Therapy Session Schedules </h2>
+        <div class="container p-5 card ">
+
+            <h2 class="text-center text-success">Appointment Details</h2>
+            <div class="row">
+                {% for appointment in appointment %}
+                <div class="col-md-12 col-6 mt-4 mb-4 border rounded border-danger">
+                    <div class="form-group mt-2">
+                        <div class="row ">
+                            <!-- <div class="col-6 mb-3 "></div>     -->
+                            <div class="col-6  mb-3">
+                                <label class="text-success" for="{{appointment.client.name }}">Client Name:</label>
+                                <h4>&nbsp;&nbsp;{{appointment.client.name}}</h4>
+                            </div>
+                            <div class="col-6  mb-3">
+                                <label class="text-success">Appointment Date:</label>
+                                <h4 class="text-danger">&nbsp;&nbsp;{{appointment.date}},{{appointment.time_slot}}</h4>
+                            </div>
+                        </div>
+    
+                        <form method='post'>
+                            {% csrf_token %}
+                            <div class="d-flex mt-5 justify-content-center w-100 align-items-center">
+                                <a href="{% url 'index' %}" class="btn btn-danger sub-btn w-25 mx-4"
+                                    type="submit">Back
+                                    to Home</button></a>
+                                <a href="{% url 'view_therapy_schedule' appointment.id %}" class="btn btn-primary sub-btn w-25 mx-4" type="submit">Show Meeting Details</button></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+
+        </div>
+    </div>
+</body>
+
+</html>

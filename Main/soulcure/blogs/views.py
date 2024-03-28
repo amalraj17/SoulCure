@@ -72,7 +72,6 @@ def add_blog(request):
     if not request.user.role == 3:
             return redirect(reverse('index'))
     print(cuser)
-    
     if request.method == 'POST':
         # Retrieve data from the form submission
         title = request.POST.get('title')
@@ -112,7 +111,6 @@ def add_blog(request):
     else:
         cat = BlogCategory.objects.all()
 
-        # Handle GET request (render the form)
         return render(request, 'editor/newblog.html',{'cat':cat})
 
 @login_required
@@ -131,18 +129,12 @@ def single_view_editor(request, post_id):
 
 def post_status(request, post_id):
     try:
-        # Retrieve single post by its id
         post = get_object_or_404(Posts, pk=post_id)
-        # Set is_published to True
         post.is_published = True
         post.save()
     except Posts.DoesNotExist:
-        # Handle the case where the post does not exist
-        return redirect('editorindex')  # Redirect to an error page or return an appropriate response
-    
-    # Redirect to view_blog_editor after updating the post status
+        return redirect('editorindex')  
     return redirect('view_blog_editor')
-
 
 
 @login_required

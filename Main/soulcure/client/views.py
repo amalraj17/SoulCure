@@ -8,7 +8,7 @@ from django.contrib import messages
 from .forms import CustomUserForm, UserProfileForm
 from therapist.models import Therapist,TherapistDayOff
 from datetime import time
-from .models import Appointment,FeedbackOption
+from .models import Appointment,FeedbackOption,FeedbackQuestions,Payment,QuestionnaireOption,QuestionnaireQuestions
 from datetime import datetime
 from django.core.mail import send_mail, EmailMessage
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -972,6 +972,7 @@ def generate_appointment_pdf(request, appointment_id):
 
 from therapist.models import *
 from django.http import HttpResponseRedirect
+from urllib.parse import urlparse, parse_qs
 
 def view_therapy_schedule(request,appointment_id):
     appointment = Appointment.objects.get(id=appointment_id)
@@ -981,12 +982,20 @@ def view_therapy_schedule(request,appointment_id):
     if request.method == 'POST':
         meeturl = current_schedule.meeting_url
         print(meeturl)
-        # return redirect('dashboard',meeturl=meeturl)
-        return HttpResponseRedirect(reverse('dashboard') + f'?meeturl={meeturl}')
 
+        parsed_url = urlparse(meeturl)
+        query_parameters = parse_qs(parsed_url.query)
+        room_id = query_parameters.get('roomID', [None])[0]  # Get the first roomID parameter or None
+        print(room_id)
+        # Now you can use the room_id as needed
+
+        # Redirect to dashboard with meeturl as a query parameter
+        return HttpResponseRedirect(reverse('dashboard') + f'?roomID={room_id}' + f'&appointment_id={appointment_id}')
 
     return render(request,'client/view-schedule.html',{'current_schedule':current_schedule,'appointment':appointment})
 
+def view_therapy_schedule_ag(request):
+    return render(request,'client/view-schedule-g.html')
 
 # User FeedBack
 
@@ -1056,3 +1065,76 @@ def add_questions(request):
         return redirect('http://127.0.0.1:8000/therapist-index/')
 
     return render(request, 'add_questions.html')
+
+def view_feedback_questions(request):
+    questions_with_options = []
+    questions = FeedbackQuestions.objects.all()
+    for question in questions:
+        options = FeedbackOption.objects.filter(question=question)
+        question_dict = {
+            'question': question,
+            'options': options
+        }
+        questions_with_options.append(question_dict)
+    return render(request, 'admin/feedback_questions.html', {'questions_with_options': questions_with_options})
+    
+
+def add_questions_questionnaire(request):
+    if request.method == 'POST':
+        question_text = request.POST.get('question')
+        options = request.POST.getlist('options')
+
+        # Create the FeedbackQuestions instance
+        question = QuestionnaireQuestions.objects.create(question=question_text)
+        print(options)
+        # Create FeedbackOptions instances for each option
+        for option_text in options:
+            QuestionnaireOption.objects.create(question=question, option_text=option_text)
+
+        # Redirect to therapist index after adding questions and options
+        return redirect('http://127.0.0.1:8000/therapist-index/')
+
+    return render(request, 'admin/questionnaire_questions.html')
+
+def view_questionnaire(request):
+    questions_with_options = []
+    questions = QuestionnaireQuestions.objects.all()
+    for question in questions:
+        options = QuestionnaireOption.objects.filter(question=question)
+        question_dict = {
+            'question': question,
+            'options': options
+        }
+        questions_with_options.append(question_dict)
+    return render(request, 'admin/view_quesionnaire.html', {'questions_with_options': questions_with_options})
+    
+def attend_questionnaire(request):
+    if request.method == 'POST':
+        for key, value in request.POST.items():
+            if key.startswith('option_'):
+                question_index = key.split('_')[1]
+                question_id = request.POST.get(f'question_id_{question_index}')
+                print(f"Question ID: {question_id}, Option: {value}")
+                user = CustomUser.objects.get(pk=request.user.id)
+                # Create a new TherapySessionFeedbacks object with the extracted data
+                feedback = Questionnaire.objects.create(
+                    question=QuestionnaireQuestions.objects.get(pk=question_id),
+                    user=user,
+                    answer=value
+                )
+                
+
+        return redirect('index')
+
+    # If the request method is not POST, render the feedback form page
+    questions_with_options = []
+    questions = QuestionnaireQuestions.objects.all()
+    for question in questions:
+        options = QuestionnaireOption.objects.filter(question=question)
+        question_dict = {
+            'question': question,
+            'options': options
+        }
+        questions_with_options.append(question_dict)
+
+    return render(request, 'admin/attend_questionnaire.html', {'questions_with_options': questions_with_options})

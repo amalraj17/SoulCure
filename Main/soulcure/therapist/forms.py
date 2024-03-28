@@ -178,5 +178,6 @@ class TherapySessionForm(forms.ModelForm):
             'meeting_url': forms.URLInput(attrs={
                 "class": "form-control form-control-lg",
                 'placeholder': 'Enter the Meeting Url'
+                
             }),
         }

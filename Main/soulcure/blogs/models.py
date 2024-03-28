@@ -9,7 +9,6 @@ class BlogCategory(models.Model):
     def __str__(self):
         return self.name
 
-
 class Posts(models.Model):
     DRAFT = 'draft'
     PUBLISHED = 'published'

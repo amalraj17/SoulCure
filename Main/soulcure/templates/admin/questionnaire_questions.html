@@ -1,0 +1,108 @@
+
+{% extends 'admin/adminbase.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Feedback Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+    
+        .container {
+            max-width: 1400px;
+            margin: 100px auto;
+            margin-left: 20%;
+            padding: 50px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        h4 {
+            text-align: center;
+            color: #171515;
+            margin-bottom: 20px;
+        }
+        .heading {
+            text-align: center;
+            color: #b62525;
+            margin-bottom: 100px;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+    
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease;
+        }
+    
+        select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+    
+        select option {
+            font-size: 16px;
+            width: 100%;
+        }
+    
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            width: 120px;
+            transition: background-color 0.3s ease;
+        }
+    
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    </head>
+    <div class="container">
+        <h2 class="heading">Add New Questions</h2>
+<!-- Hero Start -->
+<form method="post">
+    {% csrf_token %}
+<div class="d-flex justify-content-center m-5">
+    
+        <div class="col-lg-8 col-12 d-flex flex-column gap-4 justify-content-center">
+            <input type="text" id="question" name="question" class="form-control p-3 mb-5" placeholder="Enter Question">
+            <input type="text" id="option1" name="options" class="form-control p-3" placeholder="Option 1">
+            <input type="text" id="option2" name="options" class="form-control p-3" placeholder="Option 2">
+            <input type="text" id="option3" name="options" class="form-control p-3" placeholder="Option 3">
+            <input type="text" id="option4" name="options" class="form-control p-3" placeholder="Option 4">   
+            <input type="text" id="option2" name="options" class="form-control p-3" placeholder="Option 5">
+            <input type="text" id="option3" name="options" class="form-control p-3" placeholder="Option 6">
+            <input type="text" id="option4" name="options" class="form-control p-3" placeholder="Option 7">              
+        <!-- <input type="text" name="options" class="form-control p-3" placeholder="Option 5"> -->
+
+            <button id="submit" type="submit" class="btn btn-success p-3">Submit</button>
+        </div>
+    
+</div>
+</form>
+</div>
+
+{% endblock %}

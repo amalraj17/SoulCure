@@ -1,0 +1,110 @@
+{% extends 'admin/adminbase.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Feedback Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+    
+        .container {
+            max-width: 800px;
+            margin: 100px auto;
+            margin-left: 32%;
+            padding: 50px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        h4 {
+            text-align: center;
+            color: #171515;
+            margin-bottom: 20px;
+        }
+        .heading {
+            text-align: center;
+            color: #b62525;
+            margin-bottom: 100px;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+    
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease;
+        }
+    
+        select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+    
+        select option {
+            font-size: 16px;
+            width: 100%;
+        }
+    
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            width: 120px;
+            transition: background-color 0.3s ease;
+        }
+    
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    </head>
+    
+    <body>
+        <div class="container">
+            
+            <h2 class="heading"> Questionnarie</h2>
+            <hr></hr>
+            {% for question_with_options in questions_with_options %}
+            <div class="question-container">
+                <h4>{{ question_with_options.question }}</h4>
+                <!-- Hidden input field for question ID -->
+                <input type="hidden" name="question_id_{{ forloop.counter }}" value="{{ question_with_options.question.id }}">
+                <label for="option_{{ forloop.counter }}">Options:</label>
+                <select name="option_{{ forloop.counter }}" id="option_{{ forloop.counter }}">
+                    {% for option in question_with_options.options %}
+                    <option value="{{ option.option_text }}">{{ option.option_text }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+        </div>
+    </body>
+    
+    
+        
+    
+</body>
+{% endblock %}
+    
+

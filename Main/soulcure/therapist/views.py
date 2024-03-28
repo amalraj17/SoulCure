@@ -10,7 +10,7 @@ from django.contrib import messages
 from .forms import CustomUserForm, TherapistForm, UserProfileForm
 from client.models import Appointment
 from urllib.parse import urlparse, parse_qs
-
+from datetime import date,datetime
 
 
 
@@ -257,40 +257,6 @@ def update_appointment_status(request):
 from .models import TherapySessionSchedule
 from .forms import TherapySessionForm
 
-# def schedule_therapy_session(request, appointment_id):
-#     appointment = get_object_or_404(Appointment, id=appointment_id)
-
-#     # Check if a therapy session is already scheduled for this appointment
-#     existing_session = TherapySessionSchedule.objects.filter(appointment=appointment).first()
-
-#     if request.method == 'POST':
-#         form = TherapySessionForm(request.POST)
-#         if form.is_valid():
-#             if existing_session:
-#                 return render(request, 'therapist/schedule-meeting.html', {
-#                     'form': form,
-#                     'appointment': appointment,
-#                     'error_message': 'A therapy session is already scheduled for this appointment.'
-#                 })
-            
-#             therapy_session = form.save(commit=False)
-#             therapy_session.appointment = appointment
-#             therapy_session.status = 'scheduled'
-#             therapy_session.save()
-#             appointment.status = 'scheduled'
-#             appointment.save()
-#             return redirect('view-appointment-therapist')
-#     else:
-#         if existing_session:
-#             return render(request, 'therapist/schedule-meeting.html', {
-#                 'form': None,
-#                 'appointment': appointment,
-#                 'error_message': 'A therapy session is already scheduled for this appointment.'
-#             })
-        
-#         form = TherapySessionForm()
-
-#     return render(request, 'therapist/schedule-meeting.html', {'form': form, 'appointment': appointment})
 
 from twilio.rest import Client
 from django.conf import settings
@@ -301,6 +267,12 @@ def schedule_therapy_session(request, appointment_id):
 
     # Check if a therapy session is already scheduled for this appointment
     existing_session = TherapySessionSchedule.objects.filter(appointment=appointment).first()
+    therapist = request.user
+    meet_url = None
+    therapistdata = Therapist.objects.get(user=therapist)
+    meet_url = therapistdata.meeting_url
+    print(therapist)
+
 
     if request.method == 'POST':
         form = TherapySessionForm(request.POST)
@@ -317,6 +289,8 @@ def schedule_therapy_session(request, appointment_id):
             therapy_session.appointment = appointment
             therapy_session.status = 'scheduled'
             therapy_session.save()
+            therapistdata.meeting_url = therapy_session.meeting_url
+            therapistdata.save()
             appointment.status = 'scheduled'
             appointment.save()
 
@@ -331,8 +305,10 @@ def schedule_therapy_session(request, appointment_id):
                 'appointment': appointment,
                 'error_message': 'A therapy session is already scheduled for this appointment.'
             })
-        
-        form = TherapySessionForm()
+    form = TherapySessionForm()
+    if meet_url is not None:
+        form = TherapySessionForm(initial={'meeting_url': meet_url})
+    print(form)
 
     return render(request, 'therapist/schedule-meeting.html', {'form': form, 'appointment': appointment})
 
@@ -363,8 +339,6 @@ def send_whatsapp_notification(appointment,therapy_session):
     f"[Team SoulCure]"
 
     )
-
-    
     try:
         message = client.messages.create(
             from_='whatsapp:+14155238886',
@@ -394,6 +368,36 @@ def view_appointment_therapist(request):
     appointments = Appointment.objects.filter(therapist=therapist)
 
     return render(request, 'therapist/view-appointments.html', {'appointments': appointments})
+
+
+def view_therapy_schedules(request):
+    therapistid =  request.user.id
+    today = date.today()
+    time_now = datetime.now().time()    # Filter appointments for the therapist for today
+    appointments_today = Appointment.objects.filter(therapist=therapistid,date=today,status='scheduled',time_slot__gte=time_now).order_by('time_slot')
+    print(appointments_today)
+    return render(request,'therapist/view-schedules.html',{'appointment':appointments_today})
+
+def view_therapy_schedule(request,appointment_id):
+    appointment = Appointment.objects.get(id=appointment_id)
+    current_schedule = TherapySessionSchedule.objects.get(appointment=appointment_id)
+    print(current_schedule)
+
+    if request.method == 'POST':
+        meeturl = current_schedule.meeting_url
+        print(meeturl)
+
+        parsed_url = urlparse(meeturl)
+        query_parameters = parse_qs(parsed_url.query)
+        room_id = query_parameters.get('roomID', [None])[0]  # Get the first roomID parameter or None
+        print(room_id)
+        # Now you can use the room_id as needed
+
+        # Redirect to dashboard with meeturl as a query parameter
+        return HttpResponseRedirect(reverse('dashboard') + f'?roomID={room_id}')
+
+    return render(request,'therapist/view-schedule.html',{'current_schedule':current_schedule,'appointment':appointment})
+
 
 @login_required
 def fetch_appointments(request):

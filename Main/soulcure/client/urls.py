@@ -18,10 +18,19 @@ urlpatterns = [
     path('confirm-appointment/', views.confirmappointment, name='confirm-appointment'),
     path('fetch_appointments_clients/', views.fetch_appointments_clients, name='fetch_appointments_clients'),
     path('view_therapy_schedule/<int:appointment_id>/', views.view_therapy_schedule, name='view_therapy_schedule'),
+    path('view_therapy_schedule_ag/', views.view_therapy_schedule_ag, name='view_therapy_schedule_ag'),
+
     # path('feedback/<int:app_id>',views.feedback_form,name='feedback'),
     path('feedbackk/<int:app_id>',views.feedback_view,name='feedbackk'),
+    path('feedback/view/',views.view_feedback_questions,name='feedback_view'),
     path('feedback/success/',views.feedback_success, name='feedback_success'),
     path('add_questions/',views.add_questions, name='add_questions'),
+    path('add_questions_questionnaire/',views.add_questions_questionnaire, name='add_questions_questionnaire'),
+    path('view_questionnaire',views.view_questionnaire,name='view_questionnaire'),
+    path('attend_questionnaire',views.attend_questionnaire,name='attend_questionnaire'),
+
+
+
 
 
 

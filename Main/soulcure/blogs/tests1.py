@@ -38,41 +38,64 @@ class FormTest(TestCase):
         login.click()
         time.sleep(2)
         email = driver.find_element(By.CSS_SELECTOR, "input#email.form-control.form-control-lg")
-        email.send_keys("amalraj89903@gmail.com")
+        email.send_keys("saviojose2024@mca.ajce.in")
         password = driver.find_element(By.CSS_SELECTOR, "input#password.form-control.form-control-lg")
-        password.send_keys("soulcure")
+        password.send_keys("Lead@123")
         time.sleep(1)
         submitc = driver.find_element(By.CSS_SELECTOR, "button#submit.btn.btn-dark.btn-lg.w-50")
         submitc.click()
         time.sleep(2)
-        find = driver.find_element(By.CSS_SELECTOR, "a[href='/client/add_questions/']")
+        find = driver.find_element(By.CSS_SELECTOR, "a[href='/blogs/add_blog/']")
         find.click()
         time.sleep(2)
         # Fill out the form fields
-        question_input = driver.find_element(By.ID, "question")
-        question_input.send_keys("Sample question")
+        title_input = driver.find_element(By.ID, 'title')
+        title_input.send_keys('Test Title')
 
-        option1_input = driver.find_element(By.ID, "option1")
-        option1_input.send_keys(" Test Option 1")
+        subtitle1_input = driver.find_element(By.ID, 'subtitle1')
+        subtitle1_input.send_keys('Test Subtitle 1')
 
-        option2_input = driver.find_element(By.ID, "option2")
-        option2_input.send_keys("Test Option 2")
+        subtitle2_input = driver.find_element(By.ID, 'subtitle2')
+        subtitle2_input.send_keys('Test Subtitle 2')
 
-        option3_input = driver.find_element(By.ID, "option3")
-        option3_input.send_keys("Test Option 3")
+        subtitle3_input = driver.find_element(By.ID, 'subtitle3')
+        subtitle3_input.send_keys('Test Subtitle 3')
 
-        option4_input = driver.find_element(By.ID, "option4")
-        option4_input.send_keys("Test Option 4")
+        subtitle_input = driver.find_element(By.ID, 'subtitle')
+        subtitle_input.send_keys('Test Subtitle')
+
+        intro_input = driver.find_element(By.ID, 'intro')
+        intro_input.send_keys('Test Introduction')
+
+        content1_input = driver.find_element(By.ID, 'content1')
+        content1_input.send_keys('Test Content 1')
+
+        content2_input = driver.find_element(By.ID, 'content2')
+        content2_input.send_keys('Test Content 2')
+
+        content3_input = driver.find_element(By.ID, 'content3')
+        content3_input.send_keys('Test Content 3')
+
+        image_input = driver.find_element(By.ID, 'image')
+        image_input.send_keys('C:\\Users\\amalr\\Downloads\\2150916612.jpg')  # Update with your image path
+
+
+        # Locate the dropdown/select element
+        category_select = Select(driver.find_element(By.ID, 'category'))
+
+        # Use Select class to select by visible text
+        category_select.select_by_visible_text('Mental Health Education')  # Update with your test category
         time.sleep(7)
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'submit'))).click()
         time.sleep(2)
-        
+        find = driver.find_element(By.CSS_SELECTOR, "a[href='/blogs/view_blog_editor/']")
+        find.click()
         time.sleep(3)
 
         print("--------------------------------------")
         print("                                      ")
         print("Ran 1 test in", datetime.now() - start_time, "seconds")
-        print("Test Passed: Feedback Question and Options Successfully.")
+        print("Test Passed: New Blog Created Successfully.")
         print("Test Date:", datetime.now())
         print("                                      ")
         print("                                      ")

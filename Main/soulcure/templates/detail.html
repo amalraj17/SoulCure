@@ -56,10 +56,10 @@
                         {% csrf_token %}
                         <div class="row g-3">
                             <div class="col-12">
-                                <textarea class="form-control bg-white border-0" name="comment" rows="5" placeholder="Comment"></textarea>
+                                <textarea class="form-control bg-white border-0" id="comment" name="comment" rows="5" placeholder="Comment"></textarea>
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-primary w-100 py-3" type="submit">Leave Your Comment</button>
+                                <button class="btn btn-primary w-100 py-3" id="submit" type="submit">Leave Your Comment</button>
                             </div>
                         </div>
                     </form>

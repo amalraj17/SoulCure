@@ -25,7 +25,7 @@
 <body>
     <div id="root"></div>
     {% comment %} {% if call_view %} {% endcomment %}
-    <a href={% url 'schedule_therapy_session' session_id %}><button class="return-home-button" >Return Back</button></a>
+    <a href={% url 'index' %}><button class="return-home-button" >Return Back Home</button></a>
     {% comment %} {% else %} {% endcomment %}
     {% comment %} <a href={% url 'index' %}><button class="return-home-button" >Return Back</button></a> {% endcomment %}
     {% comment %} {% endif %}  {% endcomment %}

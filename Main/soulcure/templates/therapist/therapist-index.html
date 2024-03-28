@@ -55,7 +55,7 @@
                     <div class="navbar-nav ms-5 mr-5 py-0 justify-content-end">
                         <a href="{% url 'therapist' %}" class="nav-item nav-link active ">Home</a>
                         <a href="{% url 'view-appointment-therapist' %}" class="nav-item nav-link ">Appointments</a>
-                        <a href="{% url 'leave_request' %}" class="nav-item nav-link ">Apply Leave</a>
+                        <a href="{% url 'view_therapy_schedules' %}" class="nav-item nav-link ">Today Meetings</a>
                         <a href="{% url 'rooms' %}" class="nav-item nav-link">Rooms</a>
                         <a href="{% url 'blogs' %}" class="nav-item nav-link">Blogs</a>
 
@@ -71,6 +71,7 @@
                                 data-bs-toggle="dropdown">Welcome,{{user.name}}</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{% url 'therapistProfile' %}" class="dropdown-item nav-linkd">My Profile</a>
+                                <a href="{% url 'leave_request' %}" class="dropdown-item nav-linkd ">Apply Leave</a>
                                 <a href="{% url 'logout' %}" class="dropdown-item nav-linkd">Logout</a>
                             </div>
                         </div>

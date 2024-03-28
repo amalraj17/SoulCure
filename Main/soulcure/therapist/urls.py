@@ -17,6 +17,8 @@ urlpatterns = [
     path('leave_request/',views.leave_request,name='leave_request'),
     path('schedule_therapy_session/<int:appointment_id>/', views.schedule_therapy_session, name='schedule_therapy_session'),
     path('fetch_appointments/', views.fetch_appointments, name='fetch_appointments'),
+    path('view_therapy_schedules/', views.view_therapy_schedules, name='view_therapy_schedules'),
+    path('view_therapy_schedule/<int:appointment_id>/', views.view_therapy_schedule, name='view_therapy_schedule'),
 
 
     path('view-therapist/<int:user_id>/',views.viewtherapist,name='view-therapist'),

@@ -15,6 +15,8 @@ class Appointment(models.Model):
         (datetime.strptime('01:00 PM', '%I:%M %p').time(), '01:00 PM'),
         (datetime.strptime('03:00 PM', '%I:%M %p').time(), '03:00 PM'),
         (datetime.strptime('05:00 PM', '%I:%M %p').time(), '05:00 PM'),
+        # (datetime.strptime('02:00 PM', '%I:%M %p').time(), '02:00 PM'),
+
     ]
 
     STATUS_CHOICES = [
@@ -79,6 +81,26 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 from django.utils import timezone
 
+class QuestionnaireQuestions(models.Model):
+    question = models.CharField(max_length=255)
+    def __str__(self):
+        return self.question
+
+class QuestionnaireOption(models.Model):
+    question = models.ForeignKey(QuestionnaireQuestions, on_delete=models.CASCADE)
+    option_text = models.CharField(max_length=255)
+    
+    def __str__(self):
+        return self.option_text
+
+class Questionnaire(models.Model):
+    question = models.ForeignKey(QuestionnaireQuestions, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    answer = models.CharField(max_length=255, null=True)
+    def __str__(self):
+        return f"Questionnaire of {self.user}"
+
+
 class FeedbackQuestions(models.Model):
     question = models.CharField(max_length=255)
     def __str__(self):
@@ -122,7 +144,7 @@ class Payment(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
-#Update Status not implemented
+    #Update Status not implemented
     def update_status(self):
         # Calculate the time difference in minutes
         time_difference = (timezone.now() - self.timestamp).total_seconds() / 60

@@ -130,7 +130,7 @@
           </li>
           <li class="menu-label">-----------------------------------------------</li>
           <li class="{% if request.path == '/bookings/' %}active{% endif %}">
-            <a href="{% url 'view-appointments' %}" >
+            <a href="{% url 'susers' %}" >
               <div class="parent-icon"><i class="material-icons-outlined">confirmation_number</i>
               </div>
               <div class="menu-title">Users</div>
@@ -144,8 +144,30 @@
               
               <div class="menu-title parent-icon">FeedBacks</div>
               
+              <ul>
+                <li><a href="{% url 'feedback_view' %}"><i class="material-icons-outlined">arrow_right</i>View Feedback Questions</a>
+                </li>
+              </ul>
             <ul>
                 <li><a href="{% url 'add_questions' %}"><i class="material-icons-outlined">arrow_right</i>Add Feedback Questions</a>
+                </li>
+              </ul>
+          </li>
+
+          <li class="menu-label">-----------------------------------------------</li>
+
+          <li class="{% if request.path == '/lawyers_list/' %}active{% endif %}">
+            
+              <div class="parent-icon"><i class="material-icons-outlined"></i>
+              
+              <div class="menu-title parent-icon">Questionnarie</div>
+              
+               <ul>
+                <li><a href="{% url 'view_questionnaire' %}"><i class="material-icons-outlined">arrow_right</i>View Questionnarie </a>
+                </li>
+              </ul> 
+            <ul>
+                <li><a href="{% url 'add_questions_questionnaire' %}"><i class="material-icons-outlined">arrow_right</i>Add Questionnarie Questions</a>
                 </li>
               </ul>
           </li>

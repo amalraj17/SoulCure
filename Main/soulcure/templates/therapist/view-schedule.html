@@ -43,8 +43,8 @@
         <div class="row ">
           <div class="col-3 mb-3 "></div>
           <div class="col-3  mb-3">
-            <label class="text-success" for="{{appointment.client.name }}">Therapist Name:</label>
-            <h4>&nbsp;&nbsp;{{appointment.therapist.name}}</h4>
+            <label class="text-success" for="{{appointment.client.name }}">Client Name:</label>
+            <h4>&nbsp;&nbsp;{{appointment.client.name}}</h4>
           </div>
           <div class="col-6  mb-3">
             <label class="text-success">Appointment Date:</label>
@@ -73,7 +73,7 @@
           </div> -->
         </div>
 
-        
+
 
     <form method='post' >
       {% csrf_token %}
@@ -89,9 +89,5 @@
 
   </div>
 </body>
-        {% if message %}
-        <script>
-            window.alert("{{ message }}");
-        </script>
-        {% endif %}
+
 </html>

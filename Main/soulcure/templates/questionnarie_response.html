@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        /* Your CSS styles here */
+        /* ... */
+        .shop-now-button {
+            position: absolute;
+            top: 3%;
+            left: 3%;
+            background-color: #4CAF50;
+            color: #ffffff;
+            padding: 2% 3%; /* Adjust padding as needed */
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1; /* Adjust font size for responsiveness */
+            cursor: pointer;
+        }
+
+        .shop-now-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Styling for the Eco Store heading */
+        h2.eco-store-heading {
+            color: #2e8540; /* Leaf green color */
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive styling for icons */
+        .icon-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .icon-container div {
+            text-align: center;
+            width: 30%; /* Adjust percentage width for responsiveness */
+        }
+
+        .icon-container img {
+            max-width: 100%;
+            width: 70%; /* Adjust percentage width for responsiveness */
+            height: auto;
+        }
+
+        .icon-container p {
+            font-size: 14px;
+            color: #333;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body style="background-color: #f5f5f5; margin: 0; padding: 0; font-family: 'Arial', sans-serif;">
+
+    <!-- Banner Image and Header -->
+    <div class="container" style="width: 100%; max-width: 635px; margin: 0 auto; background-color: #ffffff; position: relative;">
+        <a href="https://ecoshop.mudumalaitigerreserve.com/">
+            <img src="https://mudumalaitigereserve.s3.ap-south-1.amazonaws.com/17003001126542xex0tP7e.jpg" alt="Eco Shop" style="max-width: 100%; display: block;">
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" style="width: 100%; max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 20px;">
+
+        <h2 class="eco-store-heading">Your Order Confirmation</h2>
+
+        <!-- Greeting and Order Details -->
+        <p style="font-size: 16px; color: #333; line-height: 1.6;">
+            Dear {name}, <br><br>
+            Thank you for your order! We're thrilled to confirm that your purchase has been successful. Below are the details of your order:
+        </p>
+
+        <!-- Order Details Table -->
+        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+            <tr style="background-color: #f2f2f2;">
+                <td style="padding: 10px; border: 1px solid #ddd;">Delivery Address:</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{address}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Shop Details & Address:</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{sellerAddress}</td>
+            </tr>
+            
+            <tr>
+                <tr style="background-color: #f2f2f2;"></tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Delivery Charge(Rs):</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{deliveryCharge}</td>
+            </tr>
+            
+                <td style="padding: 10px; border: 1px solid #ddd;">Discount(Rs):</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{discount}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+                <td style="padding: 10px; border: 1px solid #ddd;">Total Bill Amount(Rs):</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{total}</td>
+            </tr>
+        </table>
+
+        <!-- Additional Message -->
+        <p style="font-size: 16px; color: #333; line-height: 1.6; margin-top: 20px;">
+            We're excited for you to receive your eco-friendly products. Should you have any questions or need further assistance, feel free to reach out to our Customer Care at <strong>+91 8396568429</strong>. Thank you for supporting sustainable shopping!
+        </p>
+
+        <!-- Site Link and Customer Care -->
+        <div style="text-align: center; margin-top: 30px;">
+            <p style="font-size: 16px; color: #333; line-height: 1.6;">
+                Visit our <a href="https://ecoshop.mudumalaitigerreserve.com/" style="color: #32b127; text-decoration: none;">website</a> to explore more eco-friendly products!
+            </p>
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <h3 style="color: #333;">Our Specialties</h3>
+            <p style="font-size: 16px; color: #333; line-height: 1.6;">Discover our secure, fast, and safe shopping experience!</p>
+
+            <!-- Icons for Specialties -->
+            <div class="icon-container">
+                <div>
+                    <img src="https://mudumalaitigereserve.s3.ap-south-1.amazonaws.com/1700301911793eQy1pB-0o.jpg" alt="Secure Icon">
+                    <p>Secure</p>
+                </div>
+                <div>
+                    <img src="https://mudumalaitigereserve.s3.ap-south-1.amazonaws.com/17003016334670ttOSCfmFZ.jpg" alt="Fast Icon">
+                    <p>Fast</p>
+                </div>
+                <div>
+                    <img src="https://mudumalaitigereserve.s3.ap-south-1.amazonaws.com/1700301633496jyOSNJM0rq.jpg" alt="Safe Icon">
+                    <p>Top Quality</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+</html>

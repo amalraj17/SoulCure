@@ -17,6 +17,8 @@ from django.core.mail import send_mail, EmailMessage
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 import io
+import random
+from urllib.parse import urlencode
 
 
 
@@ -1107,14 +1109,19 @@ def view_questionnaire(request):
         }
         questions_with_options.append(question_dict)
     return render(request, 'admin/view_quesionnaire.html', {'questions_with_options': questions_with_options})
-    
+
+@login_required
 def attend_questionnaire(request):
     if request.method == 'POST':
         for key, value in request.POST.items():
             if key.startswith('option_'):
                 question_index = key.split('_')[1]
                 question_id = request.POST.get(f'question_id_{question_index}')
-                print(f"Question ID: {question_id}, Option: {value}")
+                if question_id == '6':
+                    preferred_age = value
+                if question_id == '8':
+                    preferred_gender = value
+                # print(f"Question ID: {question_id}, Option: {value}")
                 user = CustomUser.objects.get(pk=request.user.id)
                 # Create a new TherapySessionFeedbacks object with the extracted data
                 feedback = Questionnaire.objects.create(
@@ -1122,11 +1129,115 @@ def attend_questionnaire(request):
                     user=user,
                     answer=value
                 )
-                
+        if feedback:
+            q_response = QuestionnaireResponse.objects.get(user=user) 
+            q_response.questionnarie_done = True
+            q_response.save()
+        today = datetime.now().date()
+        if preferred_age == 'Below 45' or preferred_gender =='Male' or preferred_age == 'Above 45' or preferred_gender =='Female': 
+            if preferred_age == 'Below 45' and preferred_gender =='Male' or preferred_age == 'Below 45' and preferred_gender =='Female':
+                if preferred_gender =='Male':
+                    therapists_profiles = UserProfile.objects.filter(user__role=2,dob__gt=today.replace(year=today.year-45),gender='M')
+                    print(therapists_profiles)
+                    print("check 1")
+                    random_therapist = therapists_profiles.order_by('?').first()
+                    print("Random Therapist:", random_therapist)
+                elif preferred_gender == 'Female':
+                    therapists_profiles = UserProfile.objects.filter(user__role=2,dob__gt=today.replace(year=today.year-45),gender='F')
+                    print(therapists_profiles)
+                    print("check 2")
+                    random_therapist = therapists_profiles.order_by('?').first()
+                    print("Random Therapist:", random_therapist)
+                else:
+                    therapists_profiles = UserProfile.objects.filter(user__role=2,dob__gt=today.replace(year=today.year-45))
+                    print(therapists_profiles)
+                    print("check 3")
+                    random_therapist = therapists_profiles.order_by('?').first()
+                    print("Random Therapist:", random_therapist)
+            if preferred_age == 'Above 45' and preferred_gender =='Male' or preferred_age == 'Above 45' and preferred_gender =='Female':
+                if preferred_gender =='Male':
+                    therapists_profiles = UserProfile.objects.filter(user__role=2,dob__lte=today.replace(year=today.year-45),gender='M')
+                    print(therapists_profiles)
+                    print("check 4")                   
+                    random_therapist = therapists_profiles.order_by('?').first()
+                    print("Random Therapist:", random_therapist)
+                elif preferred_gender == 'Female':
+                    therapists_profiles = UserProfile.objects.filter(user__role=2,dob__lte=today.replace(year=today.year-45),gender='F')
+                    print(therapists_profiles)
+                    print("check 5") 
+                    random_therapist = therapists_profiles.order_by('?').first()
+                    print("Random Therapist:", random_therapist)
+                else:
+                    therapists_profiles = UserProfile.objects.filter(user__role=2,dob__lte=today.replace(year=today.year-45))
+                    print(therapists_profiles)
+                    print("check 6")
+                    random_therapist = therapists_profiles.order_by('?').first()
+                    print("Random Therapist:", random_therapist)
+        if preferred_age == 'No' and preferred_gender =='Male' or preferred_age == 'No' and preferred_gender =='Female':
+            if preferred_gender =='Male':
+                therapists_profiles = UserProfile.objects.filter(user__role=2,gender='M')
+                print(therapists_profiles)
+                print("check 7")
+                random_therapist = therapists_profiles.order_by('?').first()
+                print("Random Therapist:", random_therapist)
+            elif preferred_gender == 'Female':
+                therapists_profiles = UserProfile.objects.filter(user__role=2,gender='F')
+                print(therapists_profiles)
+                print("check 8")
+                random_therapist = therapists_profiles.order_by('?').first()
+                print("Random Therapist:", random_therapist)
+            else:
+                therapists_profiles = UserProfile.objects.filter(user__role=2)
+                print(therapists_profiles)
+                print("check 9")
+                random_therapist = therapists_profiles.order_by('?').first()
+                print("Random Therapist:", random_therapist)
+        if preferred_age == 'Below 45' and preferred_gender =='No' or preferred_age == 'Above 45' and preferred_gender =='No':
+            if preferred_age =='Below 45':
+                therapists_profiles = UserProfile.objects.filter(user__role=2,dob__gt=today.replace(year=today.year-45))
+                print(therapists_profiles)
+                print("check 10")
+                random_therapist = therapists_profiles.order_by('?').first()
+                print("Random Therapist:", random_therapist)
+            elif preferred_age =='Above 45':
+                therapists_profiles = UserProfile.objects.filter(user__role=2,dob__lte=today.replace(year=today.year-45))
+                print(therapists_profiles)
+                print("check 11")
+                random_therapist = therapists_profiles.order_by('?').first()
+                print("Random Therapist:", random_therapist)
+            else:
+                therapists_profiles = UserProfile.objects.filter(user__role=2)
+                print(therapists_profiles)
+                print("check 12")
+                random_therapist = therapists_profiles.order_by('?').first()
+                print("Random Therapist:", random_therapist)
+        if preferred_age == 'No' and preferred_gender =='No':
+            therapists_profiles = UserProfile.objects.filter(user__role=2)
+            print(therapists_profiles)
+            print("check 13")
+            random_therapist = therapists_profiles.order_by('?').first()
+            print("Random Therapist:", random_therapist)
+        
+        random_therapist_user = random_therapist.user
+    
+        recommended_therapist = Therapist.objects.get(user=random_therapist_user)
+        print(recommended_therapist, recommended_therapist.id)
 
-        return redirect('index')
+        user_questionnarie = Questionnaire.objects.filter(user=user)
+        for resp in user_questionnarie:
+            print(resp.question, resp.answer)
 
-    # If the request method is not POST, render the feedback form page
+        
+
+        # Construct URL parameters
+        query_params = urlencode({
+            'random_therapist_id': random_therapist.id,
+            'recommended_therapist_id': recommended_therapist.id
+        })
+
+        return redirect("/client/recommended_therapist/?random_therapist_id=" + str(random_therapist.id) + "&recommended_therapist_id=" + str(recommended_therapist.id))
+
+        # return redirect('index')        
     questions_with_options = []
     questions = QuestionnaireQuestions.objects.all()
     for question in questions:
@@ -1138,3 +1249,16 @@ def attend_questionnaire(request):
         questions_with_options.append(question_dict)
 
     return render(request, 'admin/attend_questionnaire.html', {'questions_with_options': questions_with_options})
+
+
+def recommended_therapist(request):
+    random_therapist_id = request.GET.get('random_therapist_id')
+    recommendedtherapist_id = request.GET.get('recommended_therapist_id')
+    
+    # Fetch the therapists based on the IDs
+
+    userprofile = UserProfile.objects.get(id=random_therapist_id)
+    therapist = Therapist.objects.get(id=recommendedtherapist_id)
+
+
+    return render(request, 'recommended_therapist.html', {'userprofile': userprofile,'therapist': therapist})

@@ -26,8 +26,10 @@ urlpatterns = [
     path('feedback/success/',views.feedback_success, name='feedback_success'),
     path('add_questions/',views.add_questions, name='add_questions'),
     path('add_questions_questionnaire/',views.add_questions_questionnaire, name='add_questions_questionnaire'),
-    path('view_questionnaire',views.view_questionnaire,name='view_questionnaire'),
-    path('attend_questionnaire',views.attend_questionnaire,name='attend_questionnaire'),
+    path('view_questionnaire/',views.view_questionnaire,name='view_questionnaire'),
+    path('attend_questionnaire/',views.attend_questionnaire,name='attend_questionnaire'),
+    path('recommended_therapist/',views.recommended_therapist,name='recommended_therapist'),
+
 
 
 

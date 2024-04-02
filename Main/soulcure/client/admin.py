@@ -10,5 +10,7 @@ admin.site.register(FeedbackOption)
 admin.site.register(QuestionnaireQuestions)
 admin.site.register(QuestionnaireOption)
 admin.site.register(Questionnaire)
+admin.site.register(QuestionnaireResponse)
+
 
 

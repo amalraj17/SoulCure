@@ -1,40 +1,49 @@
-{% extends 'base.html' %}
+{% extends 'qbase.html' %}
 {% load static %}
 
 {% block content %}
+
 <head>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            background-image: linear-gradient(to right, #8fdaba, #2dda58b3, #9acc99);
+            /* background-color: #44da85; */
         }
+
         form {
             max-width: 850px;
             margin: auto;
-            background-color: #fff;
+            background-color: #dbede0;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h1 {
+
+        h2 {
             text-align: center;
             color: #333;
-            margin: 20px;
+            margin-top: 20px;
         }
-        h2 {
+
+        h3 {
             color: #333;
-            margin-bottom: 10px;
-            text-align: left; /* Align questions to the left */
+            margin: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            /* Align questions to the left */
         }
+
         label {
             display: block;
             margin-bottom: 10px;
             font-weight: bold;
             color: #555;
-            text-align: left; /* Align labels to the left */
+            text-align: left;
+            /* Align labels to the left */
         }
+
         select {
             width: 100%;
             padding: 10px;
@@ -43,14 +52,34 @@
             border: 1px solid #ccc;
             transition: border-color 0.3s ease;
         }
+
+        .line-container {
+            display: flex;
+            justify-content: center;
+            /* Center the child horizontally */
+            margin-top: 20px;
+            /* Adjust margin as needed */
+        }
+
+        .line {
+            height: 10px;
+            /* Adjust the height as needed */
+            width: 30%;
+            background: #333;
+            background-image: linear-gradient(to right, #ccc, #0f6c26, #ccc);
+        }
+
+
         select:focus {
             outline: none;
             border-color: #4CAF50;
         }
+
         select option {
-            font-size: 16px; /* Adjust the font size as needed */
+            font-size: 16px;
+            /* Adjust the font size as needed */
         }
-        
+
         button {
             padding: 10px 20px;
             background-color: #4CAF50;
@@ -63,29 +92,37 @@
             width: 120px;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #45a049;
         }
     </style>
 </head>
+
 <body>
-    <h1>Questionnaire</h1>
-    
+    <h2>Help us match you to the right therapist</h2>
+    <div class="line-container">
+        <hr class="line">
+    </div>
+    <h3>It's important to have a therapist who you can establish a personal connection with. <br>
+        The following questions are designed to match you to a licensed therapist based on your therapy needs and personal preferences.</h3>
     <form method="post">
         {% csrf_token %}
         {% for question_with_options in questions_with_options %}
-            <h4>{{ question_with_options.question }}</h4>
-            <!-- Hidden input field for question ID -->
-            <input type="hidden" name="question_id_{{ forloop.counter }}" value="{{ question_with_options.question.id }}">
-            <label for="option_{{ forloop.counter }}">Select an option:</label>
-            <select name="option_{{ forloop.counter }}" id="option_{{ forloop.counter }}">
-                {% for option in question_with_options.options %}
-                    <option value="{{ option.option_text }}">{{ option.option_text }}</option>
-                {% endfor %}
-            </select>
+        <h4>{{ question_with_options.question }}</h4>
+        <!-- Hidden input field for question ID -->
+        <input type="hidden" name="question_id_{{ forloop.counter }}" value="{{ question_with_options.question.id }}">
+        <label for="option_{{ forloop.counter }}">Select an option:</label>
+        <select name="option_{{ forloop.counter }}" id="option_{{ forloop.counter }}">
+            <option value="" selected disabled>-----Select-----</option>
+            {% for option in question_with_options.options %}
+            <option value="{{ option.option_text }}">{{ option.option_text }}</option>
+            {% endfor %}
+        </select>
         {% endfor %}
-        <button type="submit">Submit Feedback</button>
+        <button type="submit">Submit</button>
     </form>
-    
+
+
 </body>
 {% endblock %}

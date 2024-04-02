@@ -69,7 +69,6 @@ class Hosttest(TestCase):
         print("--------------------------------------")
         print("                                      ")
         print("Ran 1 test in", datetime.now() - start_time, "seconds")
-        # print("Test Passed: Search results are shown.")
         print("Test Passed: Posted New comment.")
         print("Test Date:", datetime.now())
         print("                                      ")

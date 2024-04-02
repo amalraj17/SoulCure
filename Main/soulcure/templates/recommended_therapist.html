@@ -1,0 +1,156 @@
+{% extends 'qbase.html' %}
+{% load static %}
+
+{% block content %}
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-image: linear-gradient(to right, #ffffff, #ffffffb3, #ffffff);
+            /* background-color: #44da85; */
+        }
+
+        .line-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 120px;
+        }
+
+        .h3 {
+            color: #333;
+            margin: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h3 {
+            color: #333;
+            margin: 20px;
+            margin-bottom: 10px;
+        }
+
+        .h5 {
+
+            margin: 10px;
+
+        }
+
+        .b-color {
+            background: #20c71a !important;
+            width: 25%;
+            height: 60px;
+            font-weight: bold;
+        }
+        .b-colorr {
+            background: #0761cf !important;
+            width: 25%;
+            height: 60px;
+            font-weight: bold;
+        }
+
+        .line {
+            height: 10px;
+            width: 30%;
+            background: #333;
+            background-image: linear-gradient(to right, #ccc, #0f6c26, #ccc);
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Your Recommended therapist is:&nbsp;&nbsp; {{userprofile.user.name}}</h2>
+    <div class="line-container">
+        <hr class="line">
+    </div>
+    
+
+    <div class="row">
+        
+        <div class="col-md-12">
+            <div class="mt-4">
+                <div class="main-body">
+                    <div class="row ">
+                        <div class="col-lg-12 d-flex">
+                            <div class="card col-lg-12">
+                                <div class="card-body">
+                                    <div class="d-flex col-md-12 align-items-center text-center">
+                                        <div class="d-flex col-md-6 m-3">
+                                            <div class=" col-md-5 mt-3">
+                                                <img src="{{userprofile.profile_picture.url}}" alt="Admin"
+                                                    class="rounded-circle p-1 bg-primary m-0" width="200" height="200">
+                                            </div>
+                                            <div class="mt-5 t-info col-md-12 align-items-start text-start ">
+                                                <h3 class="mt-4">{{userprofile.user.name}}</h3>
+                                                <h5 class="h5">{{therapist.therapy}}, {{therapist.certification_name}}
+                                                </h5>
+                                                <!-- <p class="text-secondary mb-1">{{therapist.certification_name}}</p> -->
+                                                <div class="d-flex h5 ">
+                                                    <div>
+                                                        <p class="text-secondary mb-1 mr-5">Experience:
+                                                            {{therapist.experience}}Years </p>
+                                                    </div>
+                                                    <div class="mx-3">
+                                                        <p class="text-muted font-size-sm">Location:
+                                                            {{userprofile.city}},{{userprofile.state}}</p>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 justify-content-center">
+                                            <a href="{% url 'appointment' t_id=therapist.user.id %}"><button class="btn b-color text-dark  rounded-pill">Make an Appointment</button></a>
+
+                                            <a href="{% url 'index' %}"><button class="btn b-colorr text-dark  rounded-pill">Back to Home</button></a>
+                                        </div>
+                                    </div>
+                                    <hr class="my-2 custom-hr  ">
+                                    <div class="col-12 ml-2 mr-4 p-5 align-items-start text-start">
+                                        <div class="mt-3">
+                                            <h4>About Him</h4>
+                                        </div>
+                                        <hr class="my-4">
+                                        <p class="text-secondary mb-1 txtlarge">{{therapist.bio}}</p>
+                                        <div class="mt-5">
+                                            <h4>License Information</h4>
+                                        </div>
+
+                                        <hr class="my-2">
+                                        <p class="text-secondary mb-1 txtlarge">{{therapist.certificate_id}}</p>
+                                    </div>
+                                    <div class="row" style="height: 50%;">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-6  ">
+                                            <div class="bg-light">
+                                                <h3 class="text-center">Book an Appointment with <span class="text-danger">{{ userprofile.user.name }}</span> Now</h3>
+                                                <p class="text-center">Start counseling, therapy, or life-coaching today
+                                                    with a skilled, caring provider like Him!</p>
+                                                <div class="w-100 d-flex align-items-center justify-content-center">
+                                                    <a href="{% url 'familytherapist' %}"><button
+                                                            class="btn b-color text-dark w-100  rounded-pill mt-2 mb-5">Book Appointment</button></a>
+                                                    <div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-lg-3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+{% endblock %}

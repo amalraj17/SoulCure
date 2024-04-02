@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib  import messages,auth
 from .models import CustomUser,UserProfile
 from therapist.models import Therapist,TherapistDayOff,LeaveRequest
+from client.models import QuestionnaireResponse
 # from accounts.backends import EmailBackend
 from django.contrib.auth import get_user_model
 from .forms import CustomUserForm, UserProfileForm
@@ -18,6 +19,9 @@ from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from .decorators import user_not_authenticated
 from .tokens import account_activation_token
+import time
+from django.urls import reverse
+from django.contrib.auth.tokens import default_token_generator  
 
 ########################################################################################################################
 
@@ -48,17 +52,48 @@ def activate(request, uidb64, token):
 
     return redirect('index')
 
+# def activateEmail(request, user, to_email):
+#     mail_subject = "Activate your user account."
+#     message = render_to_string("email/account-activation.html")
+#     email = EmailMessage(mail_subject, message, to=[to_email])
+#     if email.send():
+#         messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{to_email}</b> inbox and click on \
+#                 received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+#     else:
+#         messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
+
+
+# from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+
+# def activateEmail(request, user, to_email):
+#     timestamp = int(time.time())
+#     mail_subject = "Activate your user account."
+#     uid = urlsafe_base64_encode(force_bytes(user.pk))
+#     token = account_activation_token._make_hash_value(user,timestamp)
+#     # Render the email content using the email template with the necessary context
+#     message = render_to_string("email/account-activation.html", {'uid': uid, 'token': token, 'protocol': request.scheme, 'domain': request.get_host()})
+#     email = EmailMessage(mail_subject, message, to=[to_email])
+#     if email.send():
+#         messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{to_email}</b> inbox and click on \
+#                 received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+#     else:
+#         messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
+
 def activateEmail(request, user, to_email):
     mail_subject = "Activate your user account."
-    message = render_to_string("email/account-activation.html", {
-        ' '
-    })
+    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    activation_link = reverse('activate', kwargs={'uidb64': uidb64, 'token': token})
+    message = render_to_string("email/account-activation.html", {'activation_link': activation_link})
     email = EmailMessage(mail_subject, message, to=[to_email])
     if email.send():
-        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{to_email}</b> inbox and click on \
-                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+        messages.success(request, f'Dear <b>{user}</b>, please go to your email <b>{to_email}</b> inbox and click on \
+                the received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
     else:
         messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
+
+
 
 def userlogin(request):
     if request.user.is_authenticated:
@@ -78,11 +113,16 @@ def userlogin(request):
 
         if email and password:
             user = authenticate(request, email=email, password=password)
+            c_user = CustomUser.objects.get(email=email)
+            print(c_user) 
             print("Authenticated user:", user)  
             if user is not None:
                 auth_login(request, user)
                 print("User authenticated:", user.email, user.role)
                 if request.user.role == CustomUser.CLIENT:
+                    q_response = QuestionnaireResponse.objects.get(user=c_user)
+                    if q_response.questionnarie_done == False:
+                        return redirect(reverse('attend_questionnaire'))
                     return redirect('http://127.0.0.1:8000/')
                 elif request.user.role == CustomUser.THERAPIST:
                     return redirect(reverse('therapist'))
@@ -117,6 +157,7 @@ def register(request):
         password = request.POST.get('pass', None)
         confirm_password = request.POST.get('cpass', None)
         role = User.CLIENT
+        
 
         if name1 and email and phone and password and role:
             if User.objects.filter(email=email).exists():
@@ -131,14 +172,15 @@ def register(request):
             else:
                 user = User(name=name1, email=email, phone=phone,role=role)
                 user.set_password(password)  # Set the password securely
-                user.is_active=False
+                user.is_active=True
                 user.save()
                 user_profile = UserProfile(user=user)
                 user_profile.save()
-                activateEmail(request, user, email)
+                questionnaire_obj = QuestionnaireResponse.objects.create(user=user)
+                # activateEmail(request, user, email)
                 return redirect('login')  
             
-    return render(request, 'register2.html')
+    return render(request, 'register2.html',{})
 
 def userLogout(request):
     logout(request)
@@ -210,7 +252,7 @@ def send_welcome_email(email, password, therapist_name):
     message += f"Email: {email}\nPassword: {password}\n\n"
     message += "Please take a moment to log in to your account using the provided credentials. Once you've logged in, we encourage you to reset your password to something more secure and memorable.\n\n"
     message += login_button
-    message += "\n\nSoulCure is committed to providing a safe and supportive environment for both therapists and clients. Together, we can make a positive impact on the lives of those seeking healing and guidance.\n"
+    message += "\n\nSoulCure is committed to providing a safe and supportive environment for both therapists and clients.Together, we can make a positive impact on the lives of those seeking healing and guidance.\n"
     message += "Thank you for joining the SoulCure community. We look forward to your contributions and the positive energy you'll bring to our platform.\n\n"
     message += "Warm regards,\nThe SoulCure Team\n\n"
     
@@ -293,6 +335,7 @@ def send_welcome_email_editor(email, password, editor_name):
     recipient_list = [email]
 
     send_mail(subject, message, from_email, recipient_list)
+
 ########################################################################################################################
 
 #List Users
@@ -409,14 +452,9 @@ def update_therapy(request, therapy_id):
 ########################################################################################################################
 @login_required
 def view_leave_requests(request):
-    # Check if the user is an admin
     if not request.user.role == 4:
-        return redirect('/')  # Redirect to the home page or any other appropriate page
-
-    # Query all pending holiday requests
+        return redirect('/')
     pending_requests = LeaveRequest.objects.filter(status='pending')
-
-    # Render the template with the pending holiday requests data
     return render(request, 'admin/leave-request.html', {'pending_requests': pending_requests})
 
 @login_required

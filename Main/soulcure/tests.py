@@ -43,7 +43,7 @@ class Hosttest(TestCase):
         email = driver.find_element(By.CSS_SELECTOR, "input#email.form-control.form-control-lg")
         email.send_keys("anandhu686513@gmail.com")
         password = driver.find_element(By.CSS_SELECTOR, "input#password.form-control.form-control-lg")
-        password.send_keys("Anandhu@123")
+        password.send_keys("Lead@123")
         time.sleep(1)
         submitc = driver.find_element(By.CSS_SELECTOR, "button#submit.btn.btn-dark.btn-lg.w-50")
         submitc.click()

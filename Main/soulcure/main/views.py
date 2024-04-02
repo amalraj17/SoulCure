@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from blogs.models import Posts
+from client.models import QuestionnaireResponse
 
 # Create your views here.
 
@@ -27,6 +28,9 @@ def index(request):
         elif request.user.role == 3 and not request.path == reverse('editor'):
             return redirect(reverse('editor'))
         elif request.user.role == 1 and not request.path == reverse('index'):
+            q_response = QuestionnaireResponse.objects.get(user=request.user)
+            if q_response.questionnarie_done == False:
+                return redirect(reverse('attend_questionnaire'))
             return redirect(reverse('index'))
 
     return render(request, 'index.html')
@@ -54,6 +58,9 @@ def adminindex(request):
         elif request.user.role == 3 and not request.path == reverse('editor'):
             return redirect(reverse('editor'))
         elif request.user.role == 1 and not request.path == reverse('index'):
+            q_response = QuestionnaireResponse.objects.get(user=request.user)
+            if q_response.questionnarie_done == False:
+                return redirect(reverse('attend_questionnaire'))
             return redirect(reverse('index'))
     # if request.user.role != 3 or (not request.path == reverse("adminindex")) :
     clients = CustomUser.objects.filter(role=CustomUser.CLIENT)
@@ -77,6 +84,9 @@ def therapistindex(request):
         elif request.user.role == 3 and not request.path == reverse('editor'):
             return redirect(reverse('editor'))
         elif request.user.role == 1 and not request.path == reverse('index'):
+            q_response = QuestionnaireResponse.objects.get(user=request.user)
+            if q_response.questionnarie_done == False:
+                return redirect(reverse('attend_questionnaire'))
             return redirect(reverse('index'))
     return render(request,'therapist/therapist-index.html')
 
@@ -91,6 +101,9 @@ def editorindex(request):
         elif request.user.role == 3 and not request.path == reverse('editor'):
             return redirect(reverse('editor'))    
         elif request.user.role == 1 and not request.path == reverse('index'):
+            q_response = QuestionnaireResponse.objects.get(user=request.user)
+            if q_response.questionnarie_done == False:
+                return redirect(reverse('attend_questionnaire'))
             return redirect(reverse('index'))
 
     cuser = request.user

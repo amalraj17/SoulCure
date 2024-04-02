@@ -100,6 +100,12 @@ class Questionnaire(models.Model):
     def __str__(self):
         return f"Questionnaire of {self.user}"
 
+class QuestionnaireResponse(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    questionnarie_done = models.BooleanField(default=False)
+    def __str__(self):
+        return f"Questionnaire of {self.user}"
+
 
 class FeedbackQuestions(models.Model):
     question = models.CharField(max_length=255)

@@ -51,30 +51,6 @@ def room(request, slug):
     return render(request, 'room/room.html', {'room': room, 'messages': messages})
 
 
-# @login_required
-# def room(request, slug):
-    
-#     room = Room.objects.get(slug=slug)
-#     messages = Message.objects.filter(room=room)
-
-#     users = [message.user for message in messages]
-#     user_profiles = UserProfile.objects.filter(user__in=users)
-#     profile_picture_dict = {profile.user_id: profile.profile_picture for profile in user_profiles}
-
-#     for message in messages:
-#         message.user.profile_picture = profile_picture_dict.get(message.user_id)
-
-#     return render(request, 'room/room.html', {'room': room, 'messages': messages})
-
-# @login_required
-# def notification(request):
-#     noti = Notification.objects.get(user_id=request.user.id)
-#     print(noti)
-#     return render(request,'notification.html',{'notifications':noti})
-
-
-
-
 @login_required
 def notification(request):
     try:

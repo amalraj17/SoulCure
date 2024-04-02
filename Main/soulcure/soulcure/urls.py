@@ -26,7 +26,7 @@ urlpatterns = [
     path('therapist/',include('therapist.urls')),
     path('client/',include('client.urls')),
     path('rooms/', include('room.urls')),
-    path('yoga/',include('yoga.urls')),
+    # path('yoga/',include('yoga.urls')),
     # path('music/', include('music.urls')),
     path('blogs/', include('blogs.urls')),
     path('chat/', include('videoconference_app.urls')),

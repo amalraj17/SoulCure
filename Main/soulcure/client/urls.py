@@ -19,6 +19,11 @@ urlpatterns = [
     path('fetch_appointments_clients/', views.fetch_appointments_clients, name='fetch_appointments_clients'),
     path('view_therapy_schedule/<int:appointment_id>/', views.view_therapy_schedule, name='view_therapy_schedule'),
     path('view_therapy_schedule_ag/', views.view_therapy_schedule_ag, name='view_therapy_schedule_ag'),
+    path('feed_users/', views.feed_users, name='feed_users'),
+    path('view_client_response/<int:user_id>', views.view_client_response, name='view_client_response'),
+
+
+
 
     # path('feedback/<int:app_id>',views.feedback_form,name='feedback'),
     path('feedbackk/<int:app_id>',views.feedback_view,name='feedbackk'),

@@ -3,7 +3,7 @@
 
 {% block content %}
 <br><br>
-<div class="container mt-5"style="width:900px; margin-left:32%;">
+{% comment %} <div class="container mt-5"style="width:900px; margin-left:32%;">
     <h2 class="mb-3 text-center">Add New Blog</h2>
     <p class="fs-5 text-dark text-center">Your voice is a beacon, guiding readers through the labyrinth of thought and experience. So, let your creativity soar, and may your words illuminate the path for others to follow.</p>
     <form method="post" enctype="multipart/form-data">
@@ -59,7 +59,242 @@
         </div>
         <button  id="submit"type="submit" style="height:50px;"class="btn btn-success rounded btn-sm d-block mx-auto w-25 mb-5">Submit</button>
     </form>
+</div> {% endcomment %}
+<div class="container mt-5"style="width:900px; margin-left:32%;">
+<h2 class="mb-3 text-center">Add New Blog</h2>
+    <p class="fs-5 text-dark text-center">Your voice is a beacon, guiding readers through the labyrinth of thought and experience. So, let your creativity soar, and may your words illuminate the path for others to follow.</p>
+    
+<form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    {% csrf_token %}
+    <div class="form-group mb-3">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control form-control-sm" id="title" name="title" onkeyup="validateTitle()" required>
+        <div id="title-error" class="invalid-feedback">Title is required.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="subtitle1">Subtitle 1:</label>
+        <input type="text" class="form-control form-control-sm" id="subtitle1" name="subtitle1" onkeyup="validateSubtitle1()" required>
+        <div id="subtitle1-error" class="invalid-feedback">Subtitle 1 is required.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="subtitle2">Subtitle 2:</label>
+        <input type="text" class="form-control form-control-sm" id="subtitle2" name="subtitle2" onkeyup="validateSubtitle2()" required>
+        <div id="subtitle2-error" class="invalid-feedback">Subtitle 2 is required.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="subtitle3">Subtitle 3:</label>
+        <input type="text" class="form-control form-control-sm" id="subtitle3" name="subtitle3" onkeyup="validateSubtitle3()" required>
+        <div id="subtitle3-error" class="invalid-feedback">Subtitle 3 is required.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="subtitle">Subtitle:</label>
+        <textarea class="form-control form-control-sm" id="subtitle" name="subtitle" rows="3" onkeyup="validateSubtitle()" required></textarea>
+        <div id="subtitle-error" class="invalid-feedback">Subtitle is required.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="intro">Introduction:</label>
+        <textarea class="form-control form-control-sm" id="intro" name="intro" rows="3" onkeyup="validateIntro()" required></textarea>
+        <div id="intro-error" class="invalid-feedback">Introduction is required.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="content1">Content 1:</label>
+        <textarea class="form-control form-control-sm" id="content1" name="content1" rows="3" onkeyup="validateContent1()" required></textarea>
+        <div id="content1-error" class="invalid-feedback">Content 1 is required.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="content2">Content 2:</label>
+        <textarea class="form-control form-control-sm" id="content2" name="content2" rows="3" onkeyup="validateContent2()" required></textarea>
+        <div id="content2-error" class="invalid-feedback">Content 2 is required.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="content3">Content 3:</label>
+        <textarea class="form-control form-control-sm" id="content3" name="content3" rows="3" onkeyup="validateContent3()" required></textarea>
+        <div id="content3-error" class="invalid-feedback">Content 3 is required.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="image">Image:</label>
+        <input type="file" class="form-control-file form-control-sm" id="image" name="image">
+        <!-- Validation for image can be added as required -->
+    </div>
+    <div class="form-group mb-3">
+        <label for="category">Category:</label>
+        <select class="form-control form-control-sm" id="category" name="category" onchange="validateCategory()" required>
+            <option value="" selected disabled>Select Category</option>
+            {% for i in cat %}
+            <option value="{{ i.name }}">{{ i.name }}</option>
+            {% endfor %}
+        </select>
+        <div id="category-error" class="invalid-feedback">Category is required.</div>
+    </div>
+
+    <button type="submit" style="height:50px;" class="btn btn-success rounded btn-sm d-block mx-auto w-25 mb-5">Submit</button>
+</form>
 </div>
 
+<script>
+    function validateTitle() {
+        var titleValue = document.getElementById('title').value.trim();
+        var titleField = document.getElementById('title');
+        var titleError = document.getElementById('title-error');
+
+        if (titleValue === '') {
+            titleField.classList.add('is-invalid');
+            titleError.style.display = 'block';
+            return false;
+        } else {
+            titleField.classList.remove('is-invalid');
+            titleError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateSubtitle1() {
+        var subtitle1Value = document.getElementById('subtitle1').value.trim();
+        var subtitle1Field = document.getElementById('subtitle1');
+        var subtitle1Error = document.getElementById('subtitle1-error');
+
+        if (subtitle1Value === '') {
+            subtitle1Field.classList.add('is-invalid');
+            subtitle1Error.style.display = 'block';
+            return false;
+        } else {
+            subtitle1Field.classList.remove('is-invalid');
+            subtitle1Error.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateSubtitle2() {
+        var subtitle2Value = document.getElementById('subtitle2').value.trim();
+        var subtitle2Field = document.getElementById('subtitle2');
+        var subtitle2Error = document.getElementById('subtitle2-error');
+
+        if (subtitle2Value === '') {
+            subtitle2Field.classList.add('is-invalid');
+            subtitle2Error.style.display = 'block';
+            return false;
+        } else {
+            subtitle2Field.classList.remove('is-invalid');
+            subtitle2Error.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateSubtitle3() {
+        var subtitle3Value = document.getElementById('subtitle3').value.trim();
+        var subtitle3Field = document.getElementById('subtitle3');
+        var subtitle3Error = document.getElementById('subtitle3-error');
+
+        if (subtitle3Value === '') {
+            subtitle3Field.classList.add('is-invalid');
+            subtitle3Error.style.display = 'block';
+            return false;
+        } else {
+            subtitle3Field.classList.remove('is-invalid');
+            subtitle3Error.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateSubtitle() {
+        var subtitleValue = document.getElementById('subtitle').value.trim();
+        var subtitleField = document.getElementById('subtitle');
+        var subtitleError = document.getElementById('subtitle-error');
+
+        if (subtitleValue === '') {
+            subtitleField.classList.add('is-invalid');
+            subtitleError.style.display = 'block';
+            return false;
+        } else {
+            subtitleField.classList.remove('is-invalid');
+            subtitleError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateIntro() {
+        var introValue = document.getElementById('intro').value.trim();
+        var introField = document.getElementById('intro');
+        var introError = document.getElementById('intro-error');
+
+        if (introValue === '') {
+            introField.classList.add('is-invalid');
+            introError.style.display = 'block';
+            return false;
+        } else {
+            introField.classList.remove('is-invalid');
+            introError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateContent1() {
+        var content1Value = document.getElementById('content1').value.trim();
+        var content1Field = document.getElementById('content1');
+        var content1Error = document.getElementById('content1-error');
+
+        if (content1Value === '') {
+            content1Field.classList.add('is-invalid');
+            content1Error.style.display = 'block';
+            return false;
+        } else {
+            content1Field.classList.remove('is-invalid');
+            content1Error.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateContent2() {
+        var content2Value = document.getElementById('content2').value.trim();
+        var content2Field = document.getElementById('content2');
+        var content2Error = document.getElementById('content2-error');
+
+        if (content2Value === '') {
+            content2Field.classList.add('is-invalid');
+            content2Error.style.display = 'block';
+            return false;
+        } else {
+            content2Field.classList.remove('is-invalid');
+            content2Error.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateContent3() {
+        var content3Value = document.getElementById('content3').value.trim();
+        var content3Field = document.getElementById('content3');
+        var content3Error = document.getElementById('content3-error');
+
+        if (content3Value === '') {
+            content3Field.classList.add('is-invalid');
+            content3Error.style.display = 'block';
+            return false;
+        } else {
+            content3Field.classList.remove('is-invalid');
+            content3Error.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateCategory() {
+        var categoryValue = document.getElementById('category').value;
+        var categoryField = document.getElementById('category');
+        var categoryError = document.getElementById('category-error');
+
+        if (categoryValue === '') {
+            categoryField.classList.add('is-invalid');
+            categoryError.style.display = 'block';
+            return false;
+        } else {
+            categoryField.classList.remove('is-invalid');
+            categoryError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateForm() {
+        return validateTitle() && validateSubtitle1() && validateSubtitle2() && validateSubtitle3() && validateSubtitle() && validateIntro() && validateContent1() && validateContent2() && validateContent3() && validateCategory();
+    }
+</script>
 
 {% endblock %}

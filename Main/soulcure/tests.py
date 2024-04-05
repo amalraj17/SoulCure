@@ -18,9 +18,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'soulcure.settings')
 settings.configure()
 
 
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
-
 class Hosttest(TestCase):
     
     def setUp(self):
@@ -74,9 +71,7 @@ class Hosttest(TestCase):
         else:
             print("Test Failed: No search results found.")
 
-        # You can add more assertions or actions as needed
 
-    # Add more test methods as needed
 
 if __name__ == '__main__':
     import unittest

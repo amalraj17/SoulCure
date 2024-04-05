@@ -98,13 +98,13 @@ def activateEmail(request, user, to_email):
 def userlogin(request):
     if request.user.is_authenticated:
         if request.user.role == CustomUser.CLIENT:
-            return redirect('http://127.0.0.1:8000/')
+            return redirect('index')
         elif request.user.role == CustomUser.THERAPIST:
             return redirect(reverse('therapist'))
         elif request.user.role == CustomUser.ADMIN:
             return redirect(reverse('adminindex'))
         else:
-            return redirect('http://127.0.0.1:8000/')
+            return redirect('index')
     elif request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -123,13 +123,13 @@ def userlogin(request):
                     q_response = QuestionnaireResponse.objects.get(user=c_user)
                     if q_response.questionnarie_done == False:
                         return redirect(reverse('attend_questionnaire'))
-                    return redirect('http://127.0.0.1:8000/')
+                    return redirect('index')
                 elif request.user.role == CustomUser.THERAPIST:
                     return redirect(reverse('therapist'))
                 elif request.user.role == CustomUser.ADMIN:
                     return redirect(reverse('adminindex'))
                 else:
-                    return redirect('http://127.0.0.1:8000/')
+                    return redirect('index')
 
             else:
                 error_message = "Invalid login credentials."
@@ -143,13 +143,13 @@ def userlogin(request):
 def register(request):
     if request.user.is_authenticated:
         if request.user.role == CustomUser.CLIENT:
-            return redirect('http://127.0.0.1:8000/')
+            return redirect('index')
         elif request.user.role == CustomUser.THERAPIST:
             return redirect(reverse('therapist'))
         elif request.user.role == CustomUser.ADMIN:
             return redirect(reverse('adminindex'))
         else:
-            return redirect('http://127.0.0.1:8000/')
+            return redirect('index')
     elif request.method == 'POST':
         name1 = request.POST.get('name', None)
         email = request.POST.get('email', None)
@@ -184,7 +184,7 @@ def register(request):
 
 def userLogout(request):
     logout(request)
-    return redirect('http://127.0.0.1:8000/')
+    return redirect('index')
 
 
 

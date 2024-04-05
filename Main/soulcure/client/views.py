@@ -19,6 +19,8 @@ from xhtml2pdf import pisa
 import io
 import random
 from urllib.parse import urlencode
+from twilio.rest import Client
+from django.conf import settings
 
 
 
@@ -1219,9 +1221,12 @@ def attend_questionnaire(request):
             print("Random Therapist:", random_therapist)
         
         random_therapist_user = random_therapist.user
+        print(random_therapist.user)
     
         recommended_therapist = Therapist.objects.get(user=random_therapist_user)
         print(recommended_therapist, recommended_therapist.id)
+        q_response.therapist = random_therapist_user
+        q_response.save()
 
         user_questionnarie = Questionnaire.objects.filter(user=user)
         for resp in user_questionnarie:
@@ -1255,10 +1260,48 @@ def recommended_therapist(request):
     random_therapist_id = request.GET.get('random_therapist_id')
     recommendedtherapist_id = request.GET.get('recommended_therapist_id')
     
-    # Fetch the therapists based on the IDs
-
+    user = request.user
     userprofile = UserProfile.objects.get(id=random_therapist_id)
     therapist = Therapist.objects.get(id=recommendedtherapist_id)
-
+    send_whatsapp_notification_therapist(user,therapist)
 
     return render(request, 'recommended_therapist.html', {'userprofile': userprofile,'therapist': therapist})
+
+def send_whatsapp_notification_therapist(user,therapist):
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    
+    to_number = 'whatsapp:+919074386935'  # Replace with the recipient's WhatsApp number
+
+    message_body = (
+    f"Dear {therapist.user.name},\n"
+    f"We are pleased to inform you that you have been recommended to work with our newest client. \n\n"
+    f"Client Details \n"
+    f"Name: {user.name}\n"
+    f"Email: {user.email}\n\n"
+    f"The questionnaire response of {user.name} has been submitted. Kindly review the user dashboard for the detailed response.\n"
+    f"Thank you for your dedication and commitment to providing the best care for our clients.\n"
+    f"Best Regards,\n"
+    f"[Team SoulCure]"
+    )
+    try:
+        message = client.messages.create(
+            from_='whatsapp:+14155238886',
+            body=message_body,
+            to=to_number
+        )
+        print(f"WhatsApp notification sent to {to_number}: {message.sid}")
+    except Exception as e:
+        print(f"Error sending WhatsApp notification: {str(e)}")
+
+
+def feed_users(request):
+    users=QuestionnaireResponse.objects.filter(therapist=request.user)
+    # for user in users:
+    #     qn_response = Qiestionnarie
+    return render(request,'feed_users.html',{'users':users})
+
+
+def view_client_response(request,user_id):
+    questionnarie=Questionnaire.objects.filter(user=user_id)
+    # questionnarie=Questionnaire.objects.filter(user=request.user)
+    return render(request,'therapist/view_client_response.html',{'questionnarie':questionnarie})

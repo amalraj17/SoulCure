@@ -101,8 +101,9 @@ class Questionnaire(models.Model):
         return f"Questionnaire of {self.user}"
 
 class QuestionnaireResponse(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='client')
     questionnarie_done = models.BooleanField(default=False)
+    therapist = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='therapist_answers',null=True,blank=True)
     def __str__(self):
         return f"Questionnaire of {self.user}"
 

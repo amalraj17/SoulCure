@@ -195,7 +195,7 @@ def therapists(request):
     combined_data = list(zip_longest(cuser, uprofile, therapists))
 
     # Create a Paginator object with a specified number of therapists per page
-    paginator = Paginator(combined_data, per_page=4)  # Change '10' to the number of therapists per page you prefer
+    paginator = Paginator(combined_data, per_page=8)  # Change '10' to the number of therapists per page you prefer
 
     # Get the current page number from the request's GET parameters
     page_number = request.GET.get('page')

@@ -11,6 +11,8 @@ urlpatterns = [
     path('about/',views.about,name='about'),
     path('familytherapy/',views.familytherapy,name='familytherapy'),
     path('chooseoption/',views.choosetherapy,name='chooseoption'), 
+    path('get/menu/<str:filename>/', views.view_pdf, name='view_pdf'),
+
 
 
 

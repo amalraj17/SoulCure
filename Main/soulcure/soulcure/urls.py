@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from main import views
 
 urlpatterns = [
     path('admin/', admin.site.urls,name="admin"),
@@ -26,7 +27,7 @@ urlpatterns = [
     path('therapist/',include('therapist.urls')),
     path('client/',include('client.urls')),
     path('rooms/', include('room.urls')),
-    path('yoga/',include('yoga.urls')),
+    # path('yoga/',include('yoga.urls')),
     # path('music/', include('music.urls')),
     path('blogs/', include('blogs.urls')),
     path('chat/', include('videoconference_app.urls')),

@@ -62,7 +62,7 @@
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{% url 'familytherapy' %}" class="dropdown-item">Family Therapy</a>
-                                 <a href="{% url 'yoga' %}" class="dropdown-item">Meditation</a>
+                                 {% comment %} <a href="{% url 'yoga' %}" class="dropdown-item">Meditation</a> {% endcomment %}
                                 {% comment %}<a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
                         </div>
@@ -176,7 +176,7 @@
                     <p class="fw-bold">Step 4:</p>
                     <p class="ms-1">Keep your hands folded near your chest or raise upward and hold the position for a few breaths.</p>
                 </div>
-                <a href="{% url 'yoga_instructions' %}" class="btn btn-center mt-3 mb-3 btn-success text-white px-5 py-3 fs-6" style="margin-left: 45%">Try it now</a>
+                {% comment %} <a href="{% url 'yoga_instructions' %}" class="btn btn-center mt-3 mb-3 btn-success text-white px-5 py-3 fs-6" style="margin-left: 45%">Try it now</a> {% endcomment %}
                 <p class="fs-4 mt-5 fw-bold">What Are the Safety Precautions to Take While Performing Tree Pose (Vrksasana)?</p>
                 <ul class="">
                     <li>Do not practise it after taking a meal.</li>
@@ -226,7 +226,7 @@
                     <p class="fw-bold">Step 5:</p>
                     <p class="ms-1">Hold this position for a few moments and release.</p>
                 </div>
-                <a href="{% url 'yoga_instructions' %}" class="btn btn-center mt-3 mb-3 btn-success text-white px-5 py-3 fs-6" style="margin-left: 45%">Try it now</a>
+                {% comment %} <a href="{% url 'yoga_instructions' %}" class="btn btn-center mt-3 mb-3 btn-success text-white px-5 py-3 fs-6" style="margin-left: 45%">Try it now</a> {% endcomment %}
                 <p class="fs-4 mt-5 fw-bold">What Are the Safety Precautions to Take While Performing Warrior 1 (Virabhadrasana 1)?</p>
                 <ul class="">
                     <li>Avoid practising this asana for a long time.</li>
@@ -272,7 +272,7 @@
                     <p class="fw-bold">Step 4:</p>
                     <p class="ms-1">Remain in this position for a few breaths, release, and repeat with the other leg.</p>
                 </div>
-                <a href="{% url 'yoga_instructions' %}" class="btn btn-center mt-3 mb-3 btn-success text-white px-5 py-3 fs-6" style="margin-left: 45%">Try it now</a>
+                {% comment %} <a href="{% url 'yoga_instructions' %}" class="btn btn-center mt-3 mb-3 btn-success text-white px-5 py-3 fs-6" style="margin-left: 45%">Try it now</a> {% endcomment %}
                 <p class="fs-4 mt-5 fw-bold">What Are the Safety Precautions to Take While Performing Warrior 2 (Virabhadrasana 2)?</p>
                 <ul class="">
                     <li>Ensure even distribution of body weight on both legs.</li>
@@ -302,8 +302,7 @@
                         Get In Touch
                     </h4>
                     <p class="mb-4">
-                        No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et
-                        et dolor sed dolor
+                        SoulCure Online Therapy
                     </p>
                     <p class="mb-2">
                         <i class="fa fa-map-marker-alt text-success me-3"></i>123 Street,

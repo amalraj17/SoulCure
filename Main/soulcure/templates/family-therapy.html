@@ -127,7 +127,7 @@
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{% url 'familytherapy' %}" class="dropdown-item">Family Therapy</a>
-                                <a href="{% url 'yoga' %}" class="dropdown-item">Meditation</a>
+                                {% comment %} <a href="{% url 'yoga' %}" class="dropdown-item">Meditation</a> {% endcomment %}
                                 {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
                                 <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
@@ -495,8 +495,7 @@
                         Get In Touch
                     </h4>
                     <p class="mb-4">
-                        No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et
-                        et dolor sed dolor
+                        SoulCure Online Therapy
                     </p>
                     <p class="mb-2">
                         <i class="fa fa-map-marker-alt text-success me-3"></i>123 Street,

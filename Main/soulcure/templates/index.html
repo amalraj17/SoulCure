@@ -58,7 +58,7 @@
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{% url 'familytherapy' %}" class="dropdown-item">Family Therapy</a>
-                                <a href="{% url 'yoga' %}" class="dropdown-item">Meditation</a>
+                                {% comment %} <a href="{% url 'yoga' %}" class="dropdown-item">Meditation</a> {% endcomment %}
                                 {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
                                 <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
                             </div>
@@ -95,11 +95,12 @@
                         <a href="{% url 'index' %}" class="nav-item nav-link active">Home</a>
                         <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
                         <a href="{% url 'listtherapist' %}" class="nav-item nav-link">Find a Therapist</a>
+                        {% comment %} <a class="nav-item nav-link" href="{% url 'view_pdf' filename='rambutan' %}">View PDF</a> {% endcomment %}
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{% url 'familytherapy' %}" class="dropdown-item">Family Therapy</a>
-                                <a href="{% url 'yoga' %}" class="dropdown-item">Meditation</a>
+                                {% comment %} <a href="{% url 'yoga' %}" class="dropdown-item">Meditation</a> {% endcomment %}
                                 {% comment %} <a href="{% url 'notification' %}" class="dropdown-item">Notification</a> {% endcomment %}
                                 {% comment %} <a href="{% url 'search' %}" class="dropdown-item">Search</a>
                                 <a href="appointment.html" class="dropdown-item">Appointment</a> {% endcomment %}
@@ -807,8 +808,7 @@
                         Get In Touch
                     </h4>
                     <p class="mb-4">
-                        No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et
-                        et dolor sed dolor
+                        SoulCure Online Therapy
                     </p>
                     <p class="mb-2">
                         <i class="fa fa-map-marker-alt text-success me-3"></i>123 Street,
@@ -877,14 +877,14 @@
             <div class="row g-5">
                 <div class="col-md-6 text-center text-md-start">
                     <p class="mb-md-0">
-                        &copy; <a class="text-success" href="#">Your Site Name</a>. All
+                        &copy; <a class="text-success" href="#">Soulcure</a>. All
                         Rights Reserved.
                     </p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <p class="mb-0">
                         Designed by
-                        <a class="text-success" href="https://htmlcodex.com">HTML Codex</a>
+                        <a class="text-success">SoulCure</a>
                     </p>
                 </div>
             </div>

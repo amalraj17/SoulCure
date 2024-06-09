@@ -6,6 +6,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from blogs.models import Posts
 from client.models import QuestionnaireResponse
+from django.http import FileResponse, Http404
+import os
+from django.conf import settings
+
 
 # Create your views here.
 
@@ -17,6 +21,32 @@ import razorpay
 from django.conf import settings
 
 # Initialize the Razorpay client
+
+
+def view_pdf(request, filename):
+    # Construct the full file path
+    filepath = os.path.join(settings.MEDIA_ROOT, filename)
+    if not os.path.exists(filepath):
+        raise Http404("PDF file does not exist")
+    return FileResponse(open(filepath, 'rb'), content_type='application/pdf')
+
+
+
+
+# from django.conf import settings
+# from django.http import HttpResponse
+
+# def serve_pdf(request, filename):
+#     media_root = settings.MEDIA_ROOT
+#     filepath = os.path.join(media_root, filename)
+
+#     if os.path.exists(filepath):
+#         with open(filepath, 'rb') as pdf_file:
+#             response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+#             response['Content-Disposition'] = f'attachment; filename="{filename}"'
+#             return response
+#     else:
+#         return HttpResponseNotFound('File not found')
 
 
 def index(request):
@@ -140,4 +170,8 @@ def familytherapy(request):
 @login_required
 def choosetherapy(request):
     return render(request,'select-therapy.html')
+
+
+
+
 
